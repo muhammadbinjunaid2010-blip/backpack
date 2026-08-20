@@ -1,0 +1,27 @@
+Create a dedicated:
+
+Exam Schedule
+
+screen.
+
+For this prototype, do NOT invent a detailed official exam timetable.
+
+The only information currently provided is:
+
+1st Assessment begins from mid-September.
+detailed timetable witll be released soon
+Display this clearly as:
+
+UPCOMING ASSESSMENT
+
+1st Assessment
+
+Starting:
+Mid-September
+
+Class:
+X-C
+
+Do not invent exact exam dates, subjects, times, rooms, or durations.
+
+When the user later provides the actual exam schedule PDF, use that file to populate the complete schedule.

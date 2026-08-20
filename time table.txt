@@ -1,0 +1,298 @@
+5. COMPLETE TIMETABLE
+
+The timetable must contain the complete Monday–Friday schedule below.
+
+Do not simplify it to only one day.
+
+The timetable is:
+
+Morning Timetable 2025–2026
+
+Class: X-C
+
+Class Teacher: 47 — Ms. Saeeda (vii)
+
+Period times:
+
+1st: 8:00–8:40
+2nd: 8:40–9:20
+3rd: 9:20–10:00
+4th: 10:00–10:40
+Break: 10:40–11:00
+5th: 11:00–11:40
+6th: 11:40–12:20
+7th: 12:20–1:00
+8th: 1:00–1:40
+MONDAY
+Monday — Morning
+
+08:00–08:40
+
+Chem Lab
+Ms. Saeeda
+
+08:40–09:20
+
+Chem Lab
+Ms. Saeeda
+
+09:20–10:00
+
+P St
+Mr. Imran
+
+10:00–10:40
+
+Maths
+New Math
+
+10:40–11:00
+
+BREAK
+
+11:00–11:40
+
+P-Lab
+Mr. Farhan
+
+11:40–12:20
+
+P-Lab
+Mr. Farhan
+
+12:20–01:00
+
+Urd
+New Urdu
+
+01:00–01:40
+
+Comp. Sc
+New Computer
+
+TUESDAY
+Tuesday — Morning
+
+08:00–08:40
+
+Chem
+Ms. Saeeda
+
+08:40–09:20
+
+Phy
+Mr. Farhan
+
+09:20–10:00
+
+Eng
+Mr. Hussain
+
+10:00–10:40
+
+Maths
+New Math
+
+10:40–11:00
+
+BREAK
+
+11:00–11:40
+
+Urd
+New Urdu
+
+11:40–12:20
+
+P St
+Mr. Imran
+
+12:20–01:00
+
+Comp. Sc
+New Computer
+
+01:00–01:40
+
+T-E-Q
+Mr. Tahir
+
+WEDNESDAY
+Wednesday — Morning
+
+08:00–08:40
+
+Chem
+Ms. Saeeda
+
+08:40–09:20
+
+P St
+Mr. Imran
+
+09:20–10:00
+
+T-E-Q
+Mr. Tahir
+
+10:00–10:40
+
+Maths
+New Math
+
+10:40–11:00
+
+BREAK
+
+11:00–11:40
+
+PT
+Mr. Rizwan
+
+11:40–12:20
+
+Comp. Sc
+New Computer
+
+12:20–01:00
+
+Phy
+Mr. Farhan
+
+01:00–01:40
+
+Eng
+Mr. Hussain
+
+THURSDAY
+Thursday — Morning
+
+08:00–08:40
+
+Chem
+Ms. Saeeda
+
+08:40–09:20
+
+Urd
+New Urdu
+
+09:20–10:00
+
+Eng
+Mr. Hussain
+
+10:00–10:40
+
+Phy
+Mr. Farhan
+
+10:40–11:00
+
+BREAK
+
+11:00–11:40
+
+Maths
+New Math
+
+11:40–12:20
+
+Maths
+New Math
+
+12:20–01:00
+
+Comp. Sc
+New Computer
+
+01:00–01:40
+
+T-E-Q
+Mr. Tahir
+
+FRIDAY
+Friday — Morning
+
+08:00–08:40
+
+Chem
+Ms. Saeeda
+
+08:40–09:20
+
+Lib
+Ms. Zinhar
+
+09:20–10:00
+
+Comp Lab
+New Computer
+
+10:00–10:40
+
+Comp Lab
+New Computer
+
+10:40–11:00
+
+BREAK
+
+11:00–11:40
+
+Maths
+New Math
+
+11:40–12:20
+
+Eng
+Mr. Hussain
+
+12:20–01:00
+
+Urd
+New Urdu
+
+01:00–01:40
+
+Phy
+Mr. Farhan
+
+6. TIMETABLE UI
+
+Create a dedicated Timetable screen.
+
+At the top:
+
+Bahria College Karsaz
+
+CLASS X-C
+
+Morning Timetable
+2025–2026
+
+Then:
+
+MON
+TUE
+WED
+THU
+FRI
+
+Selecting a day displays the complete schedule.
+
+Each period should be a proper card/timeline item:
+
+08:00 – 08:40
+
+CHEMISTRY
+
+Ms. Saeeda
+
+Break should look visually different:
+
+10:40 – 11:00
+
+BREAK
+
+The currently active period should be highlighted automatically.

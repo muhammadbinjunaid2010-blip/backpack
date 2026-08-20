@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-wf-page="backpack-air" data-wf-site="backpack-air">
+<head>
+  <meta charset="utf-8"/>
+  <title>Backpack Air — Digital Schoolbag</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="manifest" href="manifest.webmanifest"/>
+</head>
+<body>
+
+  <div class="ba-cursor-wrapper"><div class="ba-cursor"></div></div>
+
+  <div id="top" class="ba-page-wrapper">
+
+    <div class="ba-global-styles">
+      <style>
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        html { overflow-x: clip; }
+        [text-split] { opacity: 0; }
+        .word { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.1em 0; margin: -0.1em 0; transform-origin: bottom; }
+        .char { display: inline-block; will-change: transform; }
+        html.lenis { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-stopped { overflow: hidden; }
+      </style>
+    </div>
+
+    <!-- TOP BAR: School + Class + Current Time -->
+    <header class="ba-app-header">
+      <div class="ba-container">
+        <div class="ba-app-header-content">
+          <div class="ba-app-header-identity">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" class="ba-app-logo">
+              <path d="M9 6.5C9 4.567 10.567 3 12.5 3H21.5C23.433 3 25 4.567 25 6.5V28H9V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M9 9H25" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M6 9C6 10.657 7.343 12 9 12V9C7.343 9 6 7.657 6 6V9ZM28 9C28 10.657 26.657 12 25 12V9C26.657 9 28 7.657 28 6V9Z" fill="currentColor"/>
+              <path d="M17 6.5V28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+            <span class="ba-app-header-name">Backpack Air</span>
+          </div>
+          <div class="ba-app-header-school">
+            <div class="ba-app-school-name">Bahria College Karsaz</div>
+            <div class="ba-app-school-address">Habib Rehmatullah Road, Karsaz, Karachi</div>
+          </div>
+          <div class="ba-app-header-class">
+            <div>Class X-C</div>
+            <div class="ba-app-class-teacher">47 — Ms. Saeeda (vii)</div>
+          </div>
+        </div>
+        <div class="ba-app-header-time" id="app-header-time">
+          <!-- Updated by JS -->
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN NAVIGATION -->
+    <nav class="ba-app-nav">
+      <div class="ba-container">
+        <div class="ba-nav_block">
+          <a href="#home" class="ba-app-nav-brand">
+            <span class="ba-app-logo-small">
+              <svg width="24" height="24" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 6.5C9 4.567 10.567 3 12.5 3H21.5C23.433 3 25 4.567 25 6.5V28H9V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+                <path d="M9 9H25" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M6 9C6 10.657 7.343 12 9 12V9C7.343 9 6 7.657 6 6V9ZM28 9C28 10.657 26.657 12 25 12V9C26.657 9 28 7.657 28 6V9Z" fill="currentColor"/>
+                <path d="M17 6.5V28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="ba-app-nav-brand-text">Backpack <em>Air</em></span>
+          </a>
+          <div class="ba-nav_menu" id="ba-nav-menu">
+            <div class="ba-nav_menu_content">
+              <div class="ba-nav_menu_wrapper">
+                <a href="#home" class="ba-nav_link ba-nav_link-active" data-section="home">Home</a>
+                <a href="#timetable" class="ba-nav_link" data-section="timetable">Timetable</a>
+                <a href="#books" class="ba-nav_link" data-section="books">Books</a>
+                <a href="#notebooks" class="ba-nav_link" data-section="notebooks">Notebooks</a>
+                <a href="#exams" class="ba-nav_link" data-section="exams">Exams</a>
+                <a href="#school" class="ba-nav_link" data-section="school">School</a>
+                <a href="#settings" class="ba-nav_link" data-section="settings">Settings</a>
+              </div>
+            </div>
+            <a href="#demo" class="ba-button cc-small ba-cta-wrapper-nav">
+              <div class="ba-cta-label">Request Demo</div>
+              <div class="ba-cta-bg cc-blue"></div>
+            </a>
+          </div>
+          <div class="ba-nav_menu-button" id="ba-nav-button" aria-label="Menu">
+            <div class="ba-hamburguer-line"></div>
+            <div class="ba-hamburguer-line_2"></div>
+            <div class="ba-hamburguer-line_3"></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="ba-main" id="ba-main">
+
+      <!-- HOME SCREEN -->
+      <section class="ba-screen ba-screen-active" id="home-screen" data-section="home">
+        <div class="ba-container">
+          <div class="ba-home-screen">
+            <div class="ba-home-screen-header">
+              <div class="ba-home-screen-title">My Digital Schoolbag</div>
+              <div class="ba-home-school-info">
+                <div>Bahria College Karsaz</div>
+                <div>Class X-C</div>
+              </div>
+            </div>
+            <div class="ba-home-screen-day" id="home-screen-day">
+              <!-- Updated by JS -->
+            </div>
+            <div class="ba-home-screen-timetable" id="home-screen-timetable">
+              <!-- Dynamic timetable for today -->
+            </div>
+            <div class="ba-home-screen-upcoming" id="home-screen-upcoming">
+              <!-- Upcoming exam -->
+            </div>
+            <div class="ba-home-screen-actions">
+              <a href="#timetable" class="ba-button ba-button-secondary">View Full Timetable</a>
+              <a href="#books" class="ba-button ba-button-primary">My Books</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TIMETABLE SCREEN -->
+      <section class="ba-screen" id="timetable-screen" data-section="timetable">
+        <div class="ba-container">
+          <div class="ba-screen-header">
+            <div class="ba-back-button" data-section="home">← Back to Home</div>
+            <h2 class="ba-title-4">Morning Timetable</h2>
+            <div class="ba-screen-subtitle">Class X-C • 2025–2026</div>
+          </div>
+          <div class="ba-timetable-nav">
+            <div class="ba-timetable-day ba-timetable-day-active" data-day="mon">MON</div>
+            <div class="ba-timetable-day" data-day="tue">TUE</div>
+            <div class="ba-timetable-day" data-day="wed">WED</div>
+            <div class="ba-timetable-day" data-day="thu">THU</div>
+            <div class="ba-timetable-day" data-day="fri">FRI</div>
+          </div>
+          <div class="ba-timetable-content" id="ba-timetable-content">
+            <!-- Content loaded by JS -->
+          </div>
+          <div class="ba-timetable-footer">
+            <div class="ba-current-period" id="ba-current-period">
+              <!-- Currently active period -->
+            </div>
+            <div class="ba-next-period" id="ba-next-period">
+              <!-- Next period -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BOOKS SCREEN -->
+      <section class="ba-screen" id="books-screen" data-section="books">
+        <div class="ba-container">
+          <div class="ba-screen-header">
+            <div class="ba-back-button" data-section="home">← Back to Home</div>
+            <h2 class="ba-title-4">My Books</h2>
+          </div>
+          <div class="ba-books-grid" id="ba-books-grid">
+            <!-- Book cards loaded from config -->
+          </div>
+          <div class="ba-books-empty" id="ba-books-empty">
+            No books configured.
+          </div>
+        </div>
+      </section>
+
+      <!-- NOTEBOOKS SCREEN -->
+      <section class="ba-screen" id="notebooks-screen" data-section="notebooks">
+        <div class="ba-container">
+          <div class="ba-screen-header">
+            <div class="ba-back-button" data-section="home">← Back to Home</div>
+            <h2 class="ba-title-4">My Notebooks</h2>
+          </div>
+          <div class="ba-notebooks-grid" id="ba-notebooks-grid">
+            <!-- Notebook cards loaded -->
+          </div>
+          <div class="ba-notebooks-empty" id="ba-notebooks-empty">
+            No notebooks yet. Tap <span class="ba-text-primary">+ New Notebook</span> to create one.
+          </div>
+        </div>
+      </section>
+
+      <!-- EXAMS SCREEN -->
+      <section class="ba-screen" id="exams-screen" data-section="exams">
+        <div class="ba-container">
+          <div class="ba-screen-header">
+            <div class="ba-back-button" data-section="home">← Back to Home</div>
+            <h2 class="ba-title-4">Exam Schedule</h2>
+          </div>
+          <div class="ba-exams-content" id="ba-exams-content">
+            <!-- Exam schedule loaded -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SCHOOL SCREEN -->
+      <section class="ba-screen" id="school-screen" data-section="school">
+        <div class="ba-container">
+          <div class="ba-screen-header">
+            <div class="ba-back-button" data-section="home">← Back to Home</div>
+            <h2 class="ba-title-4">School Information</h2>
+          </div>
+          <div class="ba-school-info">
+            <div class="ba-school-logo">
+              <svg width="64" height="64" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 6.5C9 4.567 10.567 3 12.5 3H21.5C23.433 3 25 4.567 25 6.5V28H9V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+                <path d="M9 9H25" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                <path d="M6 9C6 10.657 7.343 12 9 12V9C7.343 9 6 7.657 6 6V9ZM28 9C28 10.657 26.657 12 25 12V9C26.657 9 28 7.657 28 6V9Z" fill="currentColor"/>
+                <path d="M17 6.5V28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="ba-school-details">
+              <div class="ba-school-name">Bahria College Karsaz</div>
+              <div class="ba-school-address">Habib Rehmatullah Road, Karsaz, Karachi</div>
+              <div class="ba-school-class">Class X-C</div>
+              <div class="ba-school-teacher">Class Teacher: 47 — Ms. Saeeda (vii)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS SCREEN -->
+      <section class="ba-screen" id="settings-screen" data-section="settings">
+        <div class="ba-container">
+          <div class="ba-screen-header">
+            <div class="ba-back-button" data-section="home">← Back to Home</div>
+            <h2 class="ba-title-4">Settings</h2>
+          </div>
+          <div class="ba-settings-content">
+            <div class="ba-setting-item">
+              <label>Writing Direction</label>
+              <div class="ba-setting-select">
+                <span>Left to Right</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="ba-setting-item">
+              <label>Paper Default</label>
+              <div class="ba-setting-select">
+                <span>Ruled</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div class="ba-setting-item">
+              <label>Theme</label>
+              <div class="ba-setting-select">
+                <span>Light</span>
+                <span>Dark</span>
+                <span>System</span>
+              </div>
+            </div>
+            <div class="ba-setting-item ba-setting-item-logout">
+              <label>Log Out</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="ba-footer">
+        <div class="ba-container">
+          <div class="ba-footer_inner">
+            <div class="ba-footer_brand">
+              <div class="ba-logo ba-logo-white">
+                <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 6.5C9 4.567 10.567 3 12.5 3H21.5C23.433 3 25 4.567 25 6.5V28H9V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+                  <path d="M9 9H25" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                  <path d="M6 9C6 10.657 7.343 12 9 12V9C7.343 9 6 7.657 6 6V9ZM28 9C28 10.657 26.657 12 25 12V9C26.657 9 28 7.657 28 6V9Z" fill="currentColor"/>
+                  <path d="M17 6.5V28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                </svg>
+                <span class="ba-logo_word">Backpack <em>Air</em></span>
+              </div>
+              <p class="ba-footer_desc">The digital schoolbag. Replace the school bag with a school-configured tablet and stylus.</p>
+              <span class="ba-footer-credit">Built by MO Digital</span>
+            </div>
+            <div class="ba-footer_links">
+              <div class="ba-footer_col">
+                <a href="#home" class="ba-footer_link">Home</a>
+                <a href="#timetable" class="ba-footer_link">Timetable</a>
+                <a href="#books" class="ba-footer_link">Books</a>
+                <a href="#notebooks" class="ba-footer_link">Notebooks</a>
+              </div>
+              <div class="ba-footer_col">
+                <a href="#exams" class="ba-footer_link">Exams</a>
+                <a href="#school" class="ba-footer_link">School</a>
+                <a href="#settings" class="ba-footer_link">Settings</a>
+              </div>
+              <div class="ba-footer_col">
+                <a href="#demo" class="ba-footer_link">Demo</a>
+                <a href="#faq" class="ba-footer_link">FAQ</a>
+              </div>
+            </div>
+            <div class="ba-footer_bottom">
+              <span class="ba-footer_copyright">Backpack Air</span>
+              <span class="ba-footer_sig">The digital schoolbag</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- SERVICE WORKER REGISTRATION -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/ScrollTrigger.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
