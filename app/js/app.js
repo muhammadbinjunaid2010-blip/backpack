@@ -110,6 +110,13 @@
     setupSheetEditor();
     setupHomework();
     setupPdfReader();
+    setupToolsMenu();
+    setupCalculator();
+    setupFocusTime();
+    setupSchoolClock();
+    setupStickyNotes();
+    setupFormulaBook();
+    setupHiddenGestures();
     renderHome();
     setInterval(renderHome, 60000);
   }
@@ -829,6 +836,405 @@
     window.__ba_bindAnnot = bind;
     window.__ba_reseedAnnot = function (key) { if (canvas) { undo = denorm(loadFn(key)); redo = []; redraw(); } };
     window.__ba_saveAnnotNow = function (key) { if (saveFn && canvas) saveFn(norm(undo), key); };
+  }
+
+  /* ---------- Formula Book ---------- */
+  var MATH_FORMULAS = [
+    {name:"Area of rectangle", expr:"A = l × w"},
+    {name:"Area of triangle", expr:"A = ½ × b × h"},
+    {name:"Area of circle", expr:"A = π × r²"},
+    {name:"Perimeter of rectangle", expr:"P = 2(l + w)"},
+    {name:"Pythagorean theorem", expr:"a² + b² = c²"},
+    {name:"Simple interest", expr:"SI = P × R × T / 100"},
+    {name:"Percentage", expr:"P = (Value / Total) × 100"},
+    {name:"Distance, Speed, Time", expr:"D = S × T"},
+    {name:"Average", expr:"Avg = Sum / Count"},
+    {name:"Quadratic formula", expr:"x = (-b ± √(b²-4ac)) / 2a"}
+  ];
+  var PHYSICS_FORMULAS = [
+    {name:"Speed", expr:"v = d / t"},
+    {name:"Acceleration", expr:"a = Δv / t"},
+    {name:"Force", expr:"F = m × a"},
+    {name:"Weight", expr:"W = m × g"},
+    {name:"Work", expr:"W = F × d"},
+    {name:"Power", expr:"P = W / t"},
+    {name:"Kinetic Energy", expr:"KE = ½ × m × v²"},
+    {name:"Potential Energy", expr:"PE = m × g × h"},
+    {name:"Density", expr:"ρ = m / V"},
+    {name:"Electrical Power", expr:"P = V × I"}
+  ];
+  var STORE_FORMULAS = "ba_formulas_v1";
+  var userFormulas = load(STORE_FORMULAS, []);
+  
+  function setupFormulaBook() {
+    $("formula-back").addEventListener("click", function () { $("formula-modal").classList.remove("ba-modal-open"); });
+    document.querySelectorAll(".ba-formula-tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        document.querySelectorAll(".ba-formula-tab").forEach(function (t) { t.classList.remove("ba-formula-tab-active"); });
+        this.classList.add("ba-formula-tab-active");
+        renderFormulaContent(this.getAttribute("data-subject"));
+      });
+    });
+  }
+  function renderFormulaContent(subject) {
+    var wrap = $("formula-content");
+    var html = "";
+    var formulas = subject === "math" ? MATH_FORMULAS : (subject === "physics" ? PHYSICS_FORMULAS : userFormulas);
+    
+    formulas.forEach(function (f, i) {
+      html += '<div class="ba-formula-card">' +
+        '<div class="ba-formula-num">' + String(i + 1).padStart(2, "0") + '</div>' +
+        '<div class="ba-formula-name">' + esc(f.name) + '</div>' +
+        '<div class="ba-formula-expr">' + esc(f.expr) + '</div>' +
+        '</div>';
+    });
+    
+    if (subject === "my") {
+      html += '<div class="ba-formula-add-section">' +
+        '<div class="ba-section-title">MY FORMULAS</div>' +
+        '<div class="ba-form-group"><label>Name</label><input id="my-form-name" placeholder="e.g. Work-Energy"></div>' +
+        '<div class="ba-form-group"><label>Formula</label><input id="my-form-expr" placeholder="e.g. W = F × d"></div>' +
+        '<div class="ba-form-group"><label>Notes</label><input id="my-form-notes" placeholder="Optional"></div>' +
+        '<button class="ba-button ba-button-primary" id="my-form-save">Save Formula</button>' +
+        '</div>';
+    }
+    wrap.innerHTML = html;
+    
+    if (subject === "my") {
+      $("my-form-save").addEventListener("click", function () {
+        var name = $("my-form-name").value.trim();
+        var expr = $("my-form-expr").value.trim();
+        if (!name || !expr) return;
+        userFormulas.push({ name: name, expr: expr });
+        save(STORE_FORMULAS, userFormulas);
+        renderFormulaContent("my");
+      });
+    }
+  }
+
+  /* ---------- Tools Menu ---------- */
+  function setupToolsMenu() {
+    var toolsBtn = $("schoolbag-tools-open");
+    if (toolsBtn) toolsBtn.addEventListener("click", function () { $("tools-menu-modal").classList.add("ba-modal-open"); });
+    $("tools-back").addEventListener("click", function () { $("tools-menu-modal").classList.remove("ba-modal-open"); });
+    
+    var openTool = function (id) {
+      $("tools-menu-modal").classList.remove("ba-modal-open");
+      setTimeout(function () { $(id).classList.add("ba-modal-open"); }, 100);
+    };
+    
+    $("tool-calculator").addEventListener("click", function () { openTool("calculator-modal"); });
+    $("tool-focus").addEventListener("click", function () { openTool("focus-modal"); });
+    $("tool-clock").addEventListener("click", function () { openTool("clock-modal"); });
+    $("tool-sticky").addEventListener("click", function () { openTool("sticky-modal"); renderStickyNotes(); });
+    $("tool-formulas").addEventListener("click", function () { openTool("formula-modal"); renderFormulaContent("math"); });
+  }
+
+  /* ---------- Calculator ---------- */
+  var calcExpr = "";
+  function setupCalculator() {
+    // Tabs
+    $("calc-tab-basic").addEventListener("click", function () { showCalcTab("basic"); });
+    $("calc-tab-sci").addEventListener("click", function () { showCalcTab("sci"); });
+    $("calc-tab-conv").addEventListener("click", function () { showCalcTab("conv"); });
+    
+    // Basic buttons
+    document.querySelectorAll("#calc-view-basic .ba-calc-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () { handleCalcBtn(this.textContent, "calc-display"); });
+    });
+    
+    // Scientific buttons
+    document.querySelectorAll("#calc-view-sci .ba-calc-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () { handleCalcBtn(this.textContent, "calc-sci-display"); });
+    });
+    
+    // Unit converter
+    $("conv-category").addEventListener("change", updateConvUnits);
+    updateConvUnits();
+    $("conv-from-val").addEventListener("input", updateConvResult);
+    $("conv-from-unit").addEventListener("change", updateConvResult);
+    $("conv-to-unit").addEventListener("change", updateConvResult);
+  }
+  function showCalcTab(tab) {
+    $("calc-view-basic").style.display = tab === "basic" ? "flex" : "none";
+    $("calc-view-sci").style.display = tab === "sci" ? "flex" : "none";
+    $("calc-view-conv").style.display = tab === "conv" ? "flex" : "none";
+    document.querySelectorAll(".ba-calc-tab").forEach(function (t) { t.classList.remove("ba-calc-tab-active"); });
+    $("calc-tab-" + tab).classList.add("ba-calc-tab-active");
+  }
+  function handleCalcBtn(val, displayId) {
+    var dispEl = $(displayId);
+    if (val === "C") { calcExpr = ""; dispEl.textContent = "0"; return; }
+    if (val === "=") {
+      try {
+        var expr = calcExpr.replace(/÷/g, "/").replace(/×/g, "*").replace(/−/g, "-");
+        var result = Function("'use strict'; return (" + expr + ")")();
+        dispEl.textContent = result;
+        calcExpr = String(result);
+      } catch (e) { dispEl.textContent = "Error"; calcExpr = ""; }
+      return;
+    }
+    if (val === "π") val = "Math.PI";
+    if (val === "√") val = "Math.sqrt(";
+    if (val === "x²") val = "**2";
+    if (val === "sin") val = "Math.sin(";
+    if (val === "cos") val = "Math.cos(";
+    if (val === "tan") val = "Math.tan(";
+    if (val === "log") val = "Math.log10(";
+    if (val === "ln") val = "Math.log(";
+    calcExpr += val;
+    dispEl.textContent = calcExpr;
+  }
+  var CONV_DATA = {
+    length: [{u:"m",f:1},{u:"cm",f:100},{u:"mm",f:1000},{u:"km",f:0.001},{u:"in",f:39.3701},{u:"ft",f:3.28084}],
+    mass: [{u:"kg",f:1},{u:"g",f:1000},{u:"mg",f:1000000},{u:"lb",f:2.20462},{u:"oz",f:35.274}],
+    time: [{u:"s",f:1},{u:"min",f:1/60},{u:"hr",f:1/3600},{u:"day",f:1/86400}],
+    temp: [{u:"C"},{u:"F"},{u:"K"}]
+  };
+  function updateConvUnits() {
+    var cat = $("conv-category").value;
+    var units = CONV_DATA[cat];
+    var fromSel = $("conv-from-unit"), toSel = $("conv-to-unit");
+    fromSel.innerHTML = ""; toSel.innerHTML = "";
+    units.forEach(function (item) {
+      fromSel.innerHTML += '<option value="' + item.u + '">' + item.u + '</option>';
+      toSel.innerHTML += '<option value="' + item.u + '">' + item.u + '</option>';
+    });
+    if (units.length > 1) toSel.selectedIndex = 1;
+    updateConvResult();
+  }
+  function updateConvResult() {
+    var cat = $("conv-category").value;
+    var val = parseFloat($("conv-from-val").value) || 0;
+    var from = $("conv-from-unit").value;
+    var to = $("conv-to-unit").value;
+    var result = 0;
+    
+    if (cat === "temp") {
+      if (from === "C" && to === "F") result = val * 9/5 + 32;
+      else if (from === "C" && to === "K") result = val + 273.15;
+      else if (from === "F" && to === "C") result = (val - 32) * 5/9;
+      else if (from === "F" && to === "K") result = (val - 32) * 5/9 + 273.15;
+      else if (from === "K" && to === "C") result = val - 273.15;
+      else if (from === "K" && to === "F") result = (val - 273.15) * 9/5 + 32;
+      else result = val;
+    } else {
+      var units = CONV_DATA[cat];
+      var fromF = units.find(function (x) { return x.u === from; }).f;
+      var toF = units.find(function (x) { return x.u === to; }).f;
+      result = val * fromF / toF;
+    }
+    $("conv-to-val").value = parseFloat(result.toFixed(4));
+  }
+
+  /* ---------- Focus Time (Persistent) ---------- */
+  var focusTimer = null;
+  var focusRemaining = 0;
+  function setupFocusTime() {
+    $("focus-back").addEventListener("click", function () { $("focus-modal").classList.remove("ba-modal-open"); });
+    $("focus-bar-end").addEventListener("click", function () { stopFocusTimer(); });
+    $("focus-restart").addEventListener("click", function () {
+      $("focus-ended").style.display = "none";
+      $("focus-setup").style.display = "block";
+    });
+    
+    document.querySelectorAll(".ba-focus-dur").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".ba-focus-dur").forEach(function (b) { b.classList.remove("active"); });
+        this.classList.add("active");
+      });
+    });
+    
+    $("focus-start").addEventListener("click", function () {
+      var activeBtn = document.querySelector(".ba-focus-dur.active");
+      var mins = parseInt(activeBtn.getAttribute("data-min"), 10);
+      focusRemaining = mins * 60;
+      $("focus-modal").classList.remove("ba-modal-open");
+      $("focus-bar").style.display = "flex";
+      startFocusTimer();
+    });
+    
+    document.addEventListener("visibilitychange", function () {
+      if (focusTimer && document.hidden) {
+        // User left the app
+        clearInterval(focusTimer);
+        focusTimer = "paused";
+      } else if (focusTimer === "paused") {
+        // User returned to the app
+        stopFocusTimer();
+      }
+    });
+  }
+  function startFocusTimer() {
+    if (focusTimer) clearInterval(focusTimer);
+    updateFocusDisplay();
+    focusTimer = setInterval(function () {
+      if (focusRemaining <= 0) { stopFocusTimer(); return; }
+      focusRemaining--;
+      updateFocusDisplay();
+    }, 1000);
+  }
+  function stopFocusTimer() {
+    if (focusTimer) clearInterval(focusTimer);
+    focusTimer = null;
+    $("focus-bar").style.display = "none";
+    $("focus-setup").style.display = "block";
+    $("focus-ended").style.display = "block";
+  }
+  function updateFocusDisplay() {
+    var m = Math.floor(focusRemaining / 60);
+    var s = focusRemaining % 60;
+    var str = String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    $("focus-bar-time").textContent = str;
+  }
+
+  /* ---------- School Clock ---------- */
+  var clockInterval = null;
+  function setupSchoolClock() {
+    $("clock-back").addEventListener("click", function () { $("clock-modal").classList.remove("ba-modal-open"); if (clockInterval) clearInterval(clockInterval); });
+    var startClock = function () {
+      if (clockInterval) clearInterval(clockInterval);
+      renderClock();
+      clockInterval = setInterval(renderClock, 1000);
+    };
+    startClock();
+  }
+  function renderClock() {
+    var now = new Date();
+    $("clock-time").textContent = now.toLocaleTimeString();
+    var dayKey = currentDayKey();
+    var periods = dayKey ? TIMETABLE[dayKey] : [];
+    var mins = now.getHours() * 60 + now.getMinutes();
+    var at = periodAt(periods, mins);
+    
+    if (at && at.cur.type !== "break") {
+      $("clock-subject").textContent = at.cur.subject;
+      var endMins = at.cur.end.split(":").map(Number);
+      var remain = (endMins[0] * 60 + endMins[1]) - (now.getHours() * 60 + now.getMinutes());
+      $("clock-period-info").textContent = "Ends in " + remain + " minutes";
+    } else {
+      // Find next period
+      var nextPeriod = null;
+      for (var i = 0; i < periods.length; i++) {
+        var pStart = periods[i].time.split(":").map(Number);
+        var pMins = pStart[0] * 60 + pStart[1];
+        if (pMins > mins && periods[i].type !== "break") { nextPeriod = periods[i]; break; }
+      }
+      
+      if (nextPeriod) {
+        $("clock-subject").textContent = "Next: " + nextPeriod.subject;
+        $("clock-period-info").textContent = "Starts at " + nextPeriod.time;
+      } else {
+        $("clock-subject").textContent = "No more classes today";
+        $("clock-period-info").textContent = "";
+      }
+    }
+  }
+
+  /* ---------- Sticky Notes ---------- */
+  var STORE_STICKY = "ba_sticky_v1";
+  var stickies = load(STORE_STICKY, []);
+  var editingStickyId = null;
+  function setupStickyNotes() {
+    $("sticky-back").addEventListener("click", function () { $("sticky-modal").classList.remove("ba-modal-open"); });
+    $("sticky-add").addEventListener("click", function () {
+      editingStickyId = null;
+      $("sticky-text").value = "";
+      $("sticky-label").value = "";
+      $("sticky-grid").style.display = "none";
+      $("sticky-editor").style.display = "block";
+    });
+    $("sticky-cancel").addEventListener("click", function () {
+      $("sticky-grid").style.display = "grid";
+      $("sticky-editor").style.display = "none";
+    });
+    $("sticky-save").addEventListener("click", function () {
+      var text = $("sticky-text").value.trim();
+      if (!text) return;
+      var label = $("sticky-label").value.trim();
+      if (editingStickyId) {
+        var idx = stickies.findIndex(function (n) { return n.id === editingStickyId; });
+        if (idx >= 0) { stickies[idx].text = text; stickies[idx].label = label; }
+      } else {
+        stickies.push({ id: "st-" + Date.now(), text: text, label: label, created: new Date().toISOString() });
+      }
+      save(STORE_STICKY, stickies);
+      $("sticky-grid").style.display = "grid";
+      $("sticky-editor").style.display = "none";
+      renderStickyNotes();
+    });
+  }
+  function renderStickyNotes() {
+    var grid = $("sticky-grid");
+    grid.innerHTML = "";
+    stickies.forEach(function (n) {
+      var card = document.createElement("div");
+      card.className = "ba-sticky-note";
+      card.innerHTML = (n.label ? '<div class="ba-sticky-note-label">' + esc(n.label) + '</div>' : '') + '<div class="ba-sticky-note-content">' + esc(n.text) + '</div>';
+      card.addEventListener("click", function () {
+        editingStickyId = n.id;
+        $("sticky-text").value = n.text;
+        $("sticky-label").value = n.label || "";
+        $("sticky-grid").style.display = "none";
+        $("sticky-editor").style.display = "block";
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  /* ---------- Hidden Games Gesture ---------- */
+  function setupHiddenGestures() {
+    var logo = document.querySelector(".ba-app-logo-img");
+    var tapCount = 0;
+    var tapTimer = null;
+    var holdTimer = null;
+    
+    $("games-back").addEventListener("click", function () { $("games-modal").classList.remove("ba-modal-open"); });
+    
+    if (!logo) return;
+    logo.addEventListener("click", function (e) {
+      tapCount++;
+      if (tapCount === 2) {
+        clearTimeout(tapTimer);
+        holdTimer = setTimeout(function () {
+          // After double tap and hold, listen for swipe
+          document.addEventListener("touchstart", onSwipeStart, { once: true });
+        }, 500);
+      }
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(function () { tapCount = 0; }, 400);
+    });
+    
+    function onSwipeStart(e) {
+      var startY = e.touches[0].clientY;
+      document.addEventListener("touchend", function onSwipeEnd(ev) {
+        var endY = ev.changedTouches[0].clientY;
+        if (startY - endY > 50) { // Swipe up
+          $("games-modal").classList.add("ba-modal-open");
+          if (focusTimer) stopFocusTimer();
+        }
+        document.removeEventListener("touchend", onSwipeEnd);
+      }, { once: true });
+    }
+    
+    // One-Swipe Current Subject (from edge)
+    document.addEventListener("touchstart", function (e) {
+      if (e.touches[0].clientX < 15) { // Left edge swipe
+        var startY = e.touches[0].clientY;
+        document.addEventListener("touchend", function (ev) {
+          if (startY - ev.changedTouches[0].clientY > 30) {
+            var dayKey = currentDayKey();
+            var periods = dayKey ? TIMETABLE[dayKey] : [];
+            var mins = new Date().getHours() * 60 + new Date().getMinutes();
+            var at = periodAt(periods, mins);
+            if (at && at.cur.subject && at.cur.subject !== "BREAK") {
+              var s = getSubject(at.cur.subject);
+              if (s) openPdf(s);
+            }
+          }
+        }, { once: true });
+      }
+    });
   }
 
   window.addEventListener("load", init);

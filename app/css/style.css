@@ -40,7 +40,7 @@ h1,h2,h3,h4 { font-weight:800; line-height:1.1; letter-spacing:-0.03em; }
 .ba-app-header-content { display:grid; grid-template-columns:auto 1fr; gap:.6rem; align-items:center; }
 .ba-app-header-identity { display:flex; align-items:center; gap:.5rem; }
 .ba-app-logo { color:var(--blue); }
-.ba-app-logo-img { width:32px; height:32px; border-radius:8px; object-fit:contain; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.15); }
+.ba-app-logo-img { width:48px; height:48px; border-radius:10px; object-fit:cover; box-shadow:0 2px 8px rgba(0,0,0,.18); }
 .ba-app-header-name { font-weight:800; font-size:1rem; }
 .ba-app-header-school { text-align:right; min-width:0; }
 .ba-app-school-name { font-weight:800; font-size:.9rem; color:var(--blue); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -146,8 +146,8 @@ h1,h2,h3,h4 { font-weight:800; line-height:1.1; letter-spacing:-0.03em; }
 .ba-form-row input, .ba-form-row select { width:100%; border:1px solid var(--alto); border-radius:12px; padding:.6rem .8rem;
   font-size:.9rem; font-weight:600; background:var(--white); }
 .ba-school-details { text-align:center; max-width:360px; margin:0 auto; }
-.ba-school-logo { width:84px; height:84px; margin:0 auto .8rem; border-radius:18px; overflow:hidden; background:var(--concrete);
-  display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(0,0,0,.12); }
+.ba-school-logo { width:120px; height:120px; margin:0 auto .8rem; border-radius:24px; overflow:hidden; background:var(--concrete);
+  display:flex; align-items:center; justify-content:center; box-shadow:0 10px 30px rgba(0,0,0,.15); }
 .ba-school-logo img { width:100%; height:100%; object-fit:cover; }
 .ba-school-name { font-size:1.2rem; font-weight:800; letter-spacing:.02em; }
 .ba-school-address { font-size:.8rem; color:var(--silver); margin:.3rem 0 .5rem; }
@@ -304,7 +304,7 @@ body.theme-dark .ba-period-item.ba-period-break { background:#221f33; }
 .ba-onb { width:100%; }
 .ba-onb-inner { padding:2.2rem 1.4rem; text-align:center; display:flex; flex-direction:column; gap:.8rem; overflow-y:auto; }
 .ba-onb-logo { font-size:3rem; display:flex; justify-content:center; }
-.ba-onb-logo-img { width:88px; height:88px; border-radius:18px; object-fit:contain; background:#fff; padding:8px; box-shadow:0 12px 30px rgba(0,0,0,.18); }
+.ba-onb-logo-img { width:140px; height:140px; border-radius:24px; object-fit:cover; box-shadow:0 16px 40px rgba(0,0,0,.22); }
 .ba-onb-inner h2 { font-size:1.6rem; }
 .ba-onb-sub { color:var(--silver); margin-top:-.4rem; font-size:.85rem; }
 .ba-onb-note { font-size:.72rem; color:var(--silver); margin-top:.4rem; line-height:1.4; }
@@ -316,6 +316,109 @@ body.theme-dark .ba-period-item.ba-period-break { background:#221f33; }
 .ba-sheet-swatches .ba-nb-swatch { width:20px; height:20px; cursor:pointer; border-radius:50%; }
 .ba-sheet-rowhead { position:relative; }
 .ba-sheet-resizer-row { position:absolute; left:0; bottom:-3px; width:100%; height:7px; cursor:row-resize; z-index:2; }
+
+/* ---------- SCHOOLBAG TOOLS ---------- */
+.ba-schoolbag-tools { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; margin-bottom:1.2rem; }
+.ba-tool-card { display:flex; align-items:center; gap:.6rem; background:var(--concrete); border-radius:16px; padding:.9rem; cursor:pointer; transition:transform .12s, box-shadow .12s; }
+.ba-tool-card:active { transform:scale(.97); background:var(--mercury); }
+.ba-tool-icon { font-size:1.6rem; }
+.ba-tool-info { flex:1; min-width:0; }
+.ba-tool-arrow { font-weight:800; color:var(--silver); font-size:.9rem; }
+
+/* ---------- TOOLS MENU ---------- */
+.ba-tools-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1.5rem; }
+.ba-tool-menu-item { display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--concrete); border-radius:20px; padding:2rem 1rem; gap:.6rem; cursor:pointer; transition:transform .15s; }
+.ba-tool-menu-item:active { transform:scale(.95); }
+.ba-tool-menu-icon { font-size:2.4rem; }
+.ba-tool-menu-name { font-weight:800; font-size:.9rem; }
+
+/* ---------- CALCULATOR ---------- */
+.ba-calc-container { display:flex; flex-direction:column; height:100%; background:#1a1c2e; }
+.ba-calc-display { padding:2rem 1.5rem; text-align:right; font-size:2.8rem; font-weight:800; color:#fff; word-break:break-all; min-height:120px; display:flex; align-items:flex-end; justify-content:flex-end; font-variant-numeric:tabular-nums; }
+.ba-calc-history { padding:0 1.5rem; text-align:right; font-size:.9rem; color:#6b7280; min-height:24px; margin-bottom:.5rem; }
+.ba-calc-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:.8rem; padding:1rem 1.2rem 2rem; flex:1; }
+.ba-calc-btn { border:none; border-radius:16px; font-size:1.3rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .1s; min-height:60px; }
+.ba-calc-btn:active { transform:scale(.95); }
+.ba-calc-btn:not(.ba-calc-clear):not(.ba-calc-op):not(.ba-calc-eq) { background:#2a2d4a; color:#fff; }
+.ba-calc-btn:not(.ba-calc-clear):not(.ba-calc-op):not(.ba-calc-eq):active { background:#3a3d5a; }
+.ba-calc-clear { background:#ef4444; color:#fff; }
+.ba-calc-clear:active { background:#dc2626; }
+.ba-calc-op { background:#4a4d6a; color:#ffc21c; }
+.ba-calc-op:active { background:#5a5d7a; }
+.ba-calc-eq { background:var(--blue); color:#fff; grid-column:span 1; }
+.ba-calc-eq:active { background:var(--blue-dark); }
+.ba-calc-zero { grid-column:span 2; }
+
+/* ---------- FOCUS TIME ---------- */
+.ba-focus-container { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; padding:2rem; text-align:center; background:linear-gradient(180deg,#12152b 0%,#1a1c2e 100%); color:#fff; }
+.ba-focus-header { font-size:.9rem; font-weight:800; letter-spacing:.2em; color:#a4a4a4; margin-bottom:2rem; }
+.ba-focus-timer { font-size:5rem; font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:2px; margin-bottom:1rem; }
+.ba-focus-subject { font-size:1.2rem; font-weight:700; margin-bottom:2rem; }
+.ba-focus-durations { display:flex; gap:.5rem; margin-bottom:2rem; }
+.ba-focus-dur { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff; padding:.6rem 1.2rem; border-radius:20px; font-weight:700; cursor:pointer; }
+.ba-focus-dur.active { background:var(--blue); border-color:var(--blue); }
+.ba-focus-msg { font-size:.85rem; color:#888; margin-bottom:3rem; }
+.ba-focus-start { padding:1rem 4rem; font-size:1.1rem; }
+.ba-focus-end { padding:1rem 3rem; font-size:1rem; margin-top:1rem; background:transparent; border:1px solid #fff; color:#fff; }
+
+/* ---------- SCHOOL CLOCK ---------- */
+.ba-clock-container { display:flex; flex-direction:column; align-items:center; height:100%; padding:2rem; background:linear-gradient(180deg,#12152b 0%,#1a1c2e 100%); color:#fff; position:relative; }
+.ba-clock-title { font-size:.8rem; font-weight:800; letter-spacing:.2em; color:#a4a4a4; margin-top:2rem; }
+.ba-clock-time { font-size:5rem; font-weight:800; margin:1rem 0; font-variant-numeric:tabular-nums; }
+.ba-clock-subject { font-size:1.5rem; font-weight:800; margin-bottom:.5rem; }
+.ba-clock-period-info { font-size:1rem; color:#a4a4a4; margin-bottom:2rem; }
+.ba-clock-settings { width:100%; max-width:300px; margin-top:auto; }
+
+/* ---------- STICKY NOTES ---------- */
+.ba-sticky-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1.5rem; }
+.ba-sticky-note { background:#fff7e0; border-radius:16px; padding:1.2rem; font-size:.9rem; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,.08); min-height:100px; display:flex; flex-direction:column; position:relative; cursor:pointer; }
+.ba-sticky-note-label { font-size:.7rem; font-weight:800; color:#b8941c; margin-bottom:.5rem; text-transform:uppercase; }
+.ba-sticky-note-content { flex:1; }
+.ba-sticky-editor { padding:1.5rem; }
+.ba-sticky-editor textarea { width:100%; height:200px; border:1px solid var(--alto); border-radius:16px; padding:1rem; font-family:inherit; resize:none; margin-bottom:1rem; }
+.ba-sticky-editor input { width:100%; border:1px solid var(--alto); border-radius:12px; padding:.7rem 1rem; margin-bottom:1rem; }
+
+/* ---------- HIDDEN GAMES ---------- */
+.ba-games-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1.5rem; }
+.ba-game-card { background:var(--concrete); border-radius:16px; padding:2rem 1rem; text-align:center; font-weight:800; font-size:1rem; cursor:pointer; }
+
+/* ---------- PERSISTENT FOCUS BAR ---------- */
+.ba-focus-bar { display:flex; align-items:center; gap:.5rem; padding:.5rem 1rem; background:linear-gradient(90deg,#1a1c2e,#2a2d4a); color:#fff; font-weight:800; font-size:.85rem; z-index:45; }
+.ba-focus-bar-icon { font-size:1rem; }
+.ba-focus-bar-time { font-size:1rem; font-variant-numeric:tabular-nums; margin-right:.5rem; }
+.ba-focus-bar-label { color:#a4a4a4; flex:1; }
+.ba-focus-bar-end { border:1px solid #fff; background:transparent; color:#fff; border-radius:10px; padding:.3rem .8rem; font-size:.7rem; font-weight:800; cursor:pointer; }
+
+/* ---------- TOOLS MENU ---------- */
+.ba-tools-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1.5rem; }
+.ba-tool-menu-item { display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--concrete); border-radius:20px; padding:2rem 1rem; gap:.6rem; cursor:pointer; transition:transform .15s; }
+.ba-tool-menu-item:active { transform:scale(.95); }
+.ba-tool-menu-icon { font-size:2.4rem; }
+.ba-tool-menu-name { font-weight:800; font-size:.9rem; }
+
+/* ---------- CALCULATOR TABS ---------- */
+.ba-calc-tabs { display:flex; border-bottom:1px solid var(--mercury); background:var(--white); }
+.ba-calc-tab { flex:1; padding:.8rem; border:none; background:transparent; font-weight:800; font-size:.85rem; color:var(--silver); cursor:pointer; }
+.ba-calc-tab.ba-calc-tab-active { color:var(--blue); border-bottom:2px solid var(--blue); }
+
+/* ---------- UNIT CONVERTER ---------- */
+.ba-conv-container { background:var(--white); height:100%; display:flex; flex-direction:column; }
+.ba-conv-header { font-size:.8rem; font-weight:800; color:var(--silver); letter-spacing:.12em; margin-bottom:1.5rem; }
+.ba-conv-row { display:flex; gap:.5rem; margin-bottom:1rem; }
+.ba-conv-row input { flex:1; border:1px solid var(--alto); border-radius:12px; padding:.8rem; font-size:1.1rem; font-weight:700; }
+.ba-conv-row select { border:1px solid var(--alto); border-radius:12px; padding:.8rem; font-weight:700; min-width:100px; }
+.ba-conv-equals { font-size:1.5rem; font-weight:800; color:var(--silver); text-align:center; margin:1rem 0; }
+
+/* ---------- FORMULA BOOK ---------- */
+.ba-formula-tabs { display:flex; border-bottom:1px solid var(--mercury); background:var(--white); overflow-x:auto; }
+.ba-formula-tab { padding:.8rem 1rem; border:none; background:transparent; font-weight:800; font-size:.8rem; color:var(--silver); white-space:nowrap; cursor:pointer; }
+.ba-formula-tab.ba-formula-tab-active { color:var(--blue); border-bottom:2px solid var(--blue); }
+.ba-formula-content { padding:1.5rem; overflow-y:auto; flex:1; }
+.ba-formula-card { background:var(--white); border:1px solid var(--mercury); border-radius:14px; padding:1rem; margin-bottom:.8rem; }
+.ba-formula-num { font-size:.7rem; font-weight:800; color:var(--blue); margin-bottom:.2rem; }
+.ba-formula-name { font-weight:800; font-size:.9rem; margin-bottom:.4rem; }
+.ba-formula-expr { font-family:monospace; background:var(--concrete); padding:.4rem .6rem; border-radius:8px; font-size:.85rem; color:var(--blue-dark); }
+.ba-formula-add-section { margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid var(--mercury); }
 
 /* ---------- HOMEWORK DONE ---------- */
 .ba-hw-item.done .ba-hw-subject { text-decoration:line-through; opacity:.6; }

@@ -13,20 +13,28 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
   <meta name="apple-mobile-web-app-title" content="Backpack Air"/>
-  <link rel="icon" href="assets/logo.png" type="image/png"/>
-  <link rel="apple-touch-icon" href="assets/logo.png"/>
+  <link rel="icon" href="assets/brand-logo.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="assets/brand-logo.png"/>
 </head>
 <body>
 
   <div class="ba-page-wrapper">
     <div class="app-shell" id="app-shell">
 
+      <!-- PERSISTENT FOCUS BAR -->
+      <div class="ba-focus-bar" id="focus-bar" style="display:none;">
+        <span class="ba-focus-bar-icon">⏱</span>
+        <span class="ba-focus-bar-time" id="focus-bar-time">25:00</span>
+        <span class="ba-focus-bar-label">Focus</span>
+        <button class="ba-focus-bar-end" id="focus-bar-end">End</button>
+      </div>
+
       <!-- TOP BAR -->
       <header class="ba-app-header">
         <div class="ba-container">
           <div class="ba-app-header-content">
             <div class="ba-app-header-identity">
-              <img src="assets/logo.png" alt="Backpack Air" class="ba-app-logo-img">
+              <img src="assets/brand-logo.png" alt="Backpack Air" class="ba-app-logo-img">
               <span class="ba-app-header-name">Backpack Air</span>
             </div>
             <div class="ba-app-header-school">
@@ -102,12 +110,23 @@
               <h2 class="ba-title-4">My Schoolbag</h2>
               <div class="ba-screen-subtitle">Books &amp; notebooks by subject</div>
             </div>
-            <div class="ba-homework-access" id="schoolbag-homework">
-              <div>
-                <div class="ba-section-title">HOMEWORK DIARY</div>
-                <div class="ba-homework-count" id="schoolbag-homework-count">0 tasks</div>
+            <div class="ba-schoolbag-tools">
+              <div class="ba-tool-card" id="schoolbag-homework-open">
+                <div class="ba-tool-icon">📝</div>
+                <div class="ba-tool-info">
+                  <div class="ba-section-title">HOMEWORK DIARY</div>
+                  <div class="ba-homework-count" id="schoolbag-homework-count">0 tasks</div>
+                </div>
+                <div class="ba-tool-arrow">→</div>
               </div>
-              <button class="ba-homework-open" id="schoolbag-homework-open">Open →</button>
+              <div class="ba-tool-card" id="schoolbag-tools-open">
+                <div class="ba-tool-icon">🛠️</div>
+                <div class="ba-tool-info">
+                  <div class="ba-section-title">TOOLS</div>
+                  <div class="ba-homework-count">Calculator, Clock & more</div>
+                </div>
+                <div class="ba-tool-arrow">→</div>
+              </div>
             </div>
             <div class="ba-folders-grid" id="schoolbag-folders"></div>
           </div>
@@ -178,7 +197,7 @@
               <div class="ba-setting-group">
                 <div class="ba-section-title">SCHOOL INFORMATION</div>
                 <div class="ba-school-details">
-                  <div class="ba-school-logo"><img src="assets/logo.png" alt="School logo" onerror="this.style.display='none'"></div>
+                  <div class="ba-school-logo"><img src="assets/bahria-clg-logo.png" alt="Bahria College Karsaz" onerror="this.style.display='none'"></div>
                   <div class="ba-school-name">BAHRIA COLLEGE KARSAZ</div>
                   <div class="ba-school-address">Habib Rehmatullah Road, Karsaz, Karachi</div>
                   <div class="ba-school-class">Class X-C</div>
@@ -368,6 +387,237 @@
           </div>
         </div>
 
+        <!-- ============ TOOLS MENU MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="tools-menu-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="tools-back">←</button>
+              <h3>Tools</h3>
+            </header>
+            <div class="ba-tools-grid">
+              <div class="ba-tool-menu-item" id="tool-calculator">
+                <div class="ba-tool-menu-icon">🧮</div>
+                <div class="ba-tool-menu-name">Calculator</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-focus">
+                <div class="ba-tool-menu-icon">⏱</div>
+                <div class="ba-tool-menu-name">Focus Time</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-clock">
+                <div class="ba-tool-menu-icon">🕐</div>
+                <div class="ba-tool-menu-name">School Clock</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-sticky">
+                <div class="ba-tool-menu-icon">📌</div>
+                <div class="ba-tool-menu-name">Sticky Notes</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-formulas">
+                <div class="ba-tool-menu-icon">📖</div>
+                <div class="ba-tool-menu-name">Formula Book</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CALCULATOR MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="calculator-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="calc-back">←</button>
+              <h3>Calculator</h3>
+            </header>
+            <div class="ba-calc-tabs">
+              <button class="ba-calc-tab ba-calc-tab-active" id="calc-tab-basic">Basic</button>
+              <button class="ba-calc-tab" id="calc-tab-sci">Scientific</button>
+              <button class="ba-calc-tab" id="calc-tab-conv">Converter</button>
+            </div>
+            
+            <div class="ba-calc-container" id="calc-view-basic">
+              <div class="ba-calc-display" id="calc-display">0</div>
+              <div class="ba-calc-history" id="calc-history"></div>
+              <div class="ba-calc-grid">
+                <button class="ba-calc-btn ba-calc-clear">C</button>
+                <button class="ba-calc-btn ba-calc-op">(</button>
+                <button class="ba-calc-btn ba-calc-op">)</button>
+                <button class="ba-calc-btn ba-calc-op">÷</button>
+                <button class="ba-calc-btn">7</button>
+                <button class="ba-calc-btn">8</button>
+                <button class="ba-calc-btn">9</button>
+                <button class="ba-calc-btn ba-calc-op">×</button>
+                <button class="ba-calc-btn">4</button>
+                <button class="ba-calc-btn">5</button>
+                <button class="ba-calc-btn">6</button>
+                <button class="ba-calc-btn ba-calc-op">−</button>
+                <button class="ba-calc-btn">1</button>
+                <button class="ba-calc-btn">2</button>
+                <button class="ba-calc-btn">3</button>
+                <button class="ba-calc-btn ba-calc-op">+</button>
+                <button class="ba-calc-btn ba-calc-zero">0</button>
+                <button class="ba-calc-btn">.</button>
+                <button class="ba-calc-btn ba-calc-eq">=</button>
+              </div>
+            </div>
+
+            <div class="ba-calc-container" id="calc-view-sci" style="display:none;">
+              <div class="ba-calc-display" id="calc-sci-display">0</div>
+              <div class="ba-calc-history" id="calc-sci-history"></div>
+              <div class="ba-calc-grid ba-calc-sci-grid">
+                <button class="ba-calc-btn ba-calc-sci">sin</button>
+                <button class="ba-calc-btn ba-calc-sci">cos</button>
+                <button class="ba-calc-btn ba-calc-sci">tan</button>
+                <button class="ba-calc-btn ba-calc-sci">π</button>
+                <button class="ba-calc-btn ba-calc-sci">log</button>
+                <button class="ba-calc-btn ba-calc-sci">ln</button>
+                <button class="ba-calc-btn ba-calc-sci">√</button>
+                <button class="ba-calc-btn ba-calc-sci">x²</button>
+                <button class="ba-calc-btn ba-calc-sci">(</button>
+                <button class="ba-calc-btn ba-calc-sci">)</button>
+                <button class="ba-calc-btn ba-calc-sci">%</button>
+                <button class="ba-calc-btn ba-calc-clear">C</button>
+                <button class="ba-calc-btn">7</button>
+                <button class="ba-calc-btn">8</button>
+                <button class="ba-calc-btn">9</button>
+                <button class="ba-calc-btn ba-calc-op">×</button>
+                <button class="ba-calc-btn">4</button>
+                <button class="ba-calc-btn">5</button>
+                <button class="ba-calc-btn">6</button>
+                <button class="ba-calc-btn ba-calc-op">−</button>
+                <button class="ba-calc-btn">1</button>
+                <button class="ba-calc-btn">2</button>
+                <button class="ba-calc-btn">3</button>
+                <button class="ba-calc-btn ba-calc-op">+</button>
+                <button class="ba-calc-btn ba-calc-zero">0</button>
+                <button class="ba-calc-btn">.</button>
+                <button class="ba-calc-btn ba-calc-eq">=</button>
+              </div>
+            </div>
+
+            <div class="ba-conv-container" id="calc-view-conv" style="display:none; padding:1.5rem;">
+              <div class="ba-conv-header">UNIT CONVERTER</div>
+              <div class="ba-form-group">
+                <label>Category</label>
+                <select id="conv-category">
+                  <option value="length">Length</option>
+                  <option value="mass">Mass</option>
+                  <option value="time">Time</option>
+                  <option value="temp">Temperature</option>
+                </select>
+              </div>
+              <div class="ba-conv-row">
+                <input type="number" id="conv-from-val" value="1">
+                <select id="conv-from-unit"></select>
+              </div>
+              <div class="ba-conv-equals">=</div>
+              <div class="ba-conv-row">
+                <input type="number" id="conv-to-val" readonly>
+                <select id="conv-to-unit"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ FOCUS TIME MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="focus-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <div class="ba-focus-container">
+              <button class="ba-nb-back" id="focus-back">←</button>
+              <div class="ba-focus-header">FOCUS TIME</div>
+              
+              <div id="focus-setup">
+                <div class="ba-focus-sub">Choose duration</div>
+                <div class="ba-focus-durations" id="focus-durations">
+                  <button class="ba-focus-dur" data-min="15">15 min</button>
+                  <button class="ba-focus-dur active" data-min="25">25 min</button>
+                  <button class="ba-focus-dur" data-min="45">45 min</button>
+                  <button class="ba-focus-dur" data-min="60">60 min</button>
+                </div>
+                <button class="ba-button ba-button-primary ba-focus-start" id="focus-start">START</button>
+              </div>
+
+              <div id="focus-ended" style="display:none;">
+                <div class="ba-focus-ended-title">FOCUS ENDED</div>
+                <div class="ba-focus-msg">You left Backpack Air.</div>
+                <button class="ba-button ba-button-primary" id="focus-restart">Start Again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SCHOOL CLOCK MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="clock-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <div class="ba-clock-container">
+              <button class="ba-nb-back" id="clock-back">←</button>
+              <div class="ba-clock-title">SCHOOL CLOCK</div>
+              <div class="ba-clock-time" id="clock-time">00:00:00</div>
+              <div class="ba-clock-subject" id="clock-subject">No class right now</div>
+              <div class="ba-clock-period-info" id="clock-period-info"></div>
+              <div class="ba-clock-settings">
+                <div class="ba-form-row"><label>Sound</label>
+                  <select id="clock-sound"><option value="on">ON</option><option value="off">OFF</option></select>
+                </div>
+                <div class="ba-form-row"><label>Vibration</label>
+                  <select id="clock-vibration"><option value="on">ON</option><option value="off">OFF</option></select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ STICKY NOTES MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="sticky-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="sticky-back">←</button>
+              <h3>Sticky Notes</h3>
+              <button class="ba-button ba-button-primary ba-button-sm" id="sticky-add">+ New</button>
+            </header>
+            <div class="ba-sticky-grid" id="sticky-grid"></div>
+            <div class="ba-sticky-editor" id="sticky-editor" style="display:none;">
+              <textarea id="sticky-text" placeholder="Write something..."></textarea>
+              <input id="sticky-label" placeholder="Label (optional)">
+              <div class="ba-modal-actions">
+                <button class="ba-button ba-button-secondary" id="sticky-cancel">Cancel</button>
+                <button class="ba-button ba-button-primary" id="sticky-save">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ FORMULA BOOK MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="formula-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="formula-back">←</button>
+              <h3>Formula Book</h3>
+            </header>
+            <div class="ba-formula-tabs">
+              <button class="ba-formula-tab ba-formula-tab-active" data-subject="math">Mathematics</button>
+              <button class="ba-formula-tab" data-subject="physics">Physics</button>
+              <button class="ba-formula-tab" data-subject="my">My Formulas</button>
+            </div>
+            <div class="ba-formula-content" id="formula-content"></div>
+          </div>
+        </div>
+
+        <!-- ============ HIDDEN GAMES (Gestures) ============ -->
+        <div class="ba-modal ba-modal-fs" id="games-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="games-back">←</button>
+              <h3>Games Unlocked 🎮</h3>
+            </header>
+            <div class="ba-games-grid">
+              <div class="ba-game-card">🐍 Snake</div>
+              <div class="ba-game-card">🔢 2048</div>
+              <div class="ba-game-card"> Sudoku</div>
+              <div class="ba-game-card">🧠 Memory</div>
+              <div class="ba-game-card">💣 Minesweeper</div>
+              <div class="ba-game-card">⭕ Tic-tac-toe</div>
+            </div>
+          </div>
+        </div>
+
       </main>
 
       <!-- BOTTOM TAB BAR (4 pages) -->
@@ -394,7 +644,7 @@
       <div class="ba-modal ba-modal-fs ba-onboarding" id="onboarding" role="dialog" aria-modal="true">
         <div class="ba-modal-content ba-onb">
           <div class="ba-onb-inner">
-            <div class="ba-onb-logo"><img src="assets/logo.png" alt="School" class="ba-onb-logo-img"></div>
+            <div class="ba-onb-logo"><img src="assets/brand-logo.png" alt="Backpack Air" class="ba-onb-logo-img"></div>
             <h2>Welcome to Backpack Air</h2>
             <p class="ba-onb-sub">Set up your digital schoolbag</p>
             <div class="ba-form-group">
