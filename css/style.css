@@ -130,6 +130,8 @@ h4 { font-size: 3.5rem; }
 
 .ba-brand { display: flex; align-items: center; gap: .5rem; }
 .ba-logo { display: inline-flex; align-items: center; gap: .5rem; }
+.ba-logo-img { width:32px; height:32px; border-radius:7px; object-fit:contain; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.12); }
+.ba-logo-white .ba-logo-img { background:transparent; box-shadow:none; }
 .ba-logo_word { font-weight: 800; font-size: 1.25rem; letter-spacing: -.03em; }
 .ba-logo_word em { font-style: normal; color: var(--blue); }
 .ba-logo-white { color: var(--white); }

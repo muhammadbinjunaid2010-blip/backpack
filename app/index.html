@@ -13,7 +13,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
   <meta name="apple-mobile-web-app-title" content="Backpack Air"/>
-  <link rel="apple-touch-icon" href="assets/icon-192.svg"/>
+  <link rel="icon" href="assets/logo.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="assets/logo.png"/>
 </head>
 <body>
 
@@ -25,12 +26,7 @@
         <div class="ba-container">
           <div class="ba-app-header-content">
             <div class="ba-app-header-identity">
-              <svg width="34" height="34" viewBox="0 0 34 34" fill="none" class="ba-app-logo">
-                <path d="M9 6.5C9 4.567 10.567 3 12.5 3H21.5C23.433 3 25 4.567 25 6.5V28H9V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-                <path d="M9 9H25" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-                <path d="M6 9C6 10.657 7.343 12 9 12V9C7.343 9 6 7.657 6 6V9ZM28 9C28 10.657 26.657 12 25 12V9C26.657 9 28 7.657 28 6V9Z" fill="currentColor"/>
-                <path d="M17 6.5V28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-              </svg>
+              <img src="assets/logo.png" alt="Backpack Air" class="ba-app-logo-img">
               <span class="ba-app-header-name">Backpack Air</span>
             </div>
             <div class="ba-app-header-school">
@@ -256,6 +252,8 @@
               <button class="ba-nb-tool active" data-tool="pen" title="Pen"><span class="ba-dot" style="background:#2f5bff"></span></button>
               <button class="ba-nb-tool" data-tool="pencil" title="Pencil"><span class="ba-dot" style="background:#8a8a8a"></span></button>
               <button class="ba-nb-tool" data-tool="highlighter" title="Highlighter"><span class="ba-dot" style="background:#ffe58a"></span></button>
+              <button class="ba-nb-tool" data-tool="square" title="Square">▢</button>
+              <button class="ba-nb-tool" data-tool="circle" title="Circle">◯</button>
               <button class="ba-nb-tool" data-tool="eraser" title="Eraser">🧽</button>
               <div class="ba-nb-divider"></div>
               <button class="ba-nb-tool" data-action="undo" title="Undo">↶</button>
@@ -359,6 +357,8 @@
                 <button class="ba-annotate-tool" data-tool="pen" data-color="#ff6a5e"><span style="background:#ff6a5e"></span></button>
                 <button class="ba-annotate-tool" data-tool="pencil" data-color="#8a8a8a"><span style="background:#8a8a8a"></span></button>
                 <button class="ba-annotate-tool" data-tool="highlighter" data-color="#ffe58a"><span style="background:#ffe58a"></span></button>
+                <button class="ba-annotate-tool" data-tool="square" data-color="#2f5bff" title="Square">▢</button>
+                <button class="ba-annotate-tool" data-tool="circle" data-color="#2f5bff" title="Circle">◯</button>
                 <button class="ba-annotate-tool" data-tool="eraser">🧽</button>
                 <button class="ba-annotate-tool" data-action="undo">↶</button>
                 <button class="ba-annotate-tool" data-action="redo">↷</button>
@@ -394,7 +394,7 @@
       <div class="ba-modal ba-modal-fs ba-onboarding" id="onboarding" role="dialog" aria-modal="true">
         <div class="ba-modal-content ba-onb">
           <div class="ba-onb-inner">
-            <div class="ba-onb-logo">🎒</div>
+            <div class="ba-onb-logo"><img src="assets/logo.png" alt="School" class="ba-onb-logo-img"></div>
             <h2>Welcome to Backpack Air</h2>
             <p class="ba-onb-sub">Set up your digital schoolbag</p>
             <div class="ba-form-group">

@@ -10,13 +10,13 @@
   var STORE_PDF = "ba_pdf_annot_v2";
 
   var SUBJECTS = [
-    { subject: "Mathematics", file: "10 Mathematics Book FBISE (Study++).pdf", rtl: false },
-    { subject: "English", file: "10 English Book FBISE (Study++).pdf", rtl: false },
-    { subject: "Urdu", file: "10 Urdu Book FBISE (Study++).pdf", rtl: true },
-    { subject: "Physics", file: "10 Physics Book FBISE (Study++).pdf", rtl: false },
-    { subject: "Chemistry", file: "10 Chemistry Book FBISE (Study++) (1).pdf", rtl: false },
-    { subject: "Computer Science", file: "10 Computer Science Book FBISE (Study++) (1).pdf", rtl: false },
-    { subject: "Pakistan Studies", file: "10 Pakistan Studies English Book FBISE (Study++) (1).pdf", rtl: false },
+    { subject: "Mathematics", file: "math-10.pdf", rtl: false },
+    { subject: "English", file: "eng-10.pdf", rtl: false },
+    { subject: "Urdu", file: "urd-10.pdf", rtl: true },
+    { subject: "Physics", file: "phy-10.pdf", rtl: false },
+    { subject: "Chemistry", file: "chem-10.pdf", rtl: false },
+    { subject: "Computer Science", file: "cs-10.pdf", rtl: false },
+    { subject: "Pakistan Studies", file: "pst-10.pdf", rtl: false },
     { subject: "Biology", file: null, rtl: false },
     { subject: "Islamiat", file: null, rtl: false }
   ];
@@ -367,8 +367,8 @@
     $("nb-editor-back").addEventListener("click", closeNotebookEditor);
     var canvas = $("nb-canvas");
     window.addEventListener("resize", function () { if ($("notebook-editor-modal").classList.contains("ba-modal-open")) { resizeNb(); renderNbPage(); } });
-    canvas.addEventListener("pointerdown", function (e) { nbDrawing = true; try { canvas.setPointerCapture(e.pointerId); } catch (x) {} nbCur = { tool: nbTool.type, color: nbTool.color, size: nbSize(nbTool.type), points: [nbPos(e)] }; nbUndo.push(nbCur); nbRedo = []; });
-    canvas.addEventListener("pointermove", function (e) { if (!nbDrawing) return; nbCur.points.push(nbPos(e)); renderNbPage(); });
+    canvas.addEventListener("pointerdown", function (e) { nbDrawing = true; try { canvas.setPointerCapture(e.pointerId); } catch (x) {} var p = nbPos(e); nbCur = { tool: nbTool.type, color: nbTool.color, size: nbSize(nbTool.type), points: [p, p] }; nbUndo.push(nbCur); nbRedo = []; });
+    canvas.addEventListener("pointermove", function (e) { if (!nbDrawing) return; if (nbTool.type === "square" || nbTool.type === "circle") nbCur.points[1] = nbPos(e); else nbCur.points.push(nbPos(e)); renderNbPage(); });
     canvas.addEventListener("pointerup", function () { if (nbDrawing) { nbDrawing = false; persistNb(); } });
     document.querySelectorAll("#notebook-editor-modal .ba-nb-tool").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -388,7 +388,7 @@
     });
   }
   function nbPos(e) { var r = $("nb-canvas").getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
-  function nbSize(t) { return t === "highlighter" ? 16 : t === "eraser" ? 26 : t === "pencil" ? 1.5 : 2.5; }
+  function nbSize(t) { return t === "highlighter" ? 16 : t === "eraser" ? 26 : t === "pencil" ? 1.5 : (t === "square" || t === "circle") ? 3 : 2.5; }
   function showNbToolOptions(t) {
     var box = $("nb-tool-options");
     if (t === "eraser") { box.style.display = "none"; return; }
@@ -508,13 +508,37 @@
     if (!ctx || !strokes) return;
     strokes.forEach(function (s) {
       if (!s.points || !s.points.length) return;
+      var p0 = s.points[0], p1 = s.points[s.points.length - 1];
       ctx.lineJoin = "round"; ctx.lineCap = "round";
-      if (s.tool === "eraser") { ctx.globalCompositeOperation = "destination-out"; ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = s.size; }
-      else { ctx.globalCompositeOperation = "source-over"; ctx.strokeStyle = s.color; ctx.lineWidth = s.size; ctx.globalAlpha = s.tool === "highlighter" ? 0.4 : 1; }
-      ctx.beginPath(); ctx.moveTo(s.points[0].x, s.points[0].y);
-      for (var i = 1; i < s.points.length; i++) ctx.lineTo(s.points[i].x, s.points[i].y);
-      if (s.points.length === 1) ctx.lineTo(s.points[0].x + 0.1, s.points[0].y + 0.1);
-      ctx.stroke();
+      if (s.tool === "square" || s.tool === "circle") {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.strokeStyle = s.color; ctx.lineWidth = s.size; ctx.globalAlpha = 1;
+        ctx.beginPath();
+        if (s.tool === "square") {
+          var side = Math.min(Math.abs(p1.x - p0.x), Math.abs(p1.y - p0.y));
+          var sx = p1.x >= p0.x ? p0.x : p0.x - side;
+          var sy = p1.y >= p0.y ? p0.y : p0.y - side;
+          ctx.rect(sx, sy, side, side);
+        } else {
+          var r = Math.min(Math.abs(p1.x - p0.x), Math.abs(p1.y - p0.y)) / 2;
+          ctx.arc((p0.x + p1.x) / 2, (p0.y + p1.y) / 2, r, 0, Math.PI * 2);
+        }
+        ctx.stroke();
+      } else if (s.tool === "eraser") {
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.strokeStyle = "rgba(0,0,0,1)"; ctx.lineWidth = s.size;
+        ctx.beginPath(); ctx.moveTo(p0.x, p0.y);
+        for (var i = 1; i < s.points.length; i++) ctx.lineTo(s.points[i].x, s.points[i].y);
+        if (s.points.length === 1) ctx.lineTo(p0.x + 0.1, p0.y + 0.1);
+        ctx.stroke();
+      } else {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.strokeStyle = s.color; ctx.lineWidth = s.size; ctx.globalAlpha = s.tool === "highlighter" ? 0.4 : 1;
+        ctx.beginPath(); ctx.moveTo(p0.x, p0.y);
+        for (var i = 1; i < s.points.length; i++) ctx.lineTo(s.points[i].x, s.points[i].y);
+        if (s.points.length === 1) ctx.lineTo(p0.x + 0.1, p0.y + 0.1);
+        ctx.stroke();
+      }
     });
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
   }
@@ -750,13 +774,15 @@
     $("pdf-search").addEventListener("click", function () { alert("Use your browser's find (Ctrl/Cmd + F) inside the PDF viewer to search."); });
     $("pdf-bookmark").addEventListener("click", function () { if (!pdf.book) return; var bm = load("ba_bookmarks_v1", {}); bm[pdf.book.subject] = pdf.page; save("ba_bookmarks_v1", bm); $("pdf-bookmark").textContent = "🔖✓"; setTimeout(function () { $("pdf-bookmark").textContent = "🔖"; }, 1200); });
     $("pdf-annotate").addEventListener("click", togglePdfAnnotate);
-    setupAnnotate("pdf-annotation-toolbar", function () { return load(STORE_PDF, {})[annKey()] || []; }, function (s) { var all = load(STORE_PDF, {}); all[annKey()] = s || []; save(STORE_PDF, all); });
+    setupAnnotate("pdf-annotation-toolbar",
+      function (key) { var rec = load(STORE_PDF, {})[key || annKey()]; return rec && rec.strokes ? rec.strokes : []; },
+      function (s, key) { var k = key || annKey(); var all = load(STORE_PDF, {}); var rec = all[k] || {}; rec.zoom = pdf.zoom; rec.strokes = s || []; all[k] = rec; save(STORE_PDF, all); });
   }
-  function annKey() { return pdf.book ? pdf.book.subject + ":" + pdf.page : null; }
-  function openPdf(book) { pdf.book = book; pdf.page = 1; pdf.zoom = 100; pdf.annotating = false; $("pdf-title").textContent = book.subject; $("pdf-annotation-toolbar").style.display = "none"; gotoPdf(1, true); $("pdf-reader-modal").classList.add("ba-modal-open"); }
+  function annKey() { return pdf.book ? pdf.book.subject + ":" + pdf.page + ":" + (pdf.zoom || 100) : null; }
+  function openPdf(book) { pdf.book = book; pdf.page = 1; pdf.zoom = 100; pdf.annotating = false; $("pdf-title").textContent = book.subject; $("pdf-annotation-toolbar").style.display = "none"; gotoPdf(1); $("pdf-reader-modal").classList.add("ba-modal-open"); }
   function closePdf() { if (window.__ba_saveAnnotNow) window.__ba_saveAnnotNow(); $("pdf-reader-modal").classList.remove("ba-modal-open"); $("pdf-iframe").src = "about:blank"; }
-  function gotoPdf(n) { if (!pdf.book) return; if (pdf.annotating && window.__ba_saveAnnotNow) window.__ba_saveAnnotNow(); n = Math.max(1, n); pdf.page = n; $("pdf-iframe").src = encodeURI(pdf.book.file) + "#page=" + n + "&zoom=" + pdf.zoom; $("pdf-current-page").textContent = n; $("pdf-page-input").value = n; if (pdf.annotating && window.__ba_reseedAnnot) window.__ba_reseedAnnot(); }
-  function setZoom(z) { z = Math.max(50, Math.min(300, z)); pdf.zoom = z; $("pdf-zoom-level").textContent = z + "%"; gotoPdf(pdf.page); }
+  function gotoPdf(n, oldZoom) { if (!pdf.book) return; var savedZoom = (oldZoom != null) ? oldZoom : pdf.zoom; var oldKey = pdf.book.subject + ":" + pdf.page + ":" + savedZoom; if (pdf.annotating && window.__ba_saveAnnotNow) window.__ba_saveAnnotNow(oldKey); n = Math.max(1, n); var newKey = pdf.book.subject + ":" + n + ":" + pdf.zoom; pdf.page = n; $("pdf-iframe").src = encodeURI(pdf.book.file) + "#page=" + n + "&zoom=" + pdf.zoom; $("pdf-current-page").textContent = n; $("pdf-page-input").value = n; if (pdf.annotating && window.__ba_reseedAnnot) window.__ba_reseedAnnot(newKey); }
+  function setZoom(z) { z = Math.max(50, Math.min(300, z)); var oldZ = pdf.zoom; pdf.zoom = z; $("pdf-zoom-level").textContent = z + "%"; gotoPdf(pdf.page, oldZ); }
   function togglePdfAnnotate() {
     pdf.annotating = !pdf.annotating;
     $("pdf-annotation-toolbar").style.display = pdf.annotating ? "block" : "none";
@@ -774,30 +800,35 @@
     var wrap = $("pdf-viewer"), dpr = window.devicePixelRatio || 1;
     ov.width = wrap.clientWidth * dpr; ov.height = wrap.clientHeight * dpr; ov.style.width = wrap.clientWidth + "px"; ov.style.height = wrap.clientHeight + "px";
     var ctx = ov.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, ov.width, ov.height);
-    drawStrokes(ctx, load(STORE_PDF, {})[annKey()] || []);
+    var rec = load(STORE_PDF, {})[annKey()];
+    drawStrokes(ctx, rec && rec.strokes ? rec.strokes : []);
   }
   function setupAnnotate(toolbarId, loadFn, saveFn) {
     var toolbar = $(toolbarId); if (!toolbar) return;
     var canvas, ctx, drawing = false, cur = null, undo = [], redo = [], tool = { type: "pen", color: "#2f5bff", size: 2.5 };
-    function bind(target, dpr) { canvas = target; ctx = canvas.getContext("2d"); if (dpr) ctx.setTransform(dpr, 0, 0, dpr, 0, 0); undo = loadFn() || []; redo = []; target.addEventListener("pointerdown", start); target.addEventListener("pointermove", move); window.addEventListener("pointerup", end); redraw(); }
-    function start(e) { drawing = true; try { canvas.setPointerCapture(e.pointerId); } catch (x) {} cur = { tool: tool.type, color: tool.color, size: sz(tool.type), points: [pos(e)] }; undo.push(cur); redo = []; }
-    function move(e) { if (!drawing) return; cur.points.push(pos(e)); redraw(); }
-    function end() { if (!drawing) return; drawing = false; if (saveFn) saveFn(undo); }
+    function cw() { return (canvas && canvas.clientWidth) || (canvas && canvas.width) || 1; }
+    function ch() { return (canvas && canvas.clientHeight) || (canvas && canvas.height) || 1; }
+    function norm(list) { var w = cw(), h = ch(); return (list || []).map(function (s) { return { tool: s.tool, color: s.color, size: s.size, points: (s.points || []).map(function (p) { return { x: p.x / w, y: p.y / h }; }) }; }); }
+    function denorm(list) { var w = cw(), h = ch(); return (list || []).map(function (s) { return { tool: s.tool, color: s.color, size: s.size, points: (s.points || []).map(function (p) { return { x: p.x * w, y: p.y * h }; }) }; }); }
+    function bind(target, dpr) { canvas = target; ctx = canvas.getContext("2d"); if (dpr) ctx.setTransform(dpr, 0, 0, dpr, 0, 0); undo = denorm(loadFn()); redo = []; target.addEventListener("pointerdown", start); target.addEventListener("pointermove", move); window.addEventListener("pointerup", end); redraw(); }
+    function start(e) { drawing = true; try { canvas.setPointerCapture(e.pointerId); } catch (x) {} var p = pos(e); cur = { tool: tool.type, color: tool.color, size: sz(tool.type), points: [p, p] }; undo.push(cur); redo = []; }
+    function move(e) { if (!drawing) return; if (tool.type === "square" || tool.type === "circle") cur.points[1] = pos(e); else cur.points.push(pos(e)); redraw(); }
+    function end() { if (!drawing) return; drawing = false; if (saveFn) saveFn(norm(undo)); }
     function pos(e) { var r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
-    function sz(t) { return t === "highlighter" ? 16 : t === "eraser" ? 22 : t === "pencil" ? 1.5 : 2.5; }
+    function sz(t) { return t === "highlighter" ? 16 : t === "eraser" ? 22 : t === "pencil" ? 1.5 : (t === "square" || t === "circle") ? 3 : 2.5; }
     function redraw() { if (!ctx) return; ctx.clearRect(0, 0, canvas.clientWidth || canvas.width, canvas.clientHeight || canvas.height); drawStrokes(ctx, undo); }
     toolbar.querySelectorAll(".ba-annotate-tool").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var t = this.getAttribute("data-tool"), act = this.getAttribute("data-action");
-        if (act === "undo") { if (undo.length) { redo.push(undo.pop()); redraw(); if (saveFn) saveFn(undo); } return; }
-        if (act === "redo") { if (redo.length) { undo.push(redo.pop()); redraw(); if (saveFn) saveFn(undo); } return; }
-        if (act === "save") { if (saveFn) saveFn(undo); return; }
+        if (act === "undo") { if (undo.length) { redo.push(undo.pop()); redraw(); if (saveFn) saveFn(norm(undo)); } return; }
+        if (act === "redo") { if (redo.length) { undo.push(redo.pop()); redraw(); if (saveFn) saveFn(norm(undo)); } return; }
+        if (act === "save") { if (saveFn) saveFn(norm(undo)); return; }
         if (t) { tool = { type: t, color: this.getAttribute("data-color") || "#0f0f0f", size: sz(t) }; toolbar.querySelectorAll(".ba-annotate-tool").forEach(function (b) { b.classList.remove("active"); }); this.classList.add("active"); }
       });
     });
     window.__ba_bindAnnot = bind;
-    window.__ba_reseedAnnot = function () { if (canvas) { undo = loadFn() || []; redo = []; redraw(); } };
-    window.__ba_saveAnnotNow = function () { if (saveFn && canvas) saveFn(undo); };
+    window.__ba_reseedAnnot = function (key) { if (canvas) { undo = denorm(loadFn(key)); redo = []; redraw(); } };
+    window.__ba_saveAnnotNow = function (key) { if (saveFn && canvas) saveFn(norm(undo), key); };
   }
 
   window.addEventListener("load", init);

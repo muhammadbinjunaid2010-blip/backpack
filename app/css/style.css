@@ -40,6 +40,7 @@ h1,h2,h3,h4 { font-weight:800; line-height:1.1; letter-spacing:-0.03em; }
 .ba-app-header-content { display:grid; grid-template-columns:auto 1fr; gap:.6rem; align-items:center; }
 .ba-app-header-identity { display:flex; align-items:center; gap:.5rem; }
 .ba-app-logo { color:var(--blue); }
+.ba-app-logo-img { width:32px; height:32px; border-radius:8px; object-fit:contain; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.15); }
 .ba-app-header-name { font-weight:800; font-size:1rem; }
 .ba-app-header-school { text-align:right; min-width:0; }
 .ba-app-school-name { font-weight:800; font-size:.9rem; color:var(--blue); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -302,7 +303,8 @@ body.theme-dark .ba-period-item.ba-period-break { background:#221f33; }
 /* ---------- ONBOARDING ---------- */
 .ba-onb { width:100%; }
 .ba-onb-inner { padding:2.2rem 1.4rem; text-align:center; display:flex; flex-direction:column; gap:.8rem; overflow-y:auto; }
-.ba-onb-logo { font-size:3rem; }
+.ba-onb-logo { font-size:3rem; display:flex; justify-content:center; }
+.ba-onb-logo-img { width:88px; height:88px; border-radius:18px; object-fit:contain; background:#fff; padding:8px; box-shadow:0 12px 30px rgba(0,0,0,.18); }
 .ba-onb-inner h2 { font-size:1.6rem; }
 .ba-onb-sub { color:var(--silver); margin-top:-.4rem; font-size:.85rem; }
 .ba-onb-note { font-size:.72rem; color:var(--silver); margin-top:.4rem; line-height:1.4; }
