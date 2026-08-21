@@ -245,6 +245,48 @@
   });
   if (tabletApps.length) { tabletApps[0].click(); }
 
+  /* ---------------- Notebook paper-type switcher (item 5) ---------------- */
+  var paperChoices = Array.prototype.slice.call(document.querySelectorAll(".ba-paper-choice"));
+  var paperPreview = document.querySelector(".ba-notebook_paper");
+  var coverValue = document.querySelector(".ba-cover-value");
+  if (paperChoices.length && paperPreview) {
+    paperChoices.forEach(function (ch) {
+      ch.addEventListener("click", function () {
+        var type = "";
+        if (ch.classList.contains("ba-paper-choice-ruled")) type = "ruled";
+        else if (ch.classList.contains("ba-paper-choice-grid")) type = "grid";
+        else if (ch.classList.contains("ba-paper-choice-graph")) type = "graph";
+        else if (ch.classList.contains("ba-paper-choice-blank")) type = "blank";
+        paperPreview.classList.remove("is-ruled", "is-grid", "is-graph", "is-blank");
+        paperPreview.classList.add("is-" + type);
+        paperChoices.forEach(function (c) { c.classList.remove("is-active"); });
+        ch.classList.add("is-active");
+        if (coverValue) { coverValue.textContent = ch.querySelector("span").textContent; }
+      });
+    });
+  }
+
+  /* ---------------- 4 app icons fly into the tablet on scroll ---------------- */
+  var oneDevice = document.getElementById("one-device");
+  var floatWrap = document.querySelector(".ba-float-icons");
+  if (oneDevice && floatWrap && hasGsap) {
+    var ficons = Array.prototype.slice.call(floatWrap.querySelectorAll(".ba-float-icon"));
+    var starts = [{ x: -210, y: -150 }, { x: 210, y: -150 }, { x: -210, y: 150 }, { x: 210, y: 150 }];
+    ficons.forEach(function (ic, i) { gsap.set(ic, { x: starts[i].x, y: starts[i].y, scale: 1, opacity: 1 }); });
+    var flyTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: oneDevice,
+        start: "top 80%",
+        end: "center 55%",
+        scrub: 1
+      }
+    });
+    ficons.forEach(function (ic) {
+      flyTl.to(ic, { x: 0, y: 0, scale: 0.35, ease: "power2.in", duration: 1 }, 0);
+      flyTl.to(ic, { opacity: 0, ease: "power1.in", duration: 0.3 }, 0.72);
+    });
+  }
+
   /* ---------------- FAQ ---------------- */
   document.querySelectorAll(".ba-faq_item").forEach(function (item) {
     var q = item.querySelector(".ba-faq_q");

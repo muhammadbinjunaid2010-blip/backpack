@@ -1,0 +1,32 @@
+{
+  "id": "/app",
+  "name": "Backpack Air — Digital Schoolbag",
+  "short_name": "Backpack Air",
+  "description": "The digital schoolbag: textbooks, notebooks, sheets, timetable and homework in one managed app.",
+  "start_url": "/app/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#2f5bff",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "app/assets/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "app/assets/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "app/assets/icon-maskable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
