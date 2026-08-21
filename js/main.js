@@ -97,49 +97,39 @@
         createScrollTrigger(el, tl);
       });
 
-      /* ---------------- Bag scroll scene: cards enter the tablet ---------------- */
+      /* ---------------- All becomes digital: 4 pinned screens ---------------- */
       var bagScene = document.querySelector(".ba-bag-scene");
       if (bagScene) {
-        bagScene.classList.add("js-bag");
-        var bagCards = Array.prototype.slice.call(bagScene.querySelectorAll(".ba-bag-card"));
-        var bagSub = bagScene.querySelector("#ba-bag-sub");
-        var bagListItems = Array.prototype.slice.call(bagScene.querySelectorAll("#ba-bag-list li"));
-        var bagTakeaway = bagScene.querySelector("#ba-bag-takeaway");
-        var bagTexts = [
-          "Books become digital.",
-          "Notebooks become digital.",
-          "Stationery becomes digital.",
-          "A complete digital schoolbag."
-        ];
-        var bagTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: bagScene,
-            start: "top top",
-            end: "+=250%",
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1
+        var bagHeadings = Array.prototype.slice.call(bagScene.querySelectorAll(".ba-bag-h"));
+        var bagFrames = Array.prototype.slice.call(bagScene.querySelectorAll(".ba-bag-frame"));
+        var bagHls = Array.prototype.slice.call(bagScene.querySelectorAll(".ba-hl_bg"));
+        var bagReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        gsap.set(bagHeadings, { autoAlpha: 0, y: 24 });
+        gsap.set(bagHeadings[0], { autoAlpha: 1, y: 0 });
+        gsap.set(bagFrames, { autoAlpha: 0, scale: 0.9 });
+        gsap.set(bagFrames[0], { autoAlpha: 1, scale: 1 });
+        gsap.set(bagHls, { scaleX: 0 });
+        if (bagReduce) gsap.set(bagHls[0], { scaleX: 1 });
+        if (!bagReduce && bagHeadings.length > 1) {
+          var bagTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: bagScene,
+              start: "top top",
+              end: "+=300%",
+              scrub: 0.6,
+              pin: true,
+              anticipatePin: 1
+            }
+          });
+          bagTl.to(bagHls[0], { scaleX: 1, duration: 1, ease: "power2.out" });
+          for (var i = 0; i < bagHeadings.length - 1; i++) {
+            bagTl.to(bagHeadings[i], { autoAlpha: 0, y: -24, duration: 0.4 }, "+=0.8")
+                 .to(bagFrames[i], { autoAlpha: 0, scale: 0.9, duration: 0.4 }, "<")
+                 .to(bagHeadings[i + 1], { autoAlpha: 1, y: 0, duration: 0.4 }, "<")
+                 .to(bagFrames[i + 1], { autoAlpha: 1, scale: 1, duration: 0.4 }, "<")
+                 .to(bagHls[i + 1], { scaleX: 1, duration: 1, ease: "power2.out" }, "<+=0.1");
           }
-        });
-        var bagPer = 1 / bagCards.length;
-        bagCards.forEach(function (card) {
-          gsap.set(card, { y: "46vh", scale: 1, autoAlpha: 1 });
-        });
-        bagCards.forEach(function (card, i) {
-          var seg = i * bagPer;
-          bagTl.fromTo(card, { y: "46vh", scale: 1, autoAlpha: 1 }, { y: "10vh", scale: 0.6, autoAlpha: 1, ease: "power1.inOut", duration: bagPer * 0.55 }, seg);
-          bagTl.to(card, { scale: 0.16, autoAlpha: 0, ease: "power2.in", duration: bagPer * 0.45 }, seg + bagPer * 0.55);
-          bagTl.call(function () { bagSub.style.opacity = 0; }, null, seg + bagPer * 0.08);
-          bagTl.call(function (idx) {
-            bagSub.textContent = bagTexts[idx];
-            bagSub.style.opacity = 1;
-            if (bagListItems[idx]) bagListItems[idx].classList.add("is-in");
-          }, [i], seg + bagPer * 0.14);
-        });
-        bagTl.call(function () {
-          bagSub.textContent = bagTexts[3];
-          bagTakeaway.classList.add("is-visible");
-        }, null, 0.985);
+        }
       }
     });
   }
