@@ -7,7 +7,7 @@
    longer controls those pages — this worker provides their caching.
    ============================================================ */
 
-const CACHE_NAME = "backpack-air-site-v1";
+const CACHE_NAME = "backpack-air-site-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -39,49 +39,43 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
-self.addEventListener("fetch", event => {
+function networkFirst(req) {
+  return fetch(req).then(function (res) {
+    var clone = res.clone();
+    caches.open(CACHE_NAME).then(function (cache) { cache.put(req, clone); });
+    return res;
+  }).catch(function () {
+    return caches.match(req).then(function (m) { return m || caches.match("./index.html"); });
+  });
+}
+
+function staleWhileRevalidate(req) {
+  return caches.match(req).then(function (cached) {
+    var fetched = fetch(req).then(function (res) {
+      var clone = res.clone();
+      caches.open(CACHE_NAME).then(function (cache) { cache.put(req, clone); });
+      return res;
+    }).catch(function () { return cached; });
+    return cached || fetched;
+  });
+}
+
+self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
   var url = new URL(event.request.url);
 
   // Cross-origin (fonts, CDNs): network-first, fall back to cache.
   if (url.origin !== self.location.origin) {
-    event.respondWith(
-      fetch(event.request).then(response => {
-        var clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        return response;
-      }).catch(() => caches.match(event.request))
-    );
+    event.respondWith(networkFirst(event.request));
     return;
   }
 
-  // Navigations: try exact, then network, then appropriate index fallback.
+  // Pages + app navigations: network-first so new deploys show immediately.
   if (event.request.mode === "navigate") {
-    event.respondWith(
-      caches.match(event.request).then(cached => {
-        if (cached) return cached;
-        return fetch(event.request).then(response => {
-          var clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-          return response;
-        });
-      }).catch(() => {
-        if (url.pathname.indexOf("/app") === 0) return caches.match("./app/index.html");
-        return caches.match("./index.html");
-      })
-    );
+    event.respondWith(networkFirst(event.request));
     return;
   }
 
-  // Same-origin assets: cache-first, then network (and cache the result).
-  event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-      return fetch(event.request).then(response => {
-        var clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        return response;
-      });
-    })
-  );
+  // Same-origin assets (css/js/icons/pdf): stale-while-revalidate.
+  event.respondWith(staleWhileRevalidate(event.request));
 });
