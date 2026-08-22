@@ -192,6 +192,7 @@
                 <div class="ba-form-row"><label>Theme</label>
                   <select id="setting-theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select>
                 </div>
+                <div class="ba-form-row" style="border:none;margin-top:1rem;"><label style="color:var(--silver);cursor:default;">Version</label><span id="easter-egg-trigger" style="color:var(--silver);cursor:pointer;font-size:.8rem;padding:.5rem;border-radius:8px;">1.0.0</span></div>
               </div>
 
               <div class="ba-setting-group">
@@ -205,7 +206,7 @@
                 </div>
               </div>
 
-              <div class="ba-credit-block">Backpack Air · Built by MO Digital</div>
+              <div class="ba-credit-block">Backpack Air · A project of MO Digital</div>
             </div>
           </div>
         </section>
@@ -600,24 +601,6 @@
           </div>
         </div>
 
-        <!-- ============ HIDDEN GAMES (Gestures) ============ -->
-        <div class="ba-modal ba-modal-fs" id="games-modal" role="dialog" aria-modal="true">
-          <div class="ba-modal-content ba-modal-full">
-            <header class="ba-nb-header">
-              <button class="ba-nb-back" id="games-back">←</button>
-              <h3>Games Unlocked 🎮</h3>
-            </header>
-            <div class="ba-games-grid">
-              <div class="ba-game-card">🐍 Snake</div>
-              <div class="ba-game-card">🔢 2048</div>
-              <div class="ba-game-card"> Sudoku</div>
-              <div class="ba-game-card">🧠 Memory</div>
-              <div class="ba-game-card">💣 Minesweeper</div>
-              <div class="ba-game-card">⭕ Tic-tac-toe</div>
-            </div>
-          </div>
-        </div>
-
       </main>
 
       <!-- BOTTOM TAB BAR (4 pages) -->
@@ -637,6 +620,318 @@
         <div class="ba-install-actions">
           <button class="ba-button ba-button-primary ba-button-sm" id="install-btn">Install</button>
           <button class="ba-install-dismiss" id="install-dismiss">✕</button>
+        </div>
+      </div>
+
+      <!-- ============ HIDDEN GAMES ============ -->
+      <div class="ba-modal ba-modal-fs" id="games-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="games-back">←</button>
+            <h3>Games Unlocked 🎮</h3>
+          </header>
+          <div class="ba-games-grid">
+            <div class="ba-game-card" id="open-snake">🐍 Snake</div>
+            <div class="ba-game-card" id="open-2048">🔢 2048</div>
+            <div class="ba-game-card" id="open-flappy">🐦 Flappy Bird</div>
+            <div class="ba-game-card" id="open-breakout">🧱 Breakout</div>
+            <div class="ba-game-card" id="open-whack">🔨 Whack-a-Mole</div>
+            <div class="ba-game-card" id="open-connect4">🔴 Connect Four</div>
+            <div class="ba-game-card" id="open-memory">🧠 Memory</div>
+            <div class="ba-game-card" id="open-sudoku"> Sudoku</div>
+            <div class="ba-game-card" id="open-minesweeper">💣 Minesweeper</div>
+            <div class="ba-game-card" id="open-tictactoe">⭕ Tic-tac-toe</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ SNAKE GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="snake-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="snake-back">←</button>
+            <h3>Snake 🐍</h3>
+            <div class="ba-nb-page-info" id="snake-score">Score: 0</div>
+          </header>
+          <div class="ba-game-setup" id="snake-setup">
+            <div class="ba-game-setup-title">Snake 🐍</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="snake"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="snake"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="snake">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="snake">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="snake">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="snake-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="snake-play" style="display:none;">
+            <canvas id="snake-canvas" width="300" height="300"></canvas>
+            <div class="ba-game-controls">
+              <button class="ba-game-btn" id="snake-up">↑</button>
+              <div class="ba-game-row">
+                <button class="ba-game-btn" id="snake-left">←</button>
+                <button class="ba-game-btn" id="snake-down">↓</button>
+                <button class="ba-game-btn" id="snake-right">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 2048 GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="game-2048-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="game-2048-back">←</button>
+            <h3>2048 🔢</h3>
+            <div class="ba-nb-page-info" id="game-2048-score">Score: 0</div>
+          </header>
+          <div class="ba-game-wrap">
+            <div id="game-2048-grid" class="ba-2048-grid"></div>
+            <div style="font-size:.7rem;color:var(--silver);text-align:center;margin-top:.5rem;">Swipe or use arrow keys</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ MEMORY GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="memory-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="memory-back">←</button>
+            <h3>Memory 🧠</h3>
+            <div class="ba-nb-page-info" id="memory-score">Moves: 0</div>
+          </header>
+          <div class="ba-game-setup" id="memory-setup">
+            <div class="ba-game-setup-title">Memory 🧠</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="memory"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="memory"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="memory">Easy (8)</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="memory">Medium (12)</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="memory">Hard (18)</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="memory-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="memory-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="memory-turn-bar" style="display:none;"><span class="ba-game-turn-player">🧠</span><span id="memory-turn-text">Player 1's turn</span></div>
+            <div id="memory-grid" class="ba-memory-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TIC-TAC-TOE GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="tictactoe-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="tictactoe-back">←</button>
+            <h3>Tic-tac-toe ⭕</h3>
+          </header>
+          <div class="ba-game-setup" id="tictactoe-setup">
+            <div class="ba-game-setup-title">Tic-tac-toe ⭕</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn" data-mode="bot" data-game="tictactoe"><div class="ba-game-mode-icon">🤖</div><div class="ba-game-mode-name">vs Bot</div></button>
+                <button class="ba-game-mode-btn selected" data-mode="friend" data-game="tictactoe"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">BOT DIFFICULTY</div>
+              <div class="ba-game-mode-row" id="ttt-diff-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="tictactoe">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="tictactoe">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="tictactoe">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="tictactoe-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="tictactoe-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="ttt-turn-bar"><span class="ba-game-turn-player">⭕</span><span id="tictactoe-status">Player X's turn</span></div>
+            <div id="tictactoe-grid" class="ba-tictactoe-grid"></div>
+            <button class="ba-button ba-button-secondary" id="tictactoe-restart" style="margin-top:1rem;">Restart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ SUDOKU GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="sudoku-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="sudoku-back">←</button>
+            <h3>Sudoku </h3>
+          </header>
+          <div class="ba-game-wrap">
+            <div id="sudoku-grid" class="ba-sudoku-grid"></div>
+            <div class="ba-sudoku-numpad" id="sudoku-numpad"></div>
+            <button class="ba-button ba-button-secondary" id="sudoku-restart" style="margin-top:1rem;">New Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ MINESWEEPER GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="minesweeper-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="minesweeper-back">←</button>
+            <h3>Minesweeper 💣</h3>
+          </header>
+          <div class="ba-game-setup" id="minesweeper-setup">
+            <div class="ba-game-setup-title">Minesweeper 💣</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="minesweeper"><div class="ba-game-mode-icon">🌱</div><div class="ba-game-mode-name">Easy</div></button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="minesweeper"><div class="ba-game-mode-icon">⚡</div><div class="ba-game-mode-name">Medium</div></button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="minesweeper"><div class="ba-game-mode-icon">💀</div><div class="ba-game-mode-name">Hard</div></button>
+              </div>
+              <div class="ba-game-mode-label" id="ms-diff-desc" style="font-size:.72rem;letter-spacing:0;color:var(--silver);margin-top:.3rem;">8×8 · 10 mines</div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="minesweeper-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="minesweeper-play" style="display:none;">
+            <div id="minesweeper-grid" class="ba-minesweeper-grid"></div>
+            <button class="ba-button ba-button-secondary" id="minesweeper-restart" style="margin-top:1rem;">New Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ FLAPPY BIRD ============ -->
+      <div class="ba-modal ba-modal-fs" id="flappy-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="flappy-back">←</button>
+            <h3>Flappy Bird 🐦</h3>
+            <div class="ba-nb-page-info" id="flappy-score">Score: 0</div>
+          </header>
+          <div class="ba-game-setup" id="flappy-setup">
+            <div class="ba-game-setup-title">Flappy Bird 🐦</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="flappy"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="flappy"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="flappy">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="flappy">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="flappy">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="flappy-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="flappy-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="flappy-turn-bar" style="display:none;"><span class="ba-game-turn-player">🐦</span><span id="flappy-turn-text">Player 1</span></div>
+            <canvas id="flappy-canvas" width="300" height="400"></canvas>
+            <div style="font-size:.8rem;color:var(--silver);text-align:center;margin-top:.5rem;">Tap or press Space to flap</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ BREAKOUT ============ -->
+      <div class="ba-modal ba-modal-fs" id="breakout-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="breakout-back">←</button>
+            <h3>Breakout 🧱</h3>
+            <div class="ba-nb-page-info" id="breakout-score">Score: 0</div>
+          </header>
+          <div class="ba-game-setup" id="breakout-setup">
+            <div class="ba-game-setup-title">Breakout 🧱</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="breakout"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="breakout"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="breakout">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="breakout">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="breakout">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="breakout-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="breakout-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="breakout-turn-bar" style="display:none;"><span class="ba-game-turn-player">🧱</span><span id="breakout-turn-text">Player 1</span></div>
+            <canvas id="breakout-canvas" width="300" height="360"></canvas>
+            <div style="font-size:.8rem;color:var(--silver);text-align:center;margin-top:.5rem;">Swipe or drag paddle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ WHACK-A-MOLE ============ -->
+      <div class="ba-modal ba-modal-fs" id="whack-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="whack-back">←</button>
+            <h3>Whack-a-Mole 🔨</h3>
+            <div class="ba-nb-page-info" id="whack-score">Score: 0 | Time: 30s</div>
+          </header>
+          <div class="ba-game-setup" id="whack-setup">
+            <div class="ba-game-setup-title">Whack-a-Mole 🔨</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="whack"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="whack"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="whack">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="whack">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="whack">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="whack-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="whack-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="whack-turn-bar" style="display:none;"><span class="ba-game-turn-player">🔨</span><span id="whack-turn-text">Player 1</span></div>
+            <div id="whack-grid" class="ba-whack-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ CONNECT FOUR ============ -->
+      <div class="ba-modal ba-modal-fs" id="connect4-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="connect4-back">←</button>
+            <h3>Connect Four 🔴</h3>
+          </header>
+          <div class="ba-game-setup" id="connect4-setup">
+            <div class="ba-game-setup-title">Connect Four 🔴</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="bot" data-game="connect4"><div class="ba-game-mode-icon">🤖</div><div class="ba-game-mode-name">vs Bot</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="connect4"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">BOT DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="connect4">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="connect4">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="connect4">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="connect4-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="connect4-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="c4-turn-bar"><span class="ba-game-turn-player">🔴</span><span id="connect4-status">Your turn (Red)</span></div>
+            <div id="connect4-grid" class="ba-connect4-grid"></div>
+            <button class="ba-button ba-button-secondary" id="connect4-restart" style="margin-top:1rem;">Restart</button>
+          </div>
         </div>
       </div>
 
@@ -667,7 +962,7 @@
 
     </div>
 
-    <div class="ba-app-credit">Built by MO Digital</div>
+    <div class="ba-app-credit">A project of MO Digital</div>
   </div>
 
   <script src="js/app.js"></script>

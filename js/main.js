@@ -261,20 +261,37 @@
   var floatWrap = document.querySelector(".ba-float-icons");
   if (oneDevice && floatWrap && hasGsap) {
     var ficons = Array.prototype.slice.call(floatWrap.querySelectorAll(".ba-float-icon"));
-    var starts = [{ x: -210, y: -150 }, { x: 210, y: -150 }, { x: -210, y: 150 }, { x: 210, y: 150 }];
+    var tabletCard = document.querySelector(".ba-one_card-tablet");
+    var tabletScreen = tabletCard ? tabletCard.querySelector(".ba-tablet_screen") : null;
+    var appBtns = tabletScreen ? Array.prototype.slice.call(tabletScreen.querySelectorAll(".ba-tablet_app")) : [];
+    // Target: first 4 app buttons (Books, Notebooks, Timetable, Exams)
+    var targets = appBtns.slice(0, 4);
+    var starts = [{ x: -220, y: -160 }, { x: 220, y: -160 }, { x: -220, y: 160 }, { x: 220, y: 160 }];
     ficons.forEach(function (ic, i) { gsap.set(ic, { x: starts[i].x, y: starts[i].y, scale: 1, opacity: 1 }); });
     var flyTl = gsap.timeline({
       scrollTrigger: {
         trigger: oneDevice,
         start: "top 80%",
-        end: "center 55%",
-        scrub: 1
+        end: "center 50%",
+        scrub: 1.2
       }
     });
-    ficons.forEach(function (ic) {
-      flyTl.to(ic, { x: 0, y: 0, scale: 0.35, ease: "power2.in", duration: 1 }, 0);
-      flyTl.to(ic, { opacity: 0, ease: "power1.in", duration: 0.3 }, 0.72);
+    ficons.forEach(function (ic, i) {
+      // Phase 1: fly toward tablet center and shrink
+      flyTl.to(ic, { x: 0, y: 0, scale: 0.4, ease: "power2.in", duration: 0.8 }, 0);
+      // Hide label as it shrinks
+      flyTl.to(ic.querySelector(".ba-float-label") || ic, { opacity: 0, duration: 0.2 }, 0.3);
+      // Phase 2: fade out once it reaches the tablet
+      flyTl.to(ic, { opacity: 0, ease: "power1.in", duration: 0.2 }, 0.85);
     });
+    // Highlight the corresponding tablet app icons as icons land
+    if (targets.length) {
+      targets.forEach(function (btn, i) {
+        var delay = 0.5 + i * 0.08;
+        flyTl.to(btn, { scale: 1.15, boxShadow: "0 0 20px rgba(47,91,255,.3)", duration: 0.15 }, delay);
+        flyTl.to(btn, { scale: 1, boxShadow: "none", duration: 0.2 }, delay + 0.15);
+      });
+    }
   }
 
   /* ---------------- FAQ ---------------- */
