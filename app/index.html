@@ -545,17 +545,38 @@
         </div>
       </div>
 
+      <!-- TEACHER LOGIN SCREEN -->
+      <div class="ba-modal ba-modal-fs ba-onboarding" id="teacher-login-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-onb">
+        <div class="ba-onb-inner">
+          <div class="ba-onb-logo"><img src="assets/brand-logo.png" alt="Backpack Air" class="ba-onb-logo-img"></div>
+          <h2>Teacher Access</h2>
+          <p class="ba-onb-sub">Enter your credentials to continue</p>
+          <div class="ba-form-group"><label>School</label><select id="tl-school"><option value="">Select your school</option><option value="Bahria College Karsaz">Bahria College Karsaz</option></select></div>
+          <div class="ba-form-group"><label>Teacher Number</label><input id="tl-code" placeholder="e.g. 47" type="number" autocomplete="off"></div>
+          <div class="ba-form-group"><label>Password</label><input id="tl-pass" placeholder="Enter password" type="password" autocomplete="off"></div>
+          <div id="tl-error" style="color:#ef4444;font-size:.85rem;font-weight:600;margin-bottom:1rem;display:none;"></div>
+          <button class="ba-button ba-button-primary ba-onb-continue" id="tl-continue">Enter Teacher Mode</button>
+          <p class="ba-onb-note"><a href="#" id="tl-back" style="color:var(--blue);font-weight:700;">← Back to Student</a></p>
+        </div>
+      </div>
+
     </main>
     <button class="ba-fab" id="fab-new" title="New">＋</button>
-    <nav class="ba-tabbar" role="tablist">
+    <nav class="ba-tabbar" id="ba-tabbar" role="tablist">
       <button class="ba-tabbar-item active" data-section="home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.53 20.53 21 20 21H4C3.47 21 3 20.53 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
       <button class="ba-tabbar-item" data-section="schoolbag"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2h9l5 5v15H6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Schoolbag</span></button>
       <button class="ba-tabbar-item" data-section="schedule"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Schedule</span></button>
       <button class="ba-tabbar-item" data-section="settings"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2.1 2.1M16.9 16.9 19 19M19 5l-2.1 2.1M7.1 16.9 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Settings</span></button>
     </nav>
+<!-- CUSTOM NOTIFICATION MODALS -->
+<div class="ba-modal" id="ba-confirm-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-medium"><div class="ba-modal-body" style="text-align:center;padding:2rem;"><div id="ba-confirm-icon" style="font-size:2rem;margin-bottom:.8rem;">❓</div><div id="ba-confirm-msg" style="font-size:.95rem;font-weight:600;margin-bottom:1.5rem;"></div><div style="display:flex;gap:.5rem;justify-content:center;"><button class="ba-button ba-button-secondary" id="ba-confirm-no">Cancel</button><button class="ba-button ba-button-primary" id="ba-confirm-yes">OK</button></div></div></div></div>
+<div class="ba-modal" id="ba-prompt-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-medium"><div class="ba-modal-body" style="padding:2rem;"><div id="ba-prompt-msg" style="font-size:.95rem;font-weight:600;margin-bottom:1rem;"></div><input id="ba-prompt-input" type="text" style="width:100%;padding:.7rem;border:1px solid var(--mercury);border-radius:10px;font-size:.95rem;margin-bottom:1.5rem;"><div style="display:flex;gap:.5rem;justify-content:flex-end;"><button class="ba-button ba-button-secondary" id="ba-prompt-cancel">Cancel</button><button class="ba-button ba-button-primary" id="ba-prompt-ok">OK</button></div></div></div></div>
+<div class="ba-toast" id="ba-toast"><span id="ba-toast-msg"></span></div>
 <!--__SCRIPTS__-->
   <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/teacher.js"></script>
   <script>
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.error);
   </script>

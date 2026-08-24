@@ -142,8 +142,8 @@ function $(id) { return document.getElementById(id); }
     var cont = $("onb-continue");    if (cont) cont.addEventListener("click", function () {
       var s = DB.settings;
       s.userName = ($("onb-name").value || "").trim();
-      if (!s.userName) { alert("Please enter your name."); return; }
-      if (!s._pendingSchool) { alert("Please enter a valid school code."); return; }
+      if (!s.userName) { if (window.BAUI) BAUI.toast("Please enter your name."); else alert("Please enter your name."); return; }
+      if (!s._pendingSchool) { if (window.BAUI) BAUI.toast("Please enter a valid school code."); else alert("Please enter a valid school code."); return; }
       var schoolInfo = s._pendingSchool;
       s.school = schoolInfo.school; s.address = schoolInfo.address; s.teacher = schoolInfo.teacher;
       var classVal = $("onb-class") ? $("onb-class").value : "X-C";
@@ -157,16 +157,40 @@ function $(id) { return document.getElementById(id); }
     var teacherLink = $("onb-teacher-link");
     if (teacherLink) teacherLink.addEventListener("click", function (e) {
       e.preventDefault();
-      var teacherCode = prompt("Enter teacher access code:");
-      if (teacherCode && teacherCode.trim()) {
-        DB.settings.isTeacher = true;
-        DB.settings.teacherCode = teacherCode.trim();
-        DB.settings.onboarded = true;
-        S.saveSettings(DB.settings);
-        applyHeader(); renderHome();
-        closeModal("onboarding");
-        alert("Teacher mode enabled! You can share notebooks with students using sharing codes.");
-      }
+      closeModal("onboarding");
+      openModal("teacher-login-modal");
+    });
+    /* Teacher login screen handlers */
+    var tlContinue = $("tl-continue");
+    if (tlContinue) tlContinue.addEventListener("click", function () {
+      var school = (($("tl-school") || {}).value || "").trim();
+      var code = (($("tl-code") || {}).value || "").trim();
+      var pass = (($("tl-pass") || {}).value || "").trim();
+      var errEl = $("tl-error");
+      function showErr(msg) { if (errEl) { errEl.textContent = msg; errEl.style.display = "block"; } }
+      if (!school) { showErr("Please select your school."); return; }
+      if (!code) { showErr("Please enter your teacher number."); return; }
+      if (!pass) { showErr("Please enter your password."); return; }
+      /* Validate: only teacher 47 with password m.saeeda2024 */
+      var validTeachers = { "47": { pass: "m.saeeda2024", name: "Ms. Saeeda" } };
+      var t = validTeachers[code];
+      if (!t || pass !== t.pass) { showErr("Invalid teacher number or password."); return; }
+      if (errEl) errEl.style.display = "none";
+      DB.settings.isTeacher = true;
+      DB.settings.teacherCode = code;
+      DB.settings.onboarded = true;
+      DB.settings.name = t.name;
+      DB.settings.school = school;
+      S.saveSettings(DB.settings);
+      closeModal("teacher-login-modal");
+      if (window.TeacherDashboard) { window.TeacherDashboard.init(); }
+      if (window.BAUI) BAUI.toast("Welcome, " + t.name + "!");
+    });
+    var tlBack = $("tl-back");
+    if (tlBack) tlBack.addEventListener("click", function (e) {
+      e.preventDefault();
+      closeModal("teacher-login-modal");
+      openModal("onboarding");
     });
   }
 
@@ -436,7 +460,7 @@ function $(id) { return document.getElementById(id); }
       '<button class="ba-sf-del" title="Delete">🗑</button>';
     row.addEventListener("click", function (e) { if (e.target.classList.contains("ba-sf-del") || e.target.classList.contains("ba-ln-submit")) return; openLibraryNoteForm(n.folderId, n); });
     if (n.status !== "submitted") row.querySelector(".ba-ln-submit").addEventListener("click", function (e) { e.stopPropagation(); submitLibraryNote(n.id); });
-    row.querySelector(".ba-sf-del").addEventListener("click", function (e) { e.stopPropagation(); if (confirm("Delete this reading log?")) { S.removeDocument(n.id); renderFolderIfOpen(); } });
+    row.querySelector(".ba-sf-del").addEventListener("click", function (e) { e.stopPropagation(); if (window.BAUI) { BAUI.confirm("Delete this reading log?", function(yes) { if (yes) { S.removeDocument(n.id); renderFolderIfOpen(); } }); } else { if (confirm("Delete this reading log?")) { S.removeDocument(n.id); renderFolderIfOpen(); } } });
     return row;
   }
   function submitLibraryNote(id) {
@@ -486,7 +510,7 @@ function $(id) { return document.getElementById(id); }
       closeModal("library-note-modal"); renderFolderIfOpen();
     });
     $("ln-submit").addEventListener("click", function () { if (editingLibId) submitLibraryNote(editingLibId); closeModal("library-note-modal"); renderFolderIfOpen(); });
-    $("ln-delete").addEventListener("click", function () { if (editingLibId && confirm("Delete this reading log?")) { S.removeDocument(editingLibId); closeModal("library-note-modal"); renderFolderIfOpen(); } });
+    $("ln-delete").addEventListener("click", function () { if (!editingLibId) return; function doDelete() { S.removeDocument(editingLibId); closeModal("library-note-modal"); renderFolderIfOpen(); } if (window.BAUI) { BAUI.confirm("Delete this reading log?", function(yes) { if (yes) doDelete(); }); } else { if (confirm("Delete this reading log?")) doDelete(); } });
   }
   function openFolderMenu(id) {
     var f = S.getFolder(id);
@@ -508,8 +532,8 @@ function $(id) { return document.getElementById(id); }
     row.addEventListener("click", function (e) { if (e.target.classList.contains("ba-sf-del")) return; openDocument(d); });
     row.querySelector(".ba-sf-del").addEventListener("click", function (e) {
       e.stopPropagation();
-      if (d.system) { alert("This is a mandatory school notebook and cannot be deleted."); return; }
-      if (confirm("Delete '" + name + "'? This cannot be undone.")) { S.removeDocument(d.id); renderSchoolbag(); renderFolderIfOpen(); }
+      if (d.system) { if (window.BAUI) BAUI.toast("This is a mandatory school notebook."); else alert("This is a mandatory school notebook and cannot be deleted."); return; }
+      function doDel() { S.removeDocument(d.id); renderSchoolbag(); renderFolderIfOpen(); } if (window.BAUI) { BAUI.confirm("Delete '" + name + "'? This cannot be undone.", function(yes) { if (yes) doDel(); }); } else { if (confirm("Delete '" + name + "'? This cannot be undone.")) doDel(); }
     });
     return row;
   }
@@ -534,7 +558,7 @@ function $(id) { return document.getElementById(id); }
       delFolder.onclick = function () {
         var n = S.getDocumentsByFolder(folder.id).length;
         var msg = n ? ("This folder contains " + n + " document(s). Delete the folder? Its documents will be moved to your schoolbag (not deleted).") : "Delete this folder?";
-        if (confirm(msg)) { S.removeFolder(folder.id); closeModal("doc-menu-modal"); renderSchoolbag(); }
+        function doFolderDel() { S.removeFolder(folder.id); closeModal("doc-menu-modal"); renderSchoolbag(); } if (window.BAUI) { BAUI.confirm(msg, function(yes) { if (yes) doFolderDel(); }); } else { if (confirm(msg)) doFolderDel(); }
       };
       $("doc-menu-close").onclick = function () { closeModal("doc-menu-modal"); };
     } else if (docId) {
@@ -1115,7 +1139,7 @@ function $(id) { return document.getElementById(id); }
     box.querySelectorAll("[data-esize]").forEach(function (b) { b.addEventListener("click", function () { ST.eraserSize = parseInt(b.getAttribute("data-esize"), 10); renderToolOpts(); }); });
     var sz = box.querySelector(".ba-to-size"); if (sz) sz.addEventListener("input", function () { ST.size = parseFloat(this.value); });
     var cc = box.querySelector("[data-custom]"); if (cc) cc.addEventListener("click", function () {
-      var c = prompt("Enter a hex color (e.g. #ff5500):", ST.color); if (c) { CUSTOM_COLORS.push(c); ST.color = c; renderToolOpts(); }
+      if (window.BAUI) { BAUI.prompt("Enter a hex color (e.g. #ff5500):", ST.color, function(c) { if (c) { CUSTOM_COLORS.push(c); ST.color = c; renderToolOpts(); } }); } else { var c = prompt("Enter a hex color (e.g. #ff5500):", ST.color); if (c) { CUSTOM_COLORS.push(c); ST.color = c; renderToolOpts(); } }
     });
   }
   function renderSelectOpts() {
@@ -1192,11 +1216,9 @@ function $(id) { return document.getElementById(id); }
     ed.select.rect = null; ed.select.poly = null; ed.select.free = null; persistEditor(); renderEditor();
   }
   function placeText(e) {
+    function doPlaceText(t) { if (!t) return; pushUndo(); activePage().strokes.push({ tool: "text", x: p.x, y: p.y, text: t, color: ed.color, size: ed.size * 8 }); persistEditor(); renderEditor(); }
     var p = toVirtual(e);
-    var t = prompt("Enter text:"); if (!t) return;
-    pushUndo();
-    activePage().strokes.push({ tool: "text", x: p.x, y: p.y, text: t, color: ed.color, size: ed.size * 8 });
-    persistEditor(); renderEditor();
+    if (window.BAUI) { BAUI.prompt("Enter text:", "", doPlaceText); } else { var t = prompt("Enter text:"); doPlaceText(t); }
   }
 /*__APPEND__*/
 
@@ -1216,7 +1238,7 @@ function $(id) { return document.getElementById(id); }
       th.querySelector("canvas").addEventListener("click", function () { ed.pageIndex = idx; ed.undo = []; ed.redo = []; renderEditor(); renderSidebar(); });
       th.querySelector(".ba-ed-thumb-del").addEventListener("click", function (e) {
         e.stopPropagation();
-        if (pages.length <= 1) { alert("A notebook needs at least one page."); return; }
+        if (pages.length <= 1) { if (window.BAUI) BAUI.toast("A notebook needs at least one page."); else alert("A notebook needs at least one page."); return; }
         BAStore.deletePage(ed.doc.id, pg.id); ed.pageIndex = Math.min(ed.pageIndex, pages.length - 2);
         renderEditor(); renderSidebar(); persistEditor();
       });
@@ -1240,7 +1262,7 @@ function $(id) { return document.getElementById(id); }
   function exportDocPDF() {
     var pages = BAStore.getPages(ed.doc);
     var w = window.open("", "_blank");
-    if (!w) { alert("Please allow pop-ups to export."); return; }
+    if (!w) { if (window.BAUI) BAUI.toast("Please allow pop-ups to export."); else alert("Please allow pop-ups to export."); return; }
     var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>' + esc(ed.doc.title) + '</title><style>' +
       'body{margin:0;font-family:sans-serif}@page{size:A4;margin:0}.pg{width:210mm;height:297mm;page-break-after:always;position:relative}canvas{width:210mm;height:297mm;display:block}</style></head><body>';
     pages.forEach(function (pg) {
@@ -1271,10 +1293,12 @@ function createWhiteboard(folderId, subject) {
     renderSchoolbag(); openWhiteboard(doc);
   }
   function openWhiteboardCreate() {
-    var name = prompt("Whiteboard name:", "Whiteboard");
-    var doc = S.addDocument({ type: "whiteboard", title: name || "Whiteboard", subject: null, folderId: null,
-      wb: { strokes: [], shapes: [], text: [], camera: { x: 0, y: 0, zoom: 1 } } });
-    renderSchoolbag(); openWhiteboard(doc);
+    function doWbCreate(name) {
+      var doc = S.addDocument({ type: "whiteboard", title: name || "Whiteboard", subject: null, folderId: null,
+        wb: { strokes: [], shapes: [], text: [], camera: { x: 0, y: 0, zoom: 1 } } });
+      renderSchoolbag(); openWhiteboard(doc);
+    }
+    if (window.BAUI) { BAUI.prompt("Whiteboard name:", "Whiteboard", doWbCreate); } else { var name = prompt("Whiteboard name:", "Whiteboard"); doWbCreate(name); }
   }
   function resizeWB() {
     var stage = $("wb-stage"), canvas = $("wb-canvas"); var dpr = window.devicePixelRatio || 1;
@@ -1318,7 +1342,8 @@ function createWhiteboard(folderId, subject) {
       if (Object.keys(wb.pointers).length === 2) { wb.panning = "pinch"; wb.drawing = false; return; }
       if (e.button === 2 || e.button === 1) { wb.panning = "drag"; wb.panStart = { x: e.clientX, y: e.clientY, cx: wb.cam.x, cy: wb.cam.y }; return; }
       if (e.button !== 0) return;
-      if (wb.tool === "text") { var p = wbWorld(e); var t = prompt("Text:"); if (t) { wbPushUndo(); wb.doc.wb.strokes.push({ tool: "text", x: p.x, y: p.y, text: t, color: wb.color, size: wb.size * 6 }); wbPersist(); renderWB(); } return; }
+      if (wb.tool === "text") { var p = wbWorld(e); function doWbText(t) { if (t) { wbPushUndo(); wb.doc.wb.strokes.push({ tool: "text", x: p.x, y: p.y, text: t, color: wb.color, size: wb.size * 6 }); wbPersist(); renderWB(); } }
+        if (window.BAUI) { BAUI.prompt("Text:", "", doWbText); } else { var t = prompt("Text:"); doWbText(t); } return; }
       wb.drawing = true; try { canvas.setPointerCapture(e.pointerId); } catch (x) {}
       var p = wbWorld(e); var tool = wb.tool === "shapes" ? wb.shape : wb.tool;
       var cur = { tool: tool, color: wb.color, size: wb.size, points: [p, p] };
@@ -1399,7 +1424,7 @@ function createWhiteboard(folderId, subject) {
     var cv = document.createElement("canvas"); cv.width = 1600; cv.height = 1000;
     var ctx = cv.getContext("2d"); ctx.fillStyle = "#f4f6fb"; ctx.fillRect(0, 0, cv.width, cv.height);
     ctx.save(); ctx.translate(cv.width / 2, cv.height / 2); drawStrokes(ctx, wb.doc.wb.strokes); ctx.restore();
-    var w = window.open("", "_blank"); if (!w) { alert("Allow pop-ups to export."); return; }
+    var w = window.open("", "_blank");    if (!w) { if (window.BAUI) BAUI.toast("Allow pop-ups to export."); else alert("Allow pop-ups to export."); return; }
     w.document.open(); w.document.write('<img src="' + cv.toDataURL() + '" style="width:100%"><script>window.onload=function(){window.print()}<\/script>'); w.document.close();
   }
 /*__APPEND__*/
@@ -1409,12 +1434,15 @@ function createWhiteboard(folderId, subject) {
      ============================================================ */
   function openSheetCreate(folderId, subject) {
     console.log("[openSheetCreate] called, folderId:", folderId, "subject:", subject);
-    var name = prompt("Sheet name:", "Sheet"); if (name === null) return;
-    var cols = 4, rows = 10, data = [];
-    for (var r = 0; r < rows; r++) { var row = []; for (var c = 0; c < cols; c++) row.push(""); data.push(row); }
-    var doc = S.addDocument({ type: "sheet", title: name || "Sheet", subject: subject || null, folderId: folderId || null,
-      sheet: { rows: rows, cols: cols, data: data, colWidths: [], rowHeights: new Array(rows).fill(38) } });
-    renderSchoolbag(); openSheetEditor(doc);
+    function doSheet(name) {
+      if (name === null) return;
+      var cols = 4, rows = 10, data = [];
+      for (var r = 0; r < rows; r++) { var row = []; for (var c = 0; c < cols; c++) row.push(""); data.push(row); }
+      var doc = S.addDocument({ type: "sheet", title: name || "Sheet", subject: subject || null, folderId: folderId || null,
+        sheet: { rows: rows, cols: cols, data: data, colWidths: [], rowHeights: new Array(rows).fill(38) } });
+      renderSchoolbag(); openSheetEditor(doc);
+    }
+    if (window.BAUI) { BAUI.prompt("Sheet name:", "Sheet", doSheet); } else { doSheet(prompt("Sheet name:", "Sheet")); }
   }
   var activeSheet = null;
   function openSheetEditor(d) {
@@ -1548,7 +1576,11 @@ function createWhiteboard(folderId, subject) {
     if (!pdf.book) return;
     pdf.page = Math.max(1, n);
     var bm = S.getBookmark(pdf.book.subject);
-    $("pdf-iframe").src = encodeURI(pdf.book.file) + "#page=" + pdf.page + "&zoom=" + pdf.zoom;
+    var filePath = pdf.book.file || '';
+    if (filePath && !filePath.includes('/') && !filePath.startsWith('data:') && !filePath.startsWith('http')) {
+      filePath = 'assets/' + filePath;
+    }
+    $("pdf-iframe").src = encodeURI(filePath) + "#page=" + pdf.page + "&zoom=" + pdf.zoom;
     $("pdf-current-page").textContent = pdf.page;
     if ($("pdf-page-input")) $("pdf-page-input").value = pdf.page;
     if (pdf.annotating) renderPdfAnnot();
@@ -1619,7 +1651,7 @@ function createWhiteboard(folderId, subject) {
         var t = btn.getAttribute("data-tool"), act = btn.getAttribute("data-action");
         if (act === "undo") { var s = loadPdfStrokes(); if (s.length) { pdf.redo.push(s.pop()); savePdfStrokes(s); renderPdfAnnot(); } return; }
         if (act === "redo") { if (pdf.redo.length) { var s2 = loadPdfStrokes(); s2.push(pdf.redo.pop()); savePdfStrokes(s2); renderPdfAnnot(); } return; }
-        if (act === "save") { renderPdfAnnot(); alert("Annotations saved."); return; }
+        if (act === "save") { renderPdfAnnot(); if (window.BAUI) BAUI.toast("Annotations saved."); else alert("Annotations saved."); return; }
         if (t) { document.querySelectorAll("#pdf-annotation-toolbar .ba-annotate-tool").forEach(function (b) { b.classList.remove("active"); }); btn.classList.add("active"); }
       });
     });
@@ -2791,6 +2823,20 @@ function createWhiteboard(folderId, subject) {
     var docMenuClose = $("doc-menu-close"); if (docMenuClose) docMenuClose.addEventListener("click", function () { closeModal("doc-menu-modal"); });
     renderHome(); renderSchoolbag(); renderExamInfo();
     setInterval(renderHome, 60000);
+    /* Expose key functions for teacher dashboard */
+    window.BAApp = window.BAApp || {};
+    window.BAApp.openDocument = function (doc) { openDocument(doc); };
+    window.BAApp.getDocuments = function () { return S.getDocuments(); };
+    window.BAApp.getDocument = function (id) { return S.getDocument(id); };
+    window.BAApp.getDocumentsBySubject = function (sub) { return S.getDocumentsBySubject(sub); };
+    window.BAApp.updateDocument = function (id, patch) { return S.updateDocument(id, patch); };
+    window.BAApp.openPdf = function (book) { openPdf(book); };
+    window.BAApp.openEditor = function (doc) { openEditor(doc); };
+    window.BAApp.getPages = function (doc) { return S.getPages(doc); };
+    /* If teacher mode, activate teacher dashboard */
+    if (DB.settings.isTeacher && window.TeacherDashboard) {
+      window.TeacherDashboard.init();
+    }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

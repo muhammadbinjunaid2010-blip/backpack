@@ -2,21 +2,24 @@
    BACKPACK AIR — Service Worker (Offline-First)
    ============================================================ */
 
-const CACHE_NAME = "backpack-air-v4";
+const CACHE_NAME = "backpack-air-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./css/style.css",
   "./js/app.js",
   "./js/store.js",
+  "./js/ui.js",
+  "./js/teacher.js",
   "./manifest.webmanifest",
-  "./math-10.pdf",
-  "./eng-10.pdf",
-  "./urd-10.pdf",
-  "./phy-10.pdf",
-  "./chem-10.pdf",
-  "./cs-10.pdf",
-  "./pst-10.pdf",
+  "./assets/math-10.pdf",
+  "./assets/eng-10.pdf",
+  "./assets/urd-10.pdf",
+  "./assets/phy-10.pdf",
+  "./assets/chem-10.pdf",
+  "./assets/cs-10.pdf",
+  "./assets/pst-part1.pdf",
+  "./assets/pst-part2.pdf",
   "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
   "https://fonts.gstatic.com/s/plusjakartasan/v12/7v9IQLJiRfAPQtfTs3kphO3KVuGF1pA.woff2"
 ];
