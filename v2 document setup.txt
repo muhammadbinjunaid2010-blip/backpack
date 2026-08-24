@@ -1,0 +1,967 @@
+BACKPACK AIR — DOCUMENT SYSTEM V2
+CRITICAL ARCHITECTURE + EDITOR REDESIGN
+
+Do NOT start by changing colors or cosmetic styling.
+
+First fix the document architecture and persistence, then implement the new creation flow and editor.
+
+Backpack Air remains an OFFLINE DIGITAL SCHOOLBAG.
+
+==================================================
+1. CRITICAL: UPDATES MUST NEVER DELETE USER DATA
+==================================================
+
+CURRENT BUG:
+
+When the application is updated, users lose:
+
+- notebooks
+- pages
+- handwriting
+- sheets
+- quick notes
+- folders
+- bookmarks
+- PDF annotations
+- preferences
+- other locally-created content
+
+THIS MUST BE FIXED BEFORE ANYTHING ELSE.
+
+User-created data must be stored separately from application code/version updates.
+
+Application updates must NOT reset the user's database.
+
+DO NOT use:
+
+- hardcoded initial data that overwrites existing data
+- localStorage initialization that resets existing values
+- version upgrades that clear storage
+- destructive database migrations
+
+Create a persistent local data layer with schema versioning/migrations.
+
+On application startup:
+
+1. Open existing user database.
+2. Detect database version.
+3. Run non-destructive migration if necessary.
+4. Preserve every existing document.
+5. Add new fields only when required.
+6. Never delete user content automatically.
+
+The following are USER DATA and must survive every application update:
+
+- notebooks
+- notebook pages
+- handwritten strokes
+- notebook covers
+- paper styles
+- sheets
+- whiteboards
+- quick notes
+- folders
+- folder colors
+- folder icons
+- PDF bookmarks
+- PDF annotations
+- last-read PDF page
+- homework diary entries
+- preferences
+- student name
+- selected school/class/section
+
+If a migration cannot safely preserve something, DO NOT silently delete it.
+
+==================================================
+2. MANDATORY SCHOOL SUBJECT NOTEBOOK
+==================================================
+
+Every subject must automatically have ONE permanent school notebook.
+
+For example:
+
+PHYSICS
+
+BOOK
+Physics — Class X
+
+SCHOOL NOTEBOOK
+Physics
+
+This notebook:
+
+- is automatically created
+- cannot be deleted
+- cannot be moved to another folder
+- cannot be permanently renamed away from its subject identity
+- is always available inside that subject
+- has a school-selected cover
+- has a school-selected paper style
+- is shared/collaborative with the teacher
+
+Example:
+
+PHYSICS
+
+📕 Physics — Class X
+
+📓 Physics
+   Shared with Ms. Saeeda
+
+MY DOCUMENTS
+
+Keypoints
+Numericals
+Lab Notes
+
+MY SHEETS
+
+Lab Data
+
+The teacher's shared notebook must be visually distinct from the student's personal notebooks.
+
+Example label:
+
+SHARED WITH TEACHER
+
+Do NOT build a full LMS.
+
+This is simply a shared school notebook/document.
+
+==================================================
+3. SCHOOL NOTEBOOK CONFIGURATION
+==================================================
+
+The school can define:
+
+Notebook cover
+Paper style
+Subject
+Teacher
+
+Example:
+
+PHYSICS
+
+Cover:
+School-selected Physics cover
+
+Paper:
+Ruled
+
+Teacher:
+47 — Ms. Saeeda
+
+The student can write in it.
+
+The student cannot delete it.
+
+==================================================
+4. REAL PAGE SIZE
+==================================================
+
+Notebook pages must behave like real paper.
+
+Default page:
+
+A4
+
+Ratio:
+
+210 × 297 mm
+
+The page must maintain its A4 aspect ratio regardless of screen size.
+
+On a tablet:
+
+- page fits vertically/horizontally depending on available space
+- writing area remains proportional
+- no stretched pages
+- no giant canvas overflowing outside the viewport
+
+The same document should look like the same physical page on different screen sizes.
+
+Implement page rendering around a document coordinate system rather than drawing directly based on viewport pixels.
+
+This is critical for handwriting persistence.
+
+==================================================
+5. WHITEBOARD
+==================================================
+
+When the user taps:
+
++ New
+
+show:
+
+NEW
+
+┌───────────────────────┐
+│ 📓 Notebook           │
+│                       │
+│ ⬜ Whiteboard          │
+│                       │
+│ ▦ Sheets              │
+│                       │
+│ 📝 Quick Note          │
+│                       │
+│ 📁 Folder             │
+└───────────────────────┘
+
+Whiteboard is different from a notebook.
+
+Notebook:
+- fixed page
+- A4
+- paper background
+- page-based document
+
+Whiteboard:
+- infinite/free canvas
+- no fixed paper boundaries
+- pan around
+- zoom
+- freehand drawing
+- shapes
+- text
+- sticky notes where supported
+
+The whiteboard should feel like an infinite workspace.
+
+==================================================
+6. NEW DOCUMENT MENU
+==================================================
+
+The "+ New" button is the central creation point.
+
+Options:
+
+Notebook
+Whiteboard
+Sheets
+Quick Note
+Folder
+
+Use a polished creation menu.
+
+==================================================
+7. FOLDER CREATION
+==================================================
+
+When creating a folder:
+
+First choose folder color.
+
+Provide 9 preset colors.
+
+Also provide:
+
++ Custom Color
+
+Tapping + opens a full color picker.
+
+The user can select any folder color.
+
+Then choose folder icon.
+
+Provide icons including:
+
+Web / globe
+Settings
+Plus/minus
+Music
+Code </> 
+Islamic
+Book
+Text / custom label
+
+Allow a folder to display:
+
+ICON + NAME
+
+Example:
+
+🌐 Web Resources
+
+or:
+
+</> Programming
+
+or:
+
+📖 Islamic Studies
+
+The folder icon and color must persist.
+
+Folders must support:
+
+Open
+Rename
+Change icon
+Change color
+Delete
+
+Do not delete contained documents accidentally.
+
+If deleting a folder containing documents, ask what should happen before proceeding.
+
+==================================================
+8. NOTEBOOK CREATION EXPERIENCE
+==================================================
+
+When:
+
++ New → Notebook
+
+open a premium document creation screen.
+
+LAYOUT:
+
+LEFT SIDE:
+
+Title
+
+[ Untitled Document ]
+
+RIGHT SIDE:
+
+Live cover preview
+
+Below that:
+
+PAPER
+
+Live page preview
+
+The user should see exactly what they are choosing.
+
+--------------------------------
+TITLE
+--------------------------------
+
+Label:
+
+Title
+
+Input:
+
+Untitled Document
+
+If user types:
+
+Physics Notes
+
+the document is named:
+
+Physics Notes
+
+--------------------------------
+COVER
+--------------------------------
+
+Show cover preview cards.
+
+Options should include original Backpack Air designs such as:
+
+No Cover
+Dotted
+Simple
+Classic
+Academic
+Minimal
+Dark
+Paper
+Grid
+
+Do not copy Goodnotes artwork.
+
+Selecting a cover immediately updates the live preview.
+
+--------------------------------
+PAPER COLOR
+--------------------------------
+
+Paper colors:
+
+White
+Yellow
+Dark
+
+Show actual previews.
+
+--------------------------------
+PAPER TYPE
+--------------------------------
+
+Provide visual paper cards.
+
+Types:
+
+Legal
+Legal — Left
+Blank
+Dotted
+Grid
+Graph Paper
+Green
+Ruled — Narrow
+Ruled — Wide
+
+The user should see an actual miniature preview of each paper.
+
+If "Legal — Left" means a specific writing orientation/layout, implement it correctly rather than treating it as a renamed duplicate.
+
+--------------------------------
+CREATE
+--------------------------------
+
+Buttons:
+
+Cancel
+
+Create Notebook
+
+After creation:
+
+Open the notebook immediately.
+
+==================================================
+9. MAIN DOCUMENT EDITOR
+==================================================
+
+Redesign the entire top bar.
+
+The editor should have a professional tablet-document-editor structure.
+
+TOP BAR:
+
+[ Home ] [ Sidebar ] [ Select ] [ Pen ] [ Pencil ] [ Highlighter ] [ View/Edit ] [ Eraser ] [ Undo ] [ Redo ] [ Share ] [ + Page ] [ ⋮ ]
+
+Do not cram these into unreadable tiny buttons.
+
+On smaller screens, group related tools intelligently while keeping them accessible.
+
+==================================================
+10. HOME BUTTON
+==================================================
+
+Home icon:
+
+returns to the Backpack Air document/schoolbag interface.
+
+It must NOT lose unsaved content.
+
+Autosave continuously.
+
+==================================================
+11. SIDEBAR / PAGES
+==================================================
+
+Sidebar icon opens the document page navigator.
+
+Example:
+
+KEYPOINTS
+
+Pages
+
+┌──────┐
+│  1   │
+└──────┘
+
+┌──────┐
+│  2   │
+└──────┘
+
+┌──────┐
+│  3   │
+└──────┘
+
+At bottom:
+
++ Add Page
+
+Pages should be represented as real A4 page thumbnails.
+
+The user can:
+
+- tap page
+- reorder pages
+- add page
+- delete page
+- duplicate page
+
+Page numbering should automatically update.
+
+==================================================
+12. SELECT TOOL
+==================================================
+
+Select icon opens selection options.
+
+Two modes:
+
+Freehand
+Rectangular
+
+Then allow the user to control what can be selected.
+
+Selection filters/toggles:
+
+Text
+Shapes
+Highlights
+Ink / handwriting
+
+Example:
+
+SELECT
+
+Mode:
+○ Freehand
+○ Rectangle
+
+Select:
+☑ Ink
+☑ Shapes
+☐ Highlight
+☑ Text
+
+This allows users to avoid accidentally selecting things they don't want.
+
+==================================================
+13. PEN TOOL
+==================================================
+
+Pen icon opens the annotation toolbar.
+
+PEN
+
+Choose stroke weight.
+
+Provide:
+
+Ball Pen
+Fountain Pen
+Brush Pen
+
+Each should visibly demonstrate its stroke style.
+
+Allow:
+
+- stroke thickness
+- color
+
+Do not just change the icon.
+
+The actual stroke rendering should differ appropriately.
+
+==================================================
+14. PENCIL
+==================================================
+
+Pencil is a separate annotation tool.
+
+Provide:
+
+- thickness
+- color
+
+It should visually behave differently from a ball pen.
+
+==================================================
+15. HIGHLIGHTER
+==================================================
+
+Highlighter tool:
+
+Provide:
+
+- color
+- density/transparency
+- thickness
+
+The highlight should sit visually behind text/ink where possible.
+
+==================================================
+16. SHAPES
+==================================================
+
+Shapes tool opens:
+
+Line
+Arrow
+Rectangle
+Circle
+Triangle
+Square
+Other useful basic shapes
+
+Provide color options.
+
+COLOR SYSTEM:
+
+Show 3 quick color circles.
+
+Then:
+
++
+
+Tapping + opens a larger color picker.
+
+Custom colors must be remembered.
+
+==================================================
+17. VIEW / EDIT SWITCH
+==================================================
+
+Add a clear:
+
+VIEW | EDIT
+
+switch.
+
+VIEW:
+
+- document reading
+- no accidental handwriting
+- navigation
+- zoom
+- page management
+
+EDIT:
+
+- writing tools
+- selection
+- eraser
+- shapes
+- annotations
+
+This same editor system must work for both:
+
+Notebook documents
+Books/PDFs
+
+==================================================
+18. ERASER
+==================================================
+
+Eraser icon opens eraser toolbar.
+
+Modes:
+
+Stroke
+Regular
+
+Stroke:
+delete the entire stroke.
+
+Regular:
+erase part of a stroke where supported.
+
+Provide size options:
+
+Small
+Medium
+Large
+
+==================================================
+19. UNDO / REDO
+==================================================
+
+Main toolbar contains:
+
+Undo
+Redo
+
+These must work across:
+
+- pen
+- pencil
+- highlighter
+- eraser
+- shapes
+- text
+- page actions where appropriate
+
+Undo history should be document-specific.
+
+==================================================
+20. SHARE / EXPORT
+==================================================
+
+Share button opens:
+
+EXPORT
+
+Export as PDF
+
+The resulting PDF should preserve:
+
+- page order
+- page size
+- paper background
+- handwriting
+- text
+- shapes
+- annotations
+
+A4 pages should remain A4 in the exported PDF.
+
+Do not rasterize unnecessarily if a better export method is available.
+
+==================================================
+21. ADD PAGE
+==================================================
+
+The + Page button should add another page to the bottom of the document.
+
+Example:
+
+Current:
+
+1
+2
+3
+4
+
+Tap:
+
++ Page
+
+Result:
+
+1
+2
+3
+4
+5
+
+Automatically open page 5.
+
+The new page inherits the notebook's selected paper type and paper color.
+
+The user can reorder pages through the sidebar.
+
+==================================================
+22. THREE-DOT MENU
+==================================================
+
+⋮ opens:
+
+Rename
+Document Info
+
+Document Info should show:
+
+Name
+Subject
+Created
+Last modified
+Page count
+Paper type
+Page size
+Storage information where practical
+
+Do not put unnecessary features here.
+
+==================================================
+23. BOOK PDF EDITOR
+==================================================
+
+Use the SAME document toolbar architecture for books when switched from VIEW to EDIT.
+
+VIEW:
+
+PDF reading.
+
+EDIT:
+
+annotation.
+
+The student should recognize the same tools:
+
+Select
+Pen
+Pencil
+Highlighter
+Shapes
+Eraser
+Undo
+Redo
+Share
+Page navigation
+
+However, do not allow editing the original school textbook content itself.
+
+Annotations are a separate layer.
+
+If the student exits and reopens the book:
+
+The original PDF remains unchanged.
+
+Their annotation layer is restored.
+
+==================================================
+24. DATA MODEL
+==================================================
+
+Design documents around persistent IDs.
+
+Every document gets a permanent ID.
+
+Example:
+
+documentId
+createdAt
+updatedAt
+type
+title
+subjectId
+folderId
+cover
+paper
+pages[]
+
+Each page gets its own permanent ID.
+
+Example:
+
+pageId
+documentId
+pageNumber/order
+paper
+strokes[]
+shapes[]
+text[]
+createdAt
+updatedAt
+
+Never identify documents only by array position.
+
+Never overwrite user documents because seed/sample data changed.
+
+==================================================
+25. SEED DATA MUST BE SAFE
+==================================================
+
+The prototype has school-provided documents.
+
+Examples:
+
+Physics
+Chemistry
+Mathematics
+English
+Urdu
+Computer Science
+Pakistan Studies
+
+Seed/sample content must only be created if the corresponding permanent ID does not already exist.
+
+NEVER:
+
+"initialize → clear everything → recreate"
+
+Instead:
+
+"initialize → check → create only missing system content"
+
+==================================================
+26. SYSTEM VS USER DOCUMENTS
+==================================================
+
+Clearly distinguish:
+
+SYSTEM / SCHOOL CONTENT
+
+and
+
+USER CONTENT
+
+School content:
+
+- official books
+- mandatory subject notebook
+- timetable
+- exam schedule
+
+User content:
+
+- personal notebooks
+- whiteboards
+- sheets
+- quick notes
+- folders
+- annotations
+
+The user cannot delete mandatory school content.
+
+User updates must never affect system content.
+
+==================================================
+27. CRITICAL TEST
+==================================================
+
+Before finishing, perform this exact test:
+
+1. Create notebook "Test Notes".
+2. Select cover.
+3. Select yellow A4 ruled paper.
+4. Add 3 pages.
+5. Write on all 3.
+6. Create a folder.
+7. Choose custom folder color.
+8. Choose code icon.
+9. Create a sheet.
+10. Create a whiteboard.
+11. Create a quick note.
+12. Add PDF annotation.
+13. Close application.
+14. Reopen.
+15. Verify everything exists.
+16. Simulate application version update/migration.
+17. Reopen.
+18. Verify everything still exists.
+
+If ANY user-created content disappears, the implementation is NOT complete.
+
+==================================================
+FINAL DESIGN PRINCIPLE
+==================================================
+
+Backpack Air should feel like a serious tablet document application.
+
+The quality benchmark is modern professional note-taking software.
+
+But Backpack Air remains its own product:
+
+SCHOOL
+↓
+CLASS
+↓
+SUBJECT
+↓
+BOOK
+↓
+SCHOOL NOTEBOOK
+↓
+PERSONAL DOCUMENTS
+
+The most important requirement is:
+
+USER DATA MUST SURVIVE APP UPDATES.
+
+Do that first.
+
+Then implement the A4 document engine.
+
+Then the notebook creation experience.
+
+Then the editor toolbar.
+
+Then PDF editing.
+
+Then visual polish.
