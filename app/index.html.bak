@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Backpack Air — Digital Schoolbag</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="manifest" href="manifest.webmanifest"/>
+  <meta name="theme-color" content="#2f5bff"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Backpack Air"/>
+  <link rel="icon" href="assets/brand-logo.png" type="image/png"/>
+  <link rel="apple-touch-icon" href="assets/brand-logo.png"/>
+</head>
+<body>
+
+  <div class="ba-page-wrapper">
+    <div class="app-shell" id="app-shell">
+
+      <!-- PERSISTENT FOCUS BAR -->
+      <div class="ba-focus-bar" id="focus-bar" style="display:none;">
+        <span class="ba-focus-bar-icon">⏱</span>
+        <span class="ba-focus-bar-time" id="focus-bar-time">25:00</span>
+        <span class="ba-focus-bar-label">Focus</span>
+        <button class="ba-focus-bar-end" id="focus-bar-end">End</button>
+      </div>
+
+      <!-- TOP BAR -->
+      <header class="ba-app-header">
+        <div class="ba-container">
+          <div class="ba-app-header-content">
+            <div class="ba-app-header-identity">
+              <img src="assets/brand-logo.png" alt="Backpack Air" class="ba-app-logo-img">
+              <span class="ba-app-header-name">Backpack Air</span>
+            </div>
+            <div class="ba-app-header-school">
+              <div class="ba-app-school-name" id="hdr-school">Bahria College Karsaz</div>
+              <div class="ba-app-school-address" id="hdr-class">Class X-C</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- MAIN -->
+      <main class="ba-main" id="ba-main">
+
+        <!-- ============ HOME ============ -->
+        <section class="ba-screen ba-screen-active" id="home-screen" data-section="home">
+          <div class="ba-container">
+            <div class="ba-home-greeting" id="home-greeting">Good morning</div>
+
+            <!-- Current period -->
+            <div class="ba-cp-card" id="home-current-period">
+              <div class="ba-cp-label">NOW</div>
+              <div class="ba-cp-time" id="home-cp-time">—</div>
+              <div class="ba-cp-subject" id="home-cp-subject">—</div>
+              <div class="ba-cp-teacher" id="home-cp-teacher"></div>
+              <div class="ba-cp-open">OPEN FOLDER →</div>
+            </div>
+
+            <!-- Prev / Current / Next -->
+            <div class="ba-pcn">
+              <div class="ba-pcn-item" id="home-prev">
+                <div class="ba-pcn-tag">← PREVIOUS</div>
+                <div class="ba-pcn-subject" id="home-prev-subject">—</div>
+                <div class="ba-pcn-time" id="home-prev-time"></div>
+              </div>
+              <div class="ba-pcn-divider"></div>
+              <div class="ba-pcn-item" id="home-next">
+                <div class="ba-pcn-tag">NEXT →</div>
+                <div class="ba-pcn-subject" id="home-next-subject">—</div>
+                <div class="ba-pcn-time" id="home-next-time"></div>
+              </div>
+            </div>
+
+            <!-- Today's timetable -->
+            <div class="ba-section-block">
+              <div class="ba-section-title">TODAY</div>
+              <div class="ba-today-list" id="home-today-list"></div>
+            </div>
+
+            <!-- Homework diary quick access -->
+            <div class="ba-homework-access" id="home-homework">
+              <div>
+                <div class="ba-section-title">HOMEWORK DIARY</div>
+                <div class="ba-homework-count" id="home-homework-count">0 tasks</div>
+              </div>
+              <button class="ba-homework-open" id="home-homework-open">Open →</button>
+            </div>
+
+            <!-- Upcoming exams -->
+            <div class="ba-buckle" id="home-buckle">
+              <div class="ba-buckle-top">BUCKLE UP</div>
+              <div class="ba-buckle-title">UPCOMING EXAMS</div>
+              <div class="ba-buckle-exam">1st Assessment</div>
+              <div class="ba-buckle-row"><span>Starting</span><span>MID-SEPTEMBER</span></div>
+              <div class="ba-buckle-link">View Exam Schedule →</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ SCHOOLBAG (Books & Notebooks) ============ -->
+        <section class="ba-screen" id="schoolbag-screen" data-section="schoolbag">
+          <div class="ba-container">
+            <div class="ba-screen-header">
+              <h2 class="ba-title-4">My Schoolbag</h2>
+              <div class="ba-screen-subtitle">Books &amp; notebooks by subject</div>
+            </div>
+            <div class="ba-schoolbag-tools">
+              <div class="ba-tool-card" id="schoolbag-homework-open">
+                <div class="ba-tool-icon">📝</div>
+                <div class="ba-tool-info">
+                  <div class="ba-section-title">HOMEWORK DIARY</div>
+                  <div class="ba-homework-count" id="schoolbag-homework-count">0 tasks</div>
+                </div>
+                <div class="ba-tool-arrow">→</div>
+              </div>
+              <div class="ba-tool-card" id="schoolbag-tools-open">
+                <div class="ba-tool-icon">🛠️</div>
+                <div class="ba-tool-info">
+                  <div class="ba-section-title">TOOLS</div>
+                  <div class="ba-homework-count">Calculator, Clock & more</div>
+                </div>
+                <div class="ba-tool-arrow">→</div>
+              </div>
+            </div>
+            <div class="ba-folders-grid" id="schoolbag-folders"></div>
+          </div>
+        </section>
+
+        <!-- ============ SCHEDULE (Timetable + Exams) ============ -->
+        <section class="ba-screen" id="schedule-screen" data-section="schedule">
+          <div class="ba-container">
+            <div class="ba-screen-header">
+              <h2 class="ba-title-4">Schedule</h2>
+            </div>
+            <div class="ba-sch-tabs">
+              <button class="ba-sch-tab ba-sch-tab-active" id="sch-timetable-btn">TIMETABLE</button>
+              <button class="ba-sch-tab" id="sch-exams-btn">EXAMS</button>
+            </div>
+
+            <div id="schedule-timetable">
+              <div class="ba-timetable-nav" role="tablist">
+                <button class="ba-timetable-day ba-timetable-day-active" data-day="mon">MON</button>
+                <button class="ba-timetable-day" data-day="tue">TUE</button>
+                <button class="ba-timetable-day" data-day="wed">WED</button>
+                <button class="ba-timetable-day" data-day="thu">THU</button>
+                <button class="ba-timetable-day" data-day="fri">FRI</button>
+              </div>
+              <div class="ba-timetable-content" id="ba-timetable-content"></div>
+            </div>
+
+            <div id="schedule-exams" style="display:none;">
+              <div class="ba-exam-block" id="ba-exam-block">
+                <div class="ba-exam-cap">1ST ASSESSMENT</div>
+                <div class="ba-exam-row"><span>Starting</span><span>MID-SEPTEMBER</span></div>
+                <div class="ba-exam-row"><span>Class</span><span>X-C</span></div>
+                <div class="ba-exam-row"><span>School</span><span>Bahria College Karsaz</span></div>
+                <div class="ba-exam-note">Detailed timetable will be released soon. When the exam schedule PDF is supplied, it replaces this placeholder.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ SETTINGS ============ -->
+        <section class="ba-screen" id="settings-screen" data-section="settings">
+          <div class="ba-container">
+            <div class="ba-screen-header">
+              <h2 class="ba-title-4">Settings</h2>
+            </div>
+            <div class="ba-settings-content">
+              <div class="ba-setting-group">
+                <div class="ba-section-title">YOUR PROFILE</div>
+                <div class="ba-form-row"><label>Name</label><input id="setting-name" placeholder="Muhammad"></div>
+                <div class="ba-form-row"><label>School</label><select id="setting-school"><option>Bahria College Karsaz</option></select></div>
+                <div class="ba-form-row"><label>Class</label><select id="setting-class"><option>X</option></select></div>
+                <div class="ba-form-row"><label>Section</label><select id="setting-section"><option>C</option></select></div>
+              </div>
+
+              <div class="ba-setting-group">
+                <div class="ba-section-title">PREFERENCES</div>
+                <div class="ba-form-row"><label>Writing Direction</label>
+                  <select id="setting-direction"><option value="ltr">Left → Right</option><option value="rtl">Right → Left</option></select>
+                </div>
+                <div class="ba-form-row"><label>Default Paper</label>
+                  <select id="setting-paper"><option value="ruled">Ruled</option><option value="ruled-rtl">Ruled RTL</option><option value="grid">Grid</option><option value="graph-1cm">Graph 1 cm</option><option value="graph-1in">Graph 1 inch</option><option value="blank">Blank</option></select>
+                </div>
+                <div class="ba-form-row"><label>Theme</label>
+                  <select id="setting-theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select>
+                </div>
+                <div class="ba-form-row" style="border:none;margin-top:1rem;"><label style="color:var(--silver);cursor:default;">Version</label><span id="easter-egg-trigger" style="color:var(--silver);cursor:pointer;font-size:.8rem;padding:.5rem;border-radius:8px;">1.0.0</span></div>
+              </div>
+
+              <div class="ba-setting-group">
+                <div class="ba-section-title">SCHOOL INFORMATION</div>
+                <div class="ba-school-details">
+                  <div class="ba-school-logo"><img src="assets/bahria-clg-logo.png" alt="Bahria College Karsaz" onerror="this.style.display='none'"></div>
+                  <div class="ba-school-name">BAHRIA COLLEGE KARSAZ</div>
+                  <div class="ba-school-address">Habib Rehmatullah Road, Karsaz, Karachi</div>
+                  <div class="ba-school-class">Class X-C</div>
+                  <div class="ba-school-teacher">Class Teacher<br>47 — Ms. Saeeda (vii)</div>
+                </div>
+              </div>
+
+              <div class="ba-credit-block">Backpack Air · A project of MO Digital</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ SUBJECT FOLDER MODAL ============ -->
+        <div class="ba-modal" id="subject-folder-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content">
+            <header class="ba-modal-header">
+              <button class="ba-modal-close" id="sf-back">←</button>
+              <h3 id="sf-subject">Subject</h3>
+            </header>
+            <div class="ba-modal-body" id="sf-body">
+              <div class="ba-sf-book" id="sf-book"></div>
+              <div class="ba-sf-pages-head">MY PAGES</div>
+              <div class="ba-sf-pages" id="sf-pages"></div>
+              <div class="ba-sf-actions">
+                <button class="ba-button ba-button-primary" id="sf-new-notebook">+ New Notebook</button>
+                <button class="ba-button ba-button-secondary" id="sf-new-sheet">+ New Sheet</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CREATE NOTEBOOK MODAL ============ -->
+        <div class="ba-modal" id="new-notebook-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-medium">
+            <header class="ba-modal-header"><h3>Create Notebook</h3><button class="ba-modal-close" id="nb-close">✕</button></header>
+            <form id="new-notebook-form">
+              <div class="ba-form-group"><label>Name</label><input id="nb-name" placeholder="Keypoints" required></div>
+              <div class="ba-form-group"><label>Subject</label>
+                <select id="nb-subject" required></select>
+              </div>
+              <div class="ba-form-group"><label>Paper Type</label>
+                <select id="nb-paper" required>
+                  <option value="ruled">Ruled</option><option value="ruled-rtl">Ruled RTL</option><option value="grid">Grid</option>
+                  <option value="graph-1cm">Graph 1 cm</option><option value="graph-1in">Graph 1 inch</option><option value="blank">Blank</option>
+                </select>
+              </div>
+              <div class="ba-form-group"><label>Writing Direction</label>
+                <select id="nb-direction" required><option value="ltr">Left → Right</option><option value="rtl">Right → Left</option></select>
+              </div>
+              <div class="ba-modal-actions">
+                <button type="button" class="ba-button ba-button-secondary" id="nb-cancel">Cancel</button>
+                <button type="submit" class="ba-button ba-button-primary">Create</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ============ NOTEBOOK EDITOR MODAL (redesigned) ============ -->
+        <div class="ba-modal ba-modal-fs" id="notebook-editor-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="nb-editor-back">←</button>
+              <h3 id="nb-editor-title">Keypoints</h3>
+              <div class="ba-nb-page-info">Page <span id="nb-current-page">1</span> / <span id="nb-total-pages">1</span></div>
+            </header>
+            <div class="ba-nb-page" id="nb-page">
+              <canvas id="nb-canvas" class="ba-nb-canvas"></canvas>
+            </div>
+            <div class="ba-nb-tool-options" id="nb-tool-options" style="display:none;"></div>
+            <div class="ba-nb-toolbar">
+              <button class="ba-nb-tool active" data-tool="pen" title="Pen"><span class="ba-dot" style="background:#2f5bff"></span></button>
+              <button class="ba-nb-tool" data-tool="pencil" title="Pencil"><span class="ba-dot" style="background:#8a8a8a"></span></button>
+              <button class="ba-nb-tool" data-tool="highlighter" title="Highlighter"><span class="ba-dot" style="background:#ffe58a"></span></button>
+              <button class="ba-nb-tool" data-tool="square" title="Square">▢</button>
+              <button class="ba-nb-tool" data-tool="circle" title="Circle">◯</button>
+              <button class="ba-nb-tool" data-tool="eraser" title="Eraser">🧽</button>
+              <div class="ba-nb-divider"></div>
+              <button class="ba-nb-tool" data-action="undo" title="Undo">↶</button>
+              <button class="ba-nb-tool" data-action="redo" title="Redo">↷</button>
+              <button class="ba-nb-tool" data-action="pages" title="Pages">▦</button>
+              <button class="ba-nb-tool" data-action="add-page" title="Add Page">+ Page</button>
+              <button class="ba-nb-tool" data-action="paper" title="Paper style">▤ Paper</button>
+            </div>
+            <div class="ba-nb-page-thumbnails" id="nb-page-thumbnails" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- ============ CREATE SHEET MODAL ============ -->
+        <div class="ba-modal" id="new-sheet-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-medium">
+            <header class="ba-modal-header"><h3>New Sheet</h3><button class="ba-modal-close" id="sheet-close">✕</button></header>
+            <form id="new-sheet-form">
+              <div class="ba-form-group"><label>Name</label><input id="sheet-name" placeholder="Marks" required></div>
+              <div class="ba-form-group"><label>Subject</label><select id="sheet-subject" required></select></div>
+              <div class="ba-modal-actions">
+                <button type="button" class="ba-button ba-button-secondary" id="sheet-cancel">Cancel</button>
+                <button type="submit" class="ba-button ba-button-primary">Create</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ============ SHEET EDITOR MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="sheet-editor-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="sheet-editor-back">←</button>
+              <h3 id="sheet-editor-title">Sheet</h3>
+            </header>
+            <div class="ba-sheet-wrap">
+              <table class="ba-sheet" id="sheet-grid"></table>
+            </div>
+            <div class="ba-sheet-toolbar">
+              <button class="ba-sheet-btn" data-format="bold" title="Bold"><b>B</b></button>
+              <button class="ba-sheet-btn" data-format="italic" title="Italic"><i>I</i></button>
+              <span class="ba-sheet-swatches">
+                <span class="ba-nb-swatch" data-color="#0f0f0f" style="background:#0f0f0f"></span>
+                <span class="ba-nb-swatch" data-color="#2f5bff" style="background:#2f5bff"></span>
+                <span class="ba-nb-swatch" data-color="#ff6a5e" style="background:#ff6a5e"></span>
+                <span class="ba-nb-swatch" data-color="#2fbf6f" style="background:#2fbf6f"></span>
+                <span class="ba-nb-swatch" data-color="#ffc21c" style="background:#ffc21c"></span>
+              </span>
+              <div class="ba-nb-divider"></div>
+              <button class="ba-sheet-btn" data-action="add-row">+ Row</button>
+              <button class="ba-sheet-btn" data-action="del-row">− Row</button>
+              <button class="ba-sheet-btn" data-action="add-col">+ Col</button>
+              <button class="ba-sheet-btn" data-action="del-col">− Col</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ HOMEWORK DIARY MODAL ============ -->
+        <div class="ba-modal" id="homework-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-medium">
+            <header class="ba-modal-header"><h3>Homework Diary</h3><button class="ba-modal-close" id="hw-close">✕</button></header>
+            <div class="ba-modal-body">
+              <form id="hw-form" class="ba-hw-form">
+                <input id="hw-subject" placeholder="Subject (e.g. Physics)" required>
+                <input id="hw-task" placeholder="Task" required>
+                <input id="hw-due" placeholder="Due (e.g. Monday)">
+                <button type="submit" class="ba-button ba-button-primary">Add</button>
+              </form>
+              <div class="ba-hw-sections" id="hw-list"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ PDF READER MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="pdf-reader-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content">
+            <header class="ba-pdf-header">
+              <h3 id="pdf-title">Book</h3>
+              <div class="ba-pdf-page-info">Page <span id="pdf-current-page">1</span> / <span id="pdf-total-pages">—</span></div>
+              <button class="ba-modal-close" id="pdf-close">✕</button>
+            </header>
+            <div class="ba-pdf-toolbar">
+              <button class="ba-pdf-btn" id="pdf-prev">‹</button>
+              <input type="number" class="ba-pdf-page-input" id="pdf-page-input" min="1" value="1">
+              <button class="ba-pdf-btn" id="pdf-next">›</button>
+              <div class="ba-pdf-divider"></div>
+              <button class="ba-pdf-btn" id="pdf-zoom-out">−</button>
+              <span id="pdf-zoom-level">100%</span>
+              <button class="ba-pdf-btn" id="pdf-zoom-in">+</button>
+              <div class="ba-pdf-divider"></div>
+              <button class="ba-pdf-btn" id="pdf-search">🔍</button>
+              <button class="ba-pdf-btn" id="pdf-bookmark">🔖</button>
+              <button class="ba-pdf-btn" id="pdf-annotate">✏️</button>
+            </div>
+            <div class="ba-pdf-viewer" id="pdf-viewer">
+              <iframe id="pdf-iframe" src="" frameborder="0"></iframe>
+            </div>
+            <div class="ba-pdf-annotation-toolbar" id="pdf-annotation-toolbar" style="display:none;">
+              <div class="ba-annotation-tools">
+                <button class="ba-annotate-tool active" data-tool="pen" data-color="#2f5bff"><span style="background:#2f5bff"></span></button>
+                <button class="ba-annotate-tool" data-tool="pen" data-color="#0f0f0f"><span style="background:#0f0f0f"></span></button>
+                <button class="ba-annotate-tool" data-tool="pen" data-color="#ff6a5e"><span style="background:#ff6a5e"></span></button>
+                <button class="ba-annotate-tool" data-tool="pencil" data-color="#8a8a8a"><span style="background:#8a8a8a"></span></button>
+                <button class="ba-annotate-tool" data-tool="highlighter" data-color="#ffe58a"><span style="background:#ffe58a"></span></button>
+                <button class="ba-annotate-tool" data-tool="square" data-color="#2f5bff" title="Square">▢</button>
+                <button class="ba-annotate-tool" data-tool="circle" data-color="#2f5bff" title="Circle">◯</button>
+                <button class="ba-annotate-tool" data-tool="eraser">🧽</button>
+                <button class="ba-annotate-tool" data-action="undo">↶</button>
+                <button class="ba-annotate-tool" data-action="redo">↷</button>
+                <button class="ba-annotate-tool" data-action="save">💾</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ TOOLS MENU MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="tools-menu-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="tools-back">←</button>
+              <h3>Tools</h3>
+            </header>
+            <div class="ba-tools-grid">
+              <div class="ba-tool-menu-item" id="tool-calculator">
+                <div class="ba-tool-menu-icon">🧮</div>
+                <div class="ba-tool-menu-name">Calculator</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-focus">
+                <div class="ba-tool-menu-icon">⏱</div>
+                <div class="ba-tool-menu-name">Focus Time</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-clock">
+                <div class="ba-tool-menu-icon">🕐</div>
+                <div class="ba-tool-menu-name">School Clock</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-sticky">
+                <div class="ba-tool-menu-icon">📌</div>
+                <div class="ba-tool-menu-name">Sticky Notes</div>
+              </div>
+              <div class="ba-tool-menu-item" id="tool-formulas">
+                <div class="ba-tool-menu-icon">📖</div>
+                <div class="ba-tool-menu-name">Formula Book</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ CALCULATOR MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="calculator-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="calc-back">←</button>
+              <h3>Calculator</h3>
+            </header>
+            <div class="ba-calc-tabs">
+              <button class="ba-calc-tab ba-calc-tab-active" id="calc-tab-basic">Basic</button>
+              <button class="ba-calc-tab" id="calc-tab-sci">Scientific</button>
+              <button class="ba-calc-tab" id="calc-tab-conv">Converter</button>
+            </div>
+            
+            <div class="ba-calc-container" id="calc-view-basic">
+              <div class="ba-calc-display" id="calc-display">0</div>
+              <div class="ba-calc-history" id="calc-history"></div>
+              <div class="ba-calc-grid">
+                <button class="ba-calc-btn ba-calc-clear">C</button>
+                <button class="ba-calc-btn ba-calc-op">(</button>
+                <button class="ba-calc-btn ba-calc-op">)</button>
+                <button class="ba-calc-btn ba-calc-op">÷</button>
+                <button class="ba-calc-btn">7</button>
+                <button class="ba-calc-btn">8</button>
+                <button class="ba-calc-btn">9</button>
+                <button class="ba-calc-btn ba-calc-op">×</button>
+                <button class="ba-calc-btn">4</button>
+                <button class="ba-calc-btn">5</button>
+                <button class="ba-calc-btn">6</button>
+                <button class="ba-calc-btn ba-calc-op">−</button>
+                <button class="ba-calc-btn">1</button>
+                <button class="ba-calc-btn">2</button>
+                <button class="ba-calc-btn">3</button>
+                <button class="ba-calc-btn ba-calc-op">+</button>
+                <button class="ba-calc-btn ba-calc-zero">0</button>
+                <button class="ba-calc-btn">.</button>
+                <button class="ba-calc-btn ba-calc-eq">=</button>
+              </div>
+            </div>
+
+            <div class="ba-calc-container" id="calc-view-sci" style="display:none;">
+              <div class="ba-calc-display" id="calc-sci-display">0</div>
+              <div class="ba-calc-history" id="calc-sci-history"></div>
+              <div class="ba-calc-grid ba-calc-sci-grid">
+                <button class="ba-calc-btn ba-calc-sci">sin</button>
+                <button class="ba-calc-btn ba-calc-sci">cos</button>
+                <button class="ba-calc-btn ba-calc-sci">tan</button>
+                <button class="ba-calc-btn ba-calc-sci">π</button>
+                <button class="ba-calc-btn ba-calc-sci">log</button>
+                <button class="ba-calc-btn ba-calc-sci">ln</button>
+                <button class="ba-calc-btn ba-calc-sci">√</button>
+                <button class="ba-calc-btn ba-calc-sci">x²</button>
+                <button class="ba-calc-btn ba-calc-sci">(</button>
+                <button class="ba-calc-btn ba-calc-sci">)</button>
+                <button class="ba-calc-btn ba-calc-sci">%</button>
+                <button class="ba-calc-btn ba-calc-clear">C</button>
+                <button class="ba-calc-btn">7</button>
+                <button class="ba-calc-btn">8</button>
+                <button class="ba-calc-btn">9</button>
+                <button class="ba-calc-btn ba-calc-op">×</button>
+                <button class="ba-calc-btn">4</button>
+                <button class="ba-calc-btn">5</button>
+                <button class="ba-calc-btn">6</button>
+                <button class="ba-calc-btn ba-calc-op">−</button>
+                <button class="ba-calc-btn">1</button>
+                <button class="ba-calc-btn">2</button>
+                <button class="ba-calc-btn">3</button>
+                <button class="ba-calc-btn ba-calc-op">+</button>
+                <button class="ba-calc-btn ba-calc-zero">0</button>
+                <button class="ba-calc-btn">.</button>
+                <button class="ba-calc-btn ba-calc-eq">=</button>
+              </div>
+            </div>
+
+            <div class="ba-conv-container" id="calc-view-conv" style="display:none; padding:1.5rem;">
+              <div class="ba-conv-header">UNIT CONVERTER</div>
+              <div class="ba-form-group">
+                <label>Category</label>
+                <select id="conv-category">
+                  <option value="length">Length</option>
+                  <option value="mass">Mass</option>
+                  <option value="time">Time</option>
+                  <option value="temp">Temperature</option>
+                </select>
+              </div>
+              <div class="ba-conv-row">
+                <input type="number" id="conv-from-val" value="1">
+                <select id="conv-from-unit"></select>
+              </div>
+              <div class="ba-conv-equals">=</div>
+              <div class="ba-conv-row">
+                <input type="number" id="conv-to-val" readonly>
+                <select id="conv-to-unit"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ FOCUS TIME MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="focus-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <div class="ba-focus-container">
+              <button class="ba-nb-back" id="focus-back">←</button>
+              <div class="ba-focus-header">FOCUS TIME</div>
+              
+              <div id="focus-setup">
+                <div class="ba-focus-sub">Choose duration</div>
+                <div class="ba-focus-durations" id="focus-durations">
+                  <button class="ba-focus-dur" data-min="15">15 min</button>
+                  <button class="ba-focus-dur active" data-min="25">25 min</button>
+                  <button class="ba-focus-dur" data-min="45">45 min</button>
+                  <button class="ba-focus-dur" data-min="60">60 min</button>
+                </div>
+                <button class="ba-button ba-button-primary ba-focus-start" id="focus-start">START</button>
+              </div>
+
+              <div id="focus-ended" style="display:none;">
+                <div class="ba-focus-ended-title">FOCUS ENDED</div>
+                <div class="ba-focus-msg">You left Backpack Air.</div>
+                <button class="ba-button ba-button-primary" id="focus-restart">Start Again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ SCHOOL CLOCK MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="clock-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <div class="ba-clock-container">
+              <button class="ba-nb-back" id="clock-back">←</button>
+              <div class="ba-clock-title">SCHOOL CLOCK</div>
+              <div class="ba-clock-time" id="clock-time">00:00:00</div>
+              <div class="ba-clock-subject" id="clock-subject">No class right now</div>
+              <div class="ba-clock-period-info" id="clock-period-info"></div>
+              <div class="ba-clock-settings">
+                <div class="ba-form-row"><label>Sound</label>
+                  <select id="clock-sound"><option value="on">ON</option><option value="off">OFF</option></select>
+                </div>
+                <div class="ba-form-row"><label>Vibration</label>
+                  <select id="clock-vibration"><option value="on">ON</option><option value="off">OFF</option></select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ STICKY NOTES MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="sticky-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="sticky-back">←</button>
+              <h3>Sticky Notes</h3>
+              <button class="ba-button ba-button-primary ba-button-sm" id="sticky-add">+ New</button>
+            </header>
+            <div class="ba-sticky-grid" id="sticky-grid"></div>
+            <div class="ba-sticky-editor" id="sticky-editor" style="display:none;">
+              <textarea id="sticky-text" placeholder="Write something..."></textarea>
+              <input id="sticky-label" placeholder="Label (optional)">
+              <div class="ba-modal-actions">
+                <button class="ba-button ba-button-secondary" id="sticky-cancel">Cancel</button>
+                <button class="ba-button ba-button-primary" id="sticky-save">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ FORMULA BOOK MODAL ============ -->
+        <div class="ba-modal ba-modal-fs" id="formula-modal" role="dialog" aria-modal="true">
+          <div class="ba-modal-content ba-modal-full">
+            <header class="ba-nb-header">
+              <button class="ba-nb-back" id="formula-back">←</button>
+              <h3>Formula Book</h3>
+            </header>
+            <div class="ba-formula-tabs">
+              <button class="ba-formula-tab ba-formula-tab-active" data-subject="math">Mathematics</button>
+              <button class="ba-formula-tab" data-subject="physics">Physics</button>
+              <button class="ba-formula-tab" data-subject="my">My Formulas</button>
+            </div>
+            <div class="ba-formula-content" id="formula-content"></div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- BOTTOM TAB BAR (4 pages) -->
+      <nav class="ba-tabbar" role="tablist">
+        <button class="ba-tabbar-item active" data-section="home"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20C21 20.53 20.53 21 20 21H4C3.47 21 3 20.53 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Home</span></button>
+        <button class="ba-tabbar-item" data-section="schoolbag"><svg viewBox="0 0 24 24" fill="none"><path d="M6 2h9l5 5v15H6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Schoolbag</span></button>
+        <button class="ba-tabbar-item" data-section="schedule"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Schedule</span></button>
+        <button class="ba-tabbar-item" data-section="settings"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5 5l2.1 2.1M16.9 16.9 19 19M19 5l-2.1 2.1M7.1 16.9 5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Settings</span></button>
+      </nav>
+
+      <!-- Install banner -->
+      <div class="ba-install-banner" id="install-banner" role="alert" style="display:none;">
+        <div class="ba-install-content">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong>Install Backpack Air</strong><p>Add to home screen for offline access</p></div>
+        </div>
+        <div class="ba-install-actions">
+          <button class="ba-button ba-button-primary ba-button-sm" id="install-btn">Install</button>
+          <button class="ba-install-dismiss" id="install-dismiss">✕</button>
+        </div>
+      </div>
+
+      <!-- ============ HIDDEN GAMES ============ -->
+      <div class="ba-modal ba-modal-fs" id="games-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="games-back">←</button>
+            <h3>Games Unlocked 🎮</h3>
+          </header>
+          <div class="ba-games-grid">
+            <div class="ba-game-card" id="open-snake">🐍 Snake</div>
+            <div class="ba-game-card" id="open-2048">🔢 2048</div>
+            <div class="ba-game-card" id="open-flappy">🐦 Flappy Bird</div>
+            <div class="ba-game-card" id="open-breakout">🧱 Breakout</div>
+            <div class="ba-game-card" id="open-whack">🔨 Whack-a-Mole</div>
+            <div class="ba-game-card" id="open-connect4">🔴 Connect Four</div>
+            <div class="ba-game-card" id="open-memory">🧠 Memory</div>
+            <div class="ba-game-card" id="open-sudoku"> Sudoku</div>
+            <div class="ba-game-card" id="open-minesweeper">💣 Minesweeper</div>
+            <div class="ba-game-card" id="open-tictactoe">⭕ Tic-tac-toe</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ SNAKE GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="snake-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="snake-back">←</button>
+            <h3>Snake 🐍</h3>
+            <div class="ba-nb-page-info" id="snake-score">Score: 0</div>
+          </header>
+          <div class="ba-game-setup" id="snake-setup">
+            <div class="ba-game-setup-title">Snake 🐍</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="snake"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="snake"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="snake">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="snake">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="snake">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="snake-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="snake-play" style="display:none;">
+            <canvas id="snake-canvas" width="300" height="300"></canvas>
+            <div class="ba-game-controls">
+              <button class="ba-game-btn" id="snake-up">↑</button>
+              <div class="ba-game-row">
+                <button class="ba-game-btn" id="snake-left">←</button>
+                <button class="ba-game-btn" id="snake-down">↓</button>
+                <button class="ba-game-btn" id="snake-right">→</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 2048 GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="game-2048-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="game-2048-back">←</button>
+            <h3>2048 🔢</h3>
+            <div class="ba-nb-page-info" id="game-2048-score">Score: 0</div>
+          </header>
+          <div class="ba-game-wrap">
+            <div id="game-2048-grid" class="ba-2048-grid"></div>
+            <div style="font-size:.7rem;color:var(--silver);text-align:center;margin-top:.5rem;">Swipe or use arrow keys</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ MEMORY GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="memory-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="memory-back">←</button>
+            <h3>Memory 🧠</h3>
+            <div class="ba-nb-page-info" id="memory-score">Moves: 0</div>
+          </header>
+          <div class="ba-game-setup" id="memory-setup">
+            <div class="ba-game-setup-title">Memory 🧠</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="memory"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="memory"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="memory">Easy (8)</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="memory">Medium (12)</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="memory">Hard (18)</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="memory-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="memory-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="memory-turn-bar" style="display:none;"><span class="ba-game-turn-player">🧠</span><span id="memory-turn-text">Player 1's turn</span></div>
+            <div id="memory-grid" class="ba-memory-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ TIC-TAC-TOE GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="tictactoe-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="tictactoe-back">←</button>
+            <h3>Tic-tac-toe ⭕</h3>
+          </header>
+          <div class="ba-game-setup" id="tictactoe-setup">
+            <div class="ba-game-setup-title">Tic-tac-toe ⭕</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn" data-mode="bot" data-game="tictactoe"><div class="ba-game-mode-icon">🤖</div><div class="ba-game-mode-name">vs Bot</div></button>
+                <button class="ba-game-mode-btn selected" data-mode="friend" data-game="tictactoe"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">BOT DIFFICULTY</div>
+              <div class="ba-game-mode-row" id="ttt-diff-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="tictactoe">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="tictactoe">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="tictactoe">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="tictactoe-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="tictactoe-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="ttt-turn-bar"><span class="ba-game-turn-player">⭕</span><span id="tictactoe-status">Player X's turn</span></div>
+            <div id="tictactoe-grid" class="ba-tictactoe-grid"></div>
+            <button class="ba-button ba-button-secondary" id="tictactoe-restart" style="margin-top:1rem;">Restart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ SUDOKU GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="sudoku-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="sudoku-back">←</button>
+            <h3>Sudoku </h3>
+          </header>
+          <div class="ba-game-wrap">
+            <div id="sudoku-grid" class="ba-sudoku-grid"></div>
+            <div class="ba-sudoku-numpad" id="sudoku-numpad"></div>
+            <button class="ba-button ba-button-secondary" id="sudoku-restart" style="margin-top:1rem;">New Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ MINESWEEPER GAME ============ -->
+      <div class="ba-modal ba-modal-fs" id="minesweeper-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="minesweeper-back">←</button>
+            <h3>Minesweeper 💣</h3>
+          </header>
+          <div class="ba-game-setup" id="minesweeper-setup">
+            <div class="ba-game-setup-title">Minesweeper 💣</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="minesweeper"><div class="ba-game-mode-icon">🌱</div><div class="ba-game-mode-name">Easy</div></button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="minesweeper"><div class="ba-game-mode-icon">⚡</div><div class="ba-game-mode-name">Medium</div></button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="minesweeper"><div class="ba-game-mode-icon">💀</div><div class="ba-game-mode-name">Hard</div></button>
+              </div>
+              <div class="ba-game-mode-label" id="ms-diff-desc" style="font-size:.72rem;letter-spacing:0;color:var(--silver);margin-top:.3rem;">8×8 · 10 mines</div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="minesweeper-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="minesweeper-play" style="display:none;">
+            <div id="minesweeper-grid" class="ba-minesweeper-grid"></div>
+            <button class="ba-button ba-button-secondary" id="minesweeper-restart" style="margin-top:1rem;">New Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ FLAPPY BIRD ============ -->
+      <div class="ba-modal ba-modal-fs" id="flappy-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="flappy-back">←</button>
+            <h3>Flappy Bird 🐦</h3>
+            <div class="ba-nb-page-info" id="flappy-score">Score: 0</div>
+          </header>
+          <div class="ba-game-setup" id="flappy-setup">
+            <div class="ba-game-setup-title">Flappy Bird 🐦</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="flappy"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="flappy"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="flappy">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="flappy">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="flappy">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="flappy-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="flappy-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="flappy-turn-bar" style="display:none;"><span class="ba-game-turn-player">🐦</span><span id="flappy-turn-text">Player 1</span></div>
+            <canvas id="flappy-canvas" width="300" height="400"></canvas>
+            <div style="font-size:.8rem;color:var(--silver);text-align:center;margin-top:.5rem;">Tap or press Space to flap</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ BREAKOUT ============ -->
+      <div class="ba-modal ba-modal-fs" id="breakout-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="breakout-back">←</button>
+            <h3>Breakout 🧱</h3>
+            <div class="ba-nb-page-info" id="breakout-score">Score: 0</div>
+          </header>
+          <div class="ba-game-setup" id="breakout-setup">
+            <div class="ba-game-setup-title">Breakout 🧱</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="breakout"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="breakout"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="breakout">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="breakout">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="breakout">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="breakout-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="breakout-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="breakout-turn-bar" style="display:none;"><span class="ba-game-turn-player">🧱</span><span id="breakout-turn-text">Player 1</span></div>
+            <canvas id="breakout-canvas" width="300" height="360"></canvas>
+            <div style="font-size:.8rem;color:var(--silver);text-align:center;margin-top:.5rem;">Swipe or drag paddle</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ WHACK-A-MOLE ============ -->
+      <div class="ba-modal ba-modal-fs" id="whack-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="whack-back">←</button>
+            <h3>Whack-a-Mole 🔨</h3>
+            <div class="ba-nb-page-info" id="whack-score">Score: 0 | Time: 30s</div>
+          </header>
+          <div class="ba-game-setup" id="whack-setup">
+            <div class="ba-game-setup-title">Whack-a-Mole 🔨</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="solo" data-game="whack"><div class="ba-game-mode-icon">👤</div><div class="ba-game-mode-name">Solo</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="whack"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="whack">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="whack">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="whack">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="whack-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="whack-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="whack-turn-bar" style="display:none;"><span class="ba-game-turn-player">🔨</span><span id="whack-turn-text">Player 1</span></div>
+            <div id="whack-grid" class="ba-whack-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ CONNECT FOUR ============ -->
+      <div class="ba-modal ba-modal-fs" id="connect4-modal" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header">
+            <button class="ba-nb-back" id="connect4-back">←</button>
+            <h3>Connect Four 🔴</h3>
+          </header>
+          <div class="ba-game-setup" id="connect4-setup">
+            <div class="ba-game-setup-title">Connect Four 🔴</div>
+            <div class="ba-game-mode-group">
+              <div class="ba-game-mode-label">MODE</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-mode-btn selected" data-mode="bot" data-game="connect4"><div class="ba-game-mode-icon">🤖</div><div class="ba-game-mode-name">vs Bot</div></button>
+                <button class="ba-game-mode-btn" data-mode="friend" data-game="connect4"><div class="ba-game-mode-icon">👫</div><div class="ba-game-mode-name">2 Players</div></button>
+              </div>
+              <div class="ba-game-mode-label">BOT DIFFICULTY</div>
+              <div class="ba-game-mode-row">
+                <button class="ba-game-diff-btn selected" data-diff="easy" data-game="connect4">Easy</button>
+                <button class="ba-game-diff-btn" data-diff="medium" data-game="connect4">Medium</button>
+                <button class="ba-game-diff-btn" data-diff="hard" data-game="connect4">Hard</button>
+              </div>
+            </div>
+            <button class="ba-button ba-button-primary ba-game-start-btn" id="connect4-start">START</button>
+          </div>
+          <div class="ba-game-wrap" id="connect4-play" style="display:none;">
+            <div class="ba-game-turn-bar" id="c4-turn-bar"><span class="ba-game-turn-player">🔴</span><span id="connect4-status">Your turn (Red)</span></div>
+            <div id="connect4-grid" class="ba-connect4-grid"></div>
+            <button class="ba-button ba-button-secondary" id="connect4-restart" style="margin-top:1rem;">Restart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ONBOARDING -->
+      <div class="ba-modal ba-modal-fs ba-onboarding" id="onboarding" role="dialog" aria-modal="true">
+        <div class="ba-modal-content ba-onb">
+          <div class="ba-onb-inner">
+            <div class="ba-onb-logo"><img src="assets/brand-logo.png" alt="Backpack Air" class="ba-onb-logo-img"></div>
+            <h2>Welcome to Backpack Air</h2>
+            <p class="ba-onb-sub">Set up your digital schoolbag</p>
+            <div class="ba-form-group">
+              <label>Name</label>
+              <input id="onb-name" placeholder="Your name">
+            </div>
+            <div class="ba-form-group">
+              <label>School</label>
+              <select id="onb-school"><option>Bahria College Karsaz</option></select>
+              <div class="ba-onb-note">Can't find your school? Tell your school about Backpack Air.</div>
+            </div>
+            <div class="ba-form-group">
+              <label>Class</label>
+              <select id="onb-class"><option>X-C</option></select>
+            </div>
+            <button class="ba-button ba-button-primary ba-onb-continue" id="onb-continue">Continue</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="ba-app-credit">A project of MO Digital</div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(console.error);
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault(); deferredPrompt = e;
+      document.getElementById('install-banner').style.display = 'flex';
+    });
+    document.getElementById('install-btn')?.addEventListener('click', async () => {
+      if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; document.getElementById('install-banner').style.display = 'none'; deferredPrompt = null; }
+    });
+    document.getElementById('install-dismiss')?.addEventListener('click', () => { document.getElementById('install-banner').style.display = 'none'; });
+  </script>
+</body>
+</html>
