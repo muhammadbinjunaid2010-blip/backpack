@@ -14,7 +14,7 @@
 </head>
 <body>
   <div class="ba-page-wrapper"><div class="app-shell" id="app-shell">
-    <header class="ba-app-header"><div class="ba-container"><div class="ba-app-header-content">
+    <div class="ba-focus-bar" id="focus-bar" style="display:none;"><span class="ba-focus-bar-icon">⏱</span><span class="ba-focus-bar-time" id="focus-bar-time">25:00</span><span class="ba-focus-bar-label">Focus</span><button class="ba-focus-bar-end" id="focus-bar-end">End</button></div><header class="ba-app-header"><div class="ba-container"><div class="ba-app-header-content">
       <div class="ba-app-header-identity"><img src="assets/brand-logo.png" alt="Backpack Air" class="ba-app-logo-img"><span class="ba-app-header-name">Backpack Air</span></div>
       <div class="ba-app-header-school"><div class="ba-app-school-name" id="hdr-school">Bahria College Karsaz</div><div class="ba-app-school-address" id="hdr-class">Class X-C</div></div>
     </div></div></header>
@@ -55,9 +55,14 @@
             <div class="ba-form-row"><label>Name</label><input id="setting-name" placeholder="Muhammad"></div>
           </div>
           <div class="ba-setting-group"><div class="ba-section-title">SCHOOL INFO</div>
-            <div class="ba-form-row"><label>School</label><input id="setting-school" placeholder="Bahria College Karsaz"></div>
-            <div class="ba-form-row"><label>Class</label><select id="setting-class"><option>X</option><option>IX</option><option>VIII</option><option>VII</option><option>VI</option><option>XI</option><option>XII</option></select></div>
-            <div class="ba-form-row"><label>Section</label><select id="setting-section"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+            <div class="ba-settings-school">
+              <img src="assets/bahria-clg-logo.png" alt="School" class="ba-settings-school-logo">
+              <div class="ba-settings-school-name" id="setting-school-display">Bahria College Karsaz</div>
+              <div class="ba-settings-school-row"><span>Address</span><span id="setting-address-display">Habib Rehmatullah Rd</span></div>
+              <div class="ba-settings-school-row"><span>Class</span><span id="setting-class-display">X-C</span></div>
+              <div class="ba-settings-school-row"><span>Class Teacher</span><span id="setting-teacher-display">Ms. Saeeda (47)</span></div>
+            </div>
+            <button class="ba-button ba-button-secondary ba-doc-action" id="settings-change-school">Change School</button>
           </div>
           <div class="ba-setting-group"><div class="ba-section-title">PREFERENCES</div>
             <div class="ba-form-row"><label>Writing Direction</label><select id="setting-direction"><option value="ltr">Left → Right</option><option value="rtl">Right → Left</option></select></div>
@@ -210,6 +215,7 @@
             <button class="ba-sheet-btn" data-action="del-col">− Col</button>
           </div>
         </div>
+      </div>
 
         <!-- QUICK NOTE -->
         <div class="ba-modal ba-modal-fs" id="quicknote-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full">
@@ -226,6 +232,7 @@
             <div class="ba-hw-sections" id="hw-list"></div>
           </div>
         </div>
+      </div>
 <!--__MODALS3__-->
         <!-- LIBRARY NOTE -->
         <div class="ba-modal" id="library-note-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-medium">
@@ -249,7 +256,7 @@
       </div>
 <!--__MODALS3__-->
         <!-- GAMES HUB -->
-        <div class="ba-modal" id="games-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-medium">
+        <div class="ba-modal ba-modal-fs" id="games-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full">
           <header class="ba-modal-header"><h3>Games</h3><button class="ba-modal-close" id="games-back">✕</button></header>
           <div class="ba-modal-body">
             <div class="ba-games-grid">
@@ -282,6 +289,8 @@
             <div class="ba-game-play" id="snake-play" style="display:none;"></div>
           </div>
         </div>
+      </div>
+
         <!-- MEMORY -->
         <div class="ba-modal ba-modal-fs" id="memory-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full">
           <header class="ba-game-header"><button class="ba-modal-close" id="memory-back">←</button><h3>Memory</h3></header>
@@ -410,6 +419,8 @@
             <div class="ba-game-play" id="game-2048-play" style="display:none;"></div>
           </div>
         </div>
+      </div>
+
         <!-- PDF READER -->
         <div class="ba-modal ba-modal-fs" id="pdf-reader-modal" role="dialog" aria-modal="true"><div class="ba-modal-content">
           <header class="ba-pdf-header">
@@ -452,6 +463,9 @@
           <div class="ba-tools-grid">
             <div class="ba-tool-menu-item" id="tool-calculator"><div class="ba-tool-menu-icon">🧮</div><div class="ba-tool-menu-name">Calculator</div></div>
             <div class="ba-tool-menu-item" id="tool-clock"><div class="ba-tool-menu-icon">🕐</div><div class="ba-tool-menu-name">School Clock</div></div>
+            <div class="ba-tool-menu-item" id="tool-focus"><div class="ba-tool-menu-icon">⏱️</div><div class="ba-tool-menu-name">Focus Timer</div></div>
+            <div class="ba-tool-menu-item" id="tool-formulas"><div class="ba-tool-menu-icon">📐</div><div class="ba-tool-menu-name">Formula Book</div></div>
+            <div class="ba-tool-menu-item" id="tool-stickynotes"><div class="ba-tool-menu-icon">📌</div><div class="ba-tool-menu-name">Sticky Notes</div></div>
           </div>
         </div>
       </div>
@@ -478,6 +492,32 @@
         </div>
       </div>
 
+        <!-- FOCUS TIMER -->
+        <div class="ba-modal ba-modal-fs" id="focus-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header"><button class="ba-nb-back" id="focus-back">←</button><h3>Focus Timer</h3></header>
+          <div class="ba-focus-body">
+            <div class="ba-focus-presets" id="focus-presets"></div>
+            <div class="ba-focus-display"><div class="ba-focus-ring"><svg viewBox="0 0 200 200"><circle class="ba-focus-ring-bg" cx="100" cy="100" r="90"/><circle class="ba-focus-ring-fg" id="focus-ring" cx="100" cy="100" r="90"/></svg><div class="ba-focus-time" id="focus-time">25:00</div><div class="ba-focus-label" id="focus-label">Ready</div></div></div>
+            <div class="ba-focus-actions" id="focus-actions"><button class="ba-button ba-button-primary" id="focus-start">Start</button></div>
+          </div>
+        </div>
+      </div>
+
+        <!-- FORMULA BOOK -->
+        <div class="ba-modal ba-modal-fs" id="formulas-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header"><button class="ba-nb-back" id="formulas-back">←</button><h3>Formula Book</h3></header>
+          <div class="ba-formulas-tabs"><button class="ba-formulas-tab ba-formulas-tab-active" data-ftype="physics">Physics</button><button class="ba-formulas-tab" data-ftype="maths">Maths</button></div>
+          <div class="ba-formulas-body" id="formulas-body"></div>
+        </div>
+      </div>
+
+        <!-- STICKY NOTES -->
+        <div class="ba-modal ba-modal-fs" id="stickynotes-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full">
+          <header class="ba-nb-header"><button class="ba-nb-back" id="stickynotes-back">←</button><h3>Sticky Notes</h3><button class="ba-button ba-button-primary ba-button-sm" id="stickynotes-add">+ New</button></header>
+          <div class="ba-stickynotes-grid" id="stickynotes-grid"></div>
+        </div>
+      </div>
+
         <!-- DOCUMENT INFO / RENAME -->
         <div class="ba-modal" id="doc-menu-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-medium">
           <header class="ba-modal-header"><h3 id="doc-menu-title">Document</h3><button class="ba-modal-close" id="doc-menu-close">✕</button></header>
@@ -496,10 +536,11 @@
             <div class="ba-onb-logo"><img src="assets/brand-logo.png" alt="Backpack Air" class="ba-onb-logo-img"></div>
             <h2>Welcome to Backpack Air</h2>
             <p class="ba-onb-sub">Set up your digital schoolbag</p>
-            <div class="ba-form-group"><label>Name</label><input id="onb-name" placeholder="Your name"></div>
-            <div class="ba-form-group"><label>School</label><select id="onb-school"><option>Bahria College Karsaz</option></select></div>
-            <div class="ba-form-group"><label>Class</label><select id="onb-class"><option>X-C</option></select></div>
+            <div class="ba-form-group"><label>Your Name</label><input id="onb-name" placeholder="e.g. Muhammad"></div>
+            <div class="ba-form-group"><label>School Code</label><input id="onb-code" placeholder="Enter school code"></div>
+            <div class="ba-form-group" id="onb-class-group" style="display:none;"><label>Class</label><select id="onb-class"><option>X-C</option><option>X-B</option><option>X-A</option><option>X-D</option></select></div>
             <button class="ba-button ba-button-primary ba-onb-continue" id="onb-continue">Continue</button>
+            <p class="ba-onb-note"><a href="#" id="onb-teacher-link" style="color:var(--blue);font-weight:700;">I am a teacher</a></p>
           </div>
         </div>
       </div>

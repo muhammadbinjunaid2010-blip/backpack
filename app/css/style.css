@@ -58,12 +58,7 @@ h1,h2,h3,h4 { font-weight:800; line-height:1.1; letter-spacing:-0.03em; }
 .ba-section-title { font-size:.7rem; font-weight:800; letter-spacing:.12em; color:var(--silver); margin-bottom:.5rem; }
 
 /* ---------- HOME ---------- */
-.ba-home-greeting { font-size:1.5rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:.4rem; }
-.ba-home-name-row { display:flex; gap:.5rem; align-items:center; margin-bottom:.8rem; }
-.ba-home-name-input { flex:1; border:1px solid var(--mercury); border-radius:12px; padding:.55rem .8rem; font-size:.9rem; font-weight:600; background:var(--white); }
-body.theme-dark .ba-home-name-input { background:#1d2138; color:#e7e9ff; border-color:#2a3050; }
-.ba-home-name-save { border:none; background:var(--blue); color:#fff; border-radius:12px; padding:.55rem 1rem; font-weight:800; font-size:.85rem; cursor:pointer; flex:0 0 auto; }
-.ba-home-name-save:active { transform:scale(.96); }
+.ba-home-greeting { font-size:1.5rem; font-weight:800; letter-spacing:-0.03em; margin-bottom:.9rem; }
 .ba-cp-card { background:linear-gradient(160deg,var(--blue) 0%,var(--blue-dark) 100%); color:#fff; border-radius:20px;
   padding:1.1rem 1.1rem 1rem; cursor:pointer; box-shadow:0 12px 28px rgba(47,91,255,.32); }
 .ba-cp-label { font-size:.66rem; font-weight:800; letter-spacing:.18em; opacity:.85; }
@@ -146,6 +141,13 @@ body.theme-dark .ba-home-name-input { background:#1d2138; color:#e7e9ff; border-
 /* ---------- SETTINGS ---------- */
 .ba-settings-content { display:flex; flex-direction:column; gap:1.3rem; }
 .ba-setting-group { display:flex; flex-direction:column; gap:.6rem; }
+.ba-settings-school { display:flex; flex-direction:column; align-items:center; background:var(--white); border:1px solid var(--mercury); border-radius:18px; padding:1.2rem; gap:.5rem; }
+body.theme-dark .ba-settings-school { background:#1d2138; border-color:#2a3050; }
+.ba-settings-school-logo { width:72px; height:72px; border-radius:16px; object-fit:cover; box-shadow:0 4px 16px rgba(0,0,0,.15); }
+.ba-settings-school-name { font-weight:800; font-size:1.1rem; color:var(--blue); }
+.ba-settings-school-row { display:flex; justify-content:space-between; width:100%; font-size:.85rem; padding:.35rem 0; border-bottom:1px solid var(--mercury); }
+body.theme-dark .ba-settings-school-row { border-color:#2a3050; }
+.ba-settings-school-row span:first-child { color:var(--silver); font-weight:700; }
 .ba-form-row { display:grid; grid-template-columns:120px 1fr; gap:.6rem; align-items:center; }
 .ba-form-row label { font-size:.78rem; font-weight:800; color:var(--silver); }
 .ba-form-row input, .ba-form-row select { width:100%; border:1px solid var(--alto); border-radius:12px; padding:.6rem .8rem;
@@ -331,11 +333,12 @@ body.theme-dark .ba-period-item.ba-period-break { background:#221f33; }
 .ba-tool-arrow { font-weight:800; color:var(--silver); font-size:.9rem; }
 
 /* ---------- TOOLS MENU ---------- */
-.ba-tools-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1.5rem; }
-.ba-tool-menu-item { display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--concrete); border-radius:20px; padding:2rem 1rem; gap:.6rem; cursor:pointer; transition:transform .15s; }
-.ba-tool-menu-item:active { transform:scale(.95); }
-.ba-tool-menu-icon { font-size:2.4rem; }
-.ba-tool-menu-name { font-weight:800; font-size:.9rem; }
+.ba-tools-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; padding:1.5rem; }
+.ba-tool-menu-item { display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--concrete); border-radius:16px; padding:1.8rem 1rem; gap:.5rem; cursor:pointer; transition:transform .15s; border:1px solid transparent; }
+.ba-tool-menu-item:active { transform:scale(.96); }
+body.theme-dark .ba-tool-menu-item { background:#1d2138; border-color:#2a3050; }
+.ba-tool-menu-icon { font-size:2.2rem; }
+.ba-tool-menu-name { font-weight:800; font-size:.85rem; }
 
 /* ---------- CALCULATOR ---------- */
 .ba-calc-container { display:flex; flex-direction:column; height:100%; background:#1a1c2e; }
@@ -394,12 +397,41 @@ body.theme-dark .ba-period-item.ba-period-break { background:#221f33; }
 .ba-focus-bar-label { color:#a4a4a4; flex:1; }
 .ba-focus-bar-end { border:1px solid #fff; background:transparent; color:#fff; border-radius:10px; padding:.3rem .8rem; font-size:.7rem; font-weight:800; cursor:pointer; }
 
-/* ---------- TOOLS MENU ---------- */
-.ba-tools-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; padding:1.5rem; }
-.ba-tool-menu-item { display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--concrete); border-radius:20px; padding:2rem 1rem; gap:.6rem; cursor:pointer; transition:transform .15s; }
-.ba-tool-menu-item:active { transform:scale(.95); }
-.ba-tool-menu-icon { font-size:2.4rem; }
-.ba-tool-menu-name { font-weight:800; font-size:.9rem; }
+
+/* ---------- FOCUS TIMER ---------- */
+.ba-focus-body { flex:1; display:flex; flex-direction:column; align-items:center; padding:2rem 1.5rem; overflow-y:auto; }
+.ba-focus-presets { display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; margin-bottom:2rem; }
+.ba-focus-preset { border:1px solid var(--mercury); background:var(--white); border-radius:12px; padding:.5rem 1rem; font-weight:800; font-size:.85rem; cursor:pointer; }
+body.theme-dark .ba-focus-preset { background:#1d2138; color:#e7e9ff; border-color:#2a3050; }
+.ba-focus-preset.selected { border-color:var(--blue); background:#eef2ff; color:var(--blue); }
+.ba-focus-display { margin-bottom:2rem; }
+.ba-focus-ring { position:relative; width:220px; height:220px; display:flex; align-items:center; justify-content:center; }
+.ba-focus-ring svg { position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg); }
+.ba-focus-ring-bg { fill:none; stroke:var(--mercury); stroke-width:8; }
+.ba-focus-ring-fg { fill:none; stroke:var(--blue); stroke-width:8; stroke-dasharray:565.48; stroke-dashoffset:0; stroke-linecap:round; transition:stroke-dashoffset .5s; }
+.ba-focus-time { font-size:3rem; font-weight:800; font-family:monospace; z-index:1; }
+.ba-focus-label { font-size:.85rem; color:var(--silver); font-weight:700; z-index:1; }
+.ba-focus-actions { display:flex; gap:.8rem; }
+
+/* ---------- STICKY NOTES ---------- */
+.ba-stickynotes-grid { flex:1; padding:1rem; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:.8rem; align-content:start; }
+.ba-sticky-note { border-radius:12px; padding:1rem; min-height:140px; cursor:default; box-shadow:0 4px 12px rgba(0,0,0,.12); position:relative; display:flex; flex-direction:column; }
+.ba-sticky-note-title { font-weight:800; font-size:.9rem; margin-bottom:.4rem; border:none; background:transparent; outline:none; width:100%; }
+.ba-sticky-note-text { flex:1; border:none; background:transparent; outline:none; resize:none; font-family:inherit; font-size:.85rem; width:100%; }
+.ba-sticky-note-del { position:absolute; top:6px; right:8px; border:none; background:transparent; cursor:pointer; font-size:.85rem; opacity:.5; }
+.ba-sticky-note-del:hover { opacity:1; }
+
+/* ---------- FORMULAS BODY ---------- */
+.ba-formulas-tabs { display:flex; border-bottom:1px solid var(--mercury); background:var(--white); overflow-x:auto; }
+.ba-formulas-tab { padding:.8rem 1rem; border:none; background:transparent; font-weight:800; font-size:.8rem; color:var(--silver); white-space:nowrap; cursor:pointer; }
+.ba-formulas-tab.ba-formulas-tab-active { color:var(--blue); border-bottom:2px solid var(--blue); }
+.ba-formulas-body { flex:1; padding:1.2rem; overflow-y:auto; }
+.ba-formula-section-title { font-size:.75rem; font-weight:800; letter-spacing:.08em; color:var(--silver); margin:1.2rem 0 .5rem; }
+.ba-formula-card { background:var(--white); border:1px solid var(--mercury); border-radius:14px; padding:1rem; margin-bottom:.8rem; }
+body.theme-dark .ba-formula-card { background:#1d2138; border-color:#2a3050; }
+.ba-formula-name { font-weight:800; font-size:.9rem; margin-bottom:.3rem; }
+.ba-formula-expr { font-family:monospace; background:var(--concrete); padding:.4rem .6rem; border-radius:8px; font-size:.85rem; color:var(--blue-dark); }
+body.theme-dark .ba-formula-expr { background:#0c0f20; color:#7dffb0; }
 
 /* ---------- CALCULATOR TABS ---------- */
 .ba-calc-tabs { display:flex; border-bottom:1px solid var(--mercury); background:var(--white); }
@@ -758,11 +790,12 @@ body.theme-dark .ba-calc-btn { background:#1d2138; color:#e7e9ff; }
 }
 
 /* ============ GAMES ============ */
-.ba-games-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:.5rem; }
-.ba-game-card { display:flex; flex-direction:column; align-items:center; gap:.4rem; padding:.8rem; border:1px solid var(--mercury); border-radius:12px; background:var(--white); cursor:pointer; }
+.ba-games-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.8rem; padding:1rem; }
+.ba-game-card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; padding:1.5rem 1rem; border:1px solid var(--mercury); border-radius:16px; background:var(--white); cursor:pointer; transition:transform .15s; }
+.ba-game-card:active { transform:scale(.96); }
 body.theme-dark .ba-game-card { background:#1d2138; border-color:#2a3050; }
-.ba-game-ic { font-size:1.8rem; }
-.ba-game-card span:last-child { font-weight:700; font-size:.8rem; }
+.ba-game-ic { font-size:2.4rem; }
+.ba-game-card span:last-child { font-weight:800; font-size:.9rem; }
 .ba-game-header { display:flex; align-items:center; gap:.6rem; padding:.6rem 1rem; border-bottom:1px solid var(--mercury); }
 .ba-game-body { flex:1; display:flex; flex-direction:column; padding:.8rem; overflow:auto; }
 .ba-game-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:.6rem; font-weight:700; font-size:.9rem; }

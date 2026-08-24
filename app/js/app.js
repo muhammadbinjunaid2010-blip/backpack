@@ -97,9 +97,7 @@ function $(id) { return document.getElementById(id); }
   }
   function applyHeader() {
     if ($("hdr-school")) $("hdr-school").textContent = DB.settings.school || "Bahria College Karsaz";
-    var classText = "Class " + (DB.settings.class || "X") + "-" + (DB.settings.section || "C");
-    if (DB.settings.teacher) classText += " · " + DB.settings.teacher;
-    if ($("hdr-class")) $("hdr-class").textContent = classText;
+    if ($("hdr-class")) $("hdr-class").textContent = "Class " + (DB.settings.class || "X") + "-" + (DB.settings.section || "C");
   }
 
   /* ---------- navigation ---------- */
@@ -112,32 +110,92 @@ function $(id) { return document.getElementById(id); }
       sc.classList.toggle("ba-screen-active", sc.getAttribute("data-section") === section);
     });
     var m = $("ba-main"); if (m) m.scrollTop = 0;
+    if (section === "settings") {
+      var sn = $("setting-name"); if (sn) sn.value = DB.settings.userName || "";
+      renderSettingsSchoolInfo();
+    }
   }
 
   /* ---------- onboarding ---------- */
   function setupOnboarding() {
     var ob = $("onboarding");
     if (!ob) return;
-    if (DB.settings.onboarded) { ob.classList.remove("ba-modal-open"); }
-    else { ob.classList.add("ba-modal-open"); }
-    var cont = $("onb-continue");
-    if (cont) cont.addEventListener("click", function () {
+    if (DB.settings.onboarded) { closeModal("onboarding"); }
+    else { openModal("onboarding"); }
+  }
+  function initOnboardingEvents() {
+    var codeInput = $("onb-code");
+    var classGroup = $("onb-class-group");
+    if (codeInput) {
+      codeInput.addEventListener("input", function () {
+        var code = codeInput.value.trim().toUpperCase();
+        var schoolCodes = { "BCKZ103": { school: "Bahria College Karsaz", address: "Habib Rehmatullah Rd", teacher: "Ms. Saeeda (47)", logo: "assets/bahria-clg-logo.png" } };
+        if (schoolCodes[code]) {
+          if (classGroup) classGroup.style.display = "";
+          DB.settings._pendingSchool = schoolCodes[code];
+        } else {
+          if (classGroup) classGroup.style.display = "none";
+          DB.settings._pendingSchool = null;
+        }
+      });
+    }
+    var cont = $("onb-continue");    if (cont) cont.addEventListener("click", function () {
       var s = DB.settings;
       s.userName = ($("onb-name").value || "").trim();
-      s.school = $("onb-school").value;
-      var parts = $("onb-class").value.split("-");
+      if (!s.userName) { alert("Please enter your name."); return; }
+      if (!s._pendingSchool) { alert("Please enter a valid school code."); return; }
+      var schoolInfo = s._pendingSchool;
+      s.school = schoolInfo.school; s.address = schoolInfo.address; s.teacher = schoolInfo.teacher;
+      var classVal = $("onb-class") ? $("onb-class").value : "X-C";
+      var parts = classVal.split("-");
       s.class = parts[0] || "X"; s.section = parts[1] || "C"; s.onboarded = true;
+      delete s._pendingSchool;
       S.saveSettings(s);
-      applyHeader(); renderHome(); renderSchoolbag();
-      ob.classList.remove("ba-modal-open");
+      applyHeader(); renderHome(); renderSchoolbag(); renderExamInfo(); renderSettingsSchoolInfo();
+      closeModal("onboarding");
+    });
+    var teacherLink = $("onb-teacher-link");
+    if (teacherLink) teacherLink.addEventListener("click", function (e) {
+      e.preventDefault();
+      var teacherCode = prompt("Enter teacher access code:");
+      if (teacherCode && teacherCode.trim()) {
+        DB.settings.isTeacher = true;
+        DB.settings.teacherCode = teacherCode.trim();
+        DB.settings.onboarded = true;
+        S.saveSettings(DB.settings);
+        applyHeader(); renderHome();
+        closeModal("onboarding");
+        alert("Teacher mode enabled! You can share notebooks with students using sharing codes.");
+      }
     });
   }
 
   /* ---------- home ---------- */
   function greeting() {
-    var h = new Date().getHours();
-    var part = h < 12 ? "morning" : h < 17 ? "afternoon" : "evening";
-    return DB.settings.userName ? "Good " + part + ", " + DB.settings.userName : "Good " + part;
+    var now = new Date();
+    var h = now.getHours(), m = now.getMinutes();
+    var mins = h * 60 + m;
+    var day = now.getDay();
+    var name = DB.settings.userName ? ", " + DB.settings.userName : "";
+    /* Friday 12:15 to Sunday 21:00 = weekend */
+    if (day === 5 && mins >= 12 * 60 + 15) return "Enjoy the weekend" + name + " 🎉";
+    if (day === 6 || day === 0) {
+      if (day === 0 && mins >= 21 * 60) return "Sleep tight" + name + " 😴";
+      return "Enjoy the weekend" + name + " 🎉";
+    }
+    /* Weekday time-based */
+    if (mins < 6 * 60) return "Sleep tight" + name + " 😴";
+    if (mins < 8 * 60) return "Good morning" + name + " ☀️ Get ready!";
+    var dayKey = currentDayKey();
+    var periods = dayKey ? TIMETABLE[dayKey] : [];
+    var at = periodAt(periods, mins);
+    if (at && at.cur.type === "break") return "Recess time" + name + " — have lunch and play! 🍽️";
+    if (at && at.cur.subject === "PT") return "PT time" + name + " — participate in sports! 🏃";
+    if (mins < 14 * 60) return "Good " + (h < 12 ? "morning" : "afternoon") + name;
+    if (mins < 17 * 60) return "Rest time" + name + " 😌";
+    if (mins < 19 * 60) return "Play time" + name + " ⚽";
+    if (mins < 21 * 60) return "Study time" + name + " 📚";
+    return "Sleep tight" + name + " 😴";
   }
   function currentDayKey() {
     var d = new Date().getDay();
@@ -159,17 +217,9 @@ function $(id) { return document.getElementById(id); }
     });
     var hb = $("home-buckle"); if (hb) hb.addEventListener("click", openScheduleExams);
     var hho = $("home-homework-open"); if (hho) hho.addEventListener("click", function () { openModal("homework-modal"); renderHomework(); });
-    var hns = $("home-name-save"); if (hns) hns.addEventListener("click", function () {
-      var inp = $("home-name-input"); var val = inp ? inp.value.trim() : "";
-      if (val) { DB.settings.userName = val; S.saveSettings(DB.settings); applyHeader(); renderHome(); }
-    });
-    var hni = $("home-name-input"); if (hni) hni.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { var val = hni.value.trim(); if (val) { DB.settings.userName = val; S.saveSettings(DB.settings); applyHeader(); renderHome(); } }
-    });
   }
   function renderHome() {
     if ($("home-greeting")) $("home-greeting").textContent = greeting();
-    if ($("home-name-input")) $("home-name-input").value = DB.settings.userName || "";
     var dayKey = currentDayKey();
     var periods = dayKey ? TIMETABLE[dayKey] : [];
     var now = new Date();
@@ -267,28 +317,22 @@ function $(id) { return document.getElementById(id); }
   }
   function openScheduleExams() { navigate("schedule"); switchSch("exams"); }
 
-  /* ---------- settings ---------- */
-  function setupSettings() {
+  /* ---------- settings ---------- */  function setupSettings() {
     var sn = $("setting-name"); if (sn) sn.value = DB.settings.userName || "";
-    var ss = $("setting-school"); if (ss) ss.value = DB.settings.school || "Bahria College Karsaz";
-    var sc = $("setting-class"); if (sc) sc.value = DB.settings.class || "X";
-    var ssc = $("setting-section"); if (ssc) ssc.value = DB.settings.section || "C";
-    var ste = $("setting-teacher"); if (ste) ste.value = DB.settings.teacher || "";
-    var sad = $("setting-address"); if (sad) sad.value = DB.settings.address || "";
-    var sem = $("setting-email"); if (sem) sem.value = DB.settings.email || "";
+    renderSettingsSchoolInfo();
     var sd = $("setting-direction"); if (sd) sd.value = DB.settings.direction || "ltr";
     var sp = $("setting-paper"); if (sp) sp.value = DB.settings.paper || "ruled";
     var st = $("setting-theme"); if (st) st.value = DB.settings.theme || "system";
+    var csb = $("settings-change-school"); if (csb) csb.addEventListener("click", function () {
+      DB.settings.onboarded = false; S.saveSettings(DB.settings);
+      openModal("onboarding");
+    });
     function bind(id, key, after) {
       var el = $(id); if (el) el.addEventListener("change", function () { DB.settings[key] = this.value; S.saveSettings(DB.settings); if (after) after(); });
     }
     var nameEl = $("setting-name"); if (nameEl) nameEl.addEventListener("input", function () { console.log("[setting-name] input:", this.value); DB.settings.userName = this.value; S.saveSettings(DB.settings); applyHeader(); renderHome(); });
-    bind("setting-school", "school", function () { applyHeader(); renderHome(); renderExamInfo(); });
-    bind("setting-class", "class", function () { applyHeader(); renderHome(); renderExamInfo(); });
-    bind("setting-section", "section", function () { applyHeader(); renderHome(); renderExamInfo(); });
-    bind("setting-teacher", "teacher");
-    bind("setting-address", "address");
-    bind("setting-email", "email");
+    // School info is now display-only (changed via onboarding)
+
     bind("setting-direction", "direction");
     bind("setting-paper", "paper");
     bind("setting-theme", "theme", applyTheme);
@@ -1607,9 +1651,7 @@ function createWhiteboard(folderId, subject) {
       for (var j = 0; j < pts.length; j++) { if (Math.hypot(pts[j].x - p.x, pts[j].y - p.y) < 0.03) { s.splice(i, 1); savePdfStrokes(s); renderPdfAnnot(); return; } }
     }
   }
-  function openScheduleExamsSafe() { openScheduleExams(); }
-
-  function renderExamInfo() {
+  function openScheduleExamsSafe() { openScheduleExams(); }  function renderExamInfo() {
     var block = $("ba-exam-block");
     if (!block) return;
     var cls = (DB.settings.class || "X") + "-" + (DB.settings.section || "C");
@@ -1623,14 +1665,31 @@ function createWhiteboard(folderId, subject) {
       }
     });
   }
+  function renderSettingsSchoolInfo() {
+    var school = DB.settings.school || "Bahria College Karsaz";
+    var cls = (DB.settings.class || "X") + "-" + (DB.settings.section || "C");
+    var teacher = DB.settings.teacher || "Ms. Saeeda (47)";
+    var address = DB.settings.address || "Habib Rehmatullah Rd";
+    var logo = DB.settings.logo || "assets/bahria-clg-logo.png";
+    if ($("setting-school-display")) $("setting-school-display").textContent = school;
+    if ($("setting-class-display")) $("setting-class-display").textContent = cls;
+    if ($("setting-teacher-display")) $("setting-teacher-display").textContent = teacher;
+    if ($("setting-address-display")) $("setting-address-display").textContent = address;
+    var logoImg = document.querySelector(".ba-settings-school-logo");
+    if (logoImg) logoImg.src = logo;
+  }
+
 
   /* ============================================================
-     TOOLS: Calculator + Clock
+     TOOLS: Calculator + Clock + Focus + Formulas + Stickies
      ============================================================ */
   function setupTools() {
     var toolsBack = $("tools-back"); if (toolsBack) toolsBack.addEventListener("click", function () { closeModal("tools-menu-modal"); });
     var toolCalc = $("tool-calculator"); if (toolCalc) toolCalc.addEventListener("click", function () { closeModal("tools-menu-modal"); openModal("calculator-modal"); });
     var toolClock = $("tool-clock"); if (toolClock) toolClock.addEventListener("click", function () { closeModal("tools-menu-modal"); openModal("clock-modal"); startClock(); });
+    var toolFocus = $("tool-focus"); if (toolFocus) toolFocus.addEventListener("click", function () { closeModal("tools-menu-modal"); openModal("focus-modal"); setupFocusUI(); });
+    var toolFormulas = $("tool-formulas"); if (toolFormulas) toolFormulas.addEventListener("click", function () { closeModal("tools-menu-modal"); openModal("formulas-modal"); renderFormulas("physics"); });
+    var toolSticky = $("tool-stickynotes"); if (toolSticky) toolSticky.addEventListener("click", function () { closeModal("tools-menu-modal"); openModal("stickynotes-modal"); renderStickyNotes(); });
     var calcBack = $("calc-back"); if (calcBack) calcBack.addEventListener("click", function () { closeModal("calculator-modal"); });
     var disp = $("calc-display"), expr = "";
     function upd() { disp.textContent = expr || "0"; }
@@ -1645,9 +1704,24 @@ function createWhiteboard(folderId, subject) {
       });
     });
     var clockBack = $("clock-back"); if (clockBack) clockBack.addEventListener("click", function () { closeModal("clock-modal"); if (clockTimer) clearInterval(clockTimer); });
+    var focusBack = $("focus-back"); if (focusBack) focusBack.addEventListener("click", function () { stopFocusTimer(); closeModal("focus-modal"); });
+    var formulasBack = $("formulas-back"); if (formulasBack) formulasBack.addEventListener("click", function () { closeModal("formulas-modal"); });
+    var stickyBack = $("stickynotes-back"); if (stickyBack) stickyBack.addEventListener("click", function () { saveStickyNotes(); closeModal("stickynotes-modal"); });
+    var stickyAdd = $("stickynotes-add"); if (stickyAdd) stickyAdd.addEventListener("click", function () { addStickyNote(); });
+    var focusBarEnd = $("focus-bar-end"); if (focusBarEnd) focusBarEnd.addEventListener("click", function () { stopFocusTimer(); });
+    document.querySelectorAll("#formulas-modal .ba-formulas-tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        document.querySelectorAll("#formulas-modal .ba-formulas-tab").forEach(function (t) { t.classList.remove("ba-formulas-tab-active"); });
+        tab.classList.add("ba-formulas-tab-active");
+        renderFormulas(tab.getAttribute("data-ftype"));
+      });
+    });
   }
+
+  /* ---------- CLOCK ---------- */
   var clockTimer = null;
   function startClock() {
+    if (clockTimer) clearInterval(clockTimer);
     function tick() {
       var d = new Date(); $("clock-time").textContent = d.toLocaleTimeString();
       var dayKey = currentDayKey(); var periods = dayKey ? TIMETABLE[dayKey] : [];
@@ -1656,6 +1730,231 @@ function createWhiteboard(folderId, subject) {
       $("clock-subject").textContent = at ? (at.cur.subject + (at.cur.teacher ? " · " + at.cur.teacher : "")) : "No class right now";
     }
     tick(); clockTimer = setInterval(tick, 1000);
+  }
+
+  /* ---------- FOCUS TIMER ---------- */
+  var focusTimer = null, focusRemaining = 0, focusTotal = 0, focusRunning = false;
+  function setupFocusUI() {
+    var presets = [5, 10, 15, 20, 25, 30, 45, 60];
+    var wrap = $("focus-presets"); wrap.innerHTML = "";
+    presets.forEach(function (m) {
+      var b = document.createElement("button"); b.className = "ba-focus-preset"; b.textContent = m + " min";
+      b.addEventListener("click", function () {
+        document.querySelectorAll(".ba-focus-preset").forEach(function (x) { x.classList.remove("selected"); });
+        b.classList.add("selected");
+        focusRemaining = m * 60; focusTotal = m * 60;
+        updateFocusDisplay();
+      });
+      wrap.appendChild(b);
+    });
+    focusRemaining = 25 * 60; focusTotal = 25 * 60;
+    updateFocusDisplay();
+    var startBtn = $("focus-start");
+    if (startBtn) startBtn.onclick = function () {
+      if (focusRunning) { pauseFocusTimer(); } else { startFocusTimer(); }
+    };
+  }
+  function updateFocusDisplay() {
+    var mins = Math.floor(focusRemaining / 60), secs = focusRemaining % 60;
+    var timeStr = (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs;
+    if ($("focus-time")) $("focus-time").textContent = timeStr;
+    if ($("focus-bar-time")) $("focus-bar-time").textContent = timeStr;
+    var pct = focusTotal > 0 ? (1 - focusRemaining / focusTotal) : 0;
+    var circ = 2 * Math.PI * 90;
+    var ring = $("focus-ring");
+    if (ring) ring.style.strokeDashoffset = circ * (1 - pct);
+  }
+  function startFocusTimer() {
+    focusRunning = true;
+    var startBtn = $("focus-start"); if (startBtn) startBtn.textContent = "Pause";
+    if ($("focus-label")) $("focus-label").textContent = "Focusing...";
+    if ($("focus-bar")) $("focus-bar").style.display = "flex";
+    document.addEventListener("visibilitychange", function focusVisibilityHandler() {
+      if (document.hidden && focusRunning) {
+        pauseFocusTimer();
+        if ($("focus-bar")) $("focus-bar").style.display = "none";
+      }
+      if (!document.hidden && focusRunning === false && focusRemaining > 0 && focusRemaining < focusTotal) {
+        if ($("focus-bar")) $("focus-bar").style.display = "flex";
+      }
+    });
+    focusTimer = setInterval(function () {
+      focusRemaining--;
+      updateFocusDisplay();
+      if (focusRemaining <= 0) {
+        stopFocusTimer();
+        if ($("focus-label")) $("focus-label").textContent = "Done! Great work 🎉";
+        try { new Audio("data:audio/wav;base64,UklGRl4FAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YToFAACAgICAgICAgICAgICAgICA").play(); } catch (e) {}
+      }
+    }, 1000);
+  }
+  function pauseFocusTimer() {
+    focusRunning = false;
+    if (focusTimer) clearInterval(focusTimer); focusTimer = null;
+    var startBtn = $("focus-start"); if (startBtn) startBtn.textContent = "Resume";
+    if ($("focus-label")) $("focus-label").textContent = "Paused";
+  }
+  function stopFocusTimer() {
+    focusRunning = false;
+    if (focusTimer) clearInterval(focusTimer); focusTimer = null;
+    if ($("focus-bar")) $("focus-bar").style.display = "none";
+    var startBtn = $("focus-start"); if (startBtn) startBtn.textContent = "Start";
+    if ($("focus-label")) $("focus-label").textContent = "Ready";
+  }
+
+  /* ---------- FORMULA BOOK ---------- */
+  var FORMULAS = {
+    physics: [
+      { section: "Mechanics", items: [
+        { name: "Speed", expr: "v = d / t" },
+        { name: "Acceleration", expr: "a = (v - u) / t" },
+        { name: "Newton's 2nd Law", expr: "F = m × a" },
+        { name: "Weight", expr: "W = m × g" },
+        { name: "Momentum", expr: "p = m × v" },
+        { name: "Kinetic Energy", expr: "KE = ½mv²" },
+        { name: "Work Done", expr: "W = F × d × cos θ" },
+        { name: "Power", expr: "P = W / t = F × v" },
+        { name: "Gravitational PE", expr: "GPE = m × g × h" },
+        { name: "Distance (accel.)", expr: "s = ut + ½at²" }
+      ]},
+      { section: "Electricity", items: [
+        { name: "Ohm's Law", expr: "V = I × R" },
+        { name: "Power (elec.)", expr: "P = V × I = I²R = V²/R" },
+        { name: "Energy", expr: "E = V × I × t" },
+        { name: "Resistance (series)", expr: "R_total = R₁ + R₂ + R₃" },
+        { name: "Resistance (parallel)", expr: "1/R_total = 1/R₁ + 1/R₂ + 1/R₃" }
+      ]},
+      { section: "Waves & Optics", items: [
+        { name: "Wave Speed", expr: "v = f × λ" },
+        { name: "Snell's Law", expr: "n₁ sin θ₁ = n₂ sin θ₂" },
+        { name: "Mirror / Lens", expr: "1/f = 1/v - 1/u" },
+        { name: "Refractive Index", expr: "n = c / v" }
+      ]},
+      { section: "Thermal Physics", items: [
+        { name: "Heat Energy", expr: "Q = m × c × ΔT" },
+        { name: "Ideal Gas", expr: "PV = nRT" },
+        { name: "Efficiency", expr: "η = W_out / Q_in × 100%" }
+      ]},
+      { section: "Nuclear Physics", items: [
+        { name: "Nuclear Energy", expr: "E = mc²" },
+        { name: "Half-life", expr: "N = N₀ × (½)^(t/t½)" },
+        { name: "Activity", expr: "A = λN" }
+      ]}
+    ],
+    maths: [
+      { section: "Algebra", items: [
+        { name: "Quadratic Formula", expr: "x = (-b ± √(b²-4ac)) / 2a" },
+        { name: "Sum of AP", expr: "Sₙ = n/2 × [2a + (n-1)d]" },
+        { name: "Sum of GP", expr: "Sₙ = a(rⁿ - 1) / (r - 1)" },
+        { name: "Binomial Theorem", expr: "(a+b)ⁿ = Σ C(n,k) aⁿ⁻ᵏbᵏ" }
+      ]},
+      { section: "Geometry", items: [
+        { name: "Area of Triangle", expr: "A = ½ × base × height" },
+        { name: "Area of Circle", expr: "A = πr²" },
+        { name: "Circumference", expr: "C = 2πr" },
+        { name: "Pythagoras Theorem", expr: "a² + b² = c²" },
+        { name: "Sphere Volume", expr: "V = (4/3)πr³" },
+        { name: "Sphere Surface", expr: "A = 4πr²" },
+        { name: "Cylinder Volume", expr: "V = πr²h" },
+        { name: "Cone Volume", expr: "V = (1/3)πr²h" }
+      ]},
+      { section: "Trigonometry", items: [
+        { name: "SOH CAH TOA", expr: "sin θ = opp/hyp, cos θ = adj/hyp, tan θ = opp/adj" },
+        { name: "Sine Rule", expr: "a/sin A = b/sin B = c/sin C" },
+        { name: "Cosine Rule", expr: "a² = b² + c² - 2bc cos A" },
+        { name: "Area (trig)", expr: "A = ½ab sin C" },
+        { name: "sin²θ + cos²θ", expr: "sin²θ + cos²θ = 1" }
+      ]},
+      { section: "Statistics", items: [
+        { name: "Mean", expr: "x̄ = Σx / n" },
+        { name: "Standard Deviation", expr: "σ = √(Σ(x - x̄)² / n)" },
+        { name: "Probability", expr: "P(A) = favorable / total" },
+        { name: "Combined Probability", expr: "P(A and B) = P(A) × P(B)" }
+      ]},
+      { section: "Calculus", items: [
+        { name: "Power Rule", expr: "d/dx(xⁿ) = nxⁿ⁻¹" },
+        { name: "Integration", expr: "∫xⁿ dx = xⁿ⁺¹/(n+1) + C" },
+        { name: "Product Rule", expr: "d/dx(uv) = u'v + uv'" },
+        { name: "Chain Rule", expr: "d/dx[f(g(x))] = f'(g(x)) × g'(x)" }
+      ]}
+    ]
+  };
+  function renderFormulas(type) {
+    var body = $("formulas-body"); if (!body) return;
+    var data = FORMULAS[type] || [];
+    var html = "";
+    data.forEach(function (sec) {
+      html += '<div class="ba-formula-section-title">' + esc(sec.section) + '</div>';
+      sec.items.forEach(function (item) {
+        html += '<div class="ba-formula-card"><div class="ba-formula-name">' + esc(item.name) + '</div><div class="ba-formula-expr">' + esc(item.expr) + '</div></div>';
+      });
+    });
+    body.innerHTML = html;
+  }
+
+  /* ---------- STICKY NOTES ---------- */
+  var STICKY_KEY = "ba_sticky_notes";
+  function loadStickyNotes() {
+    try { var raw = localStorage.getItem(STICKY_KEY); return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
+  }
+  function saveStickyNotes() {
+    var grid = $("stickynotes-grid"); if (!grid) return;
+    var notes = [];
+    grid.querySelectorAll(".ba-sticky-note").forEach(function (el) {
+      notes.push({
+        title: el.querySelector(".ba-sticky-note-title").value,
+        text: el.querySelector(".ba-sticky-note-text").value,
+        color: el.getAttribute("data-color") || "#fff740"
+      });
+    });
+    try { localStorage.setItem(STICKY_KEY, JSON.stringify(notes)); } catch (e) {}
+  }
+  var STICKY_COLORS = ["#fff740", "#ff6b6b", "#51cf66", "#74c0fc", "#da77f2", "#ffc078"];
+  function renderStickyNotes() {
+    var grid = $("stickynotes-grid"); if (!grid) return;
+    grid.innerHTML = "";
+    var notes = loadStickyNotes();
+    if (!notes.length) notes.push({ title: "", text: "", color: STICKY_COLORS[0] });
+    notes.forEach(function (n) { addStickyNoteEl(grid, n); });
+  }
+  function addStickyNote() {
+    var grid = $("stickynotes-grid"); if (!grid) return;
+    addStickyNoteEl(grid, { title: "", text: "", color: STICKY_COLORS[Math.floor(Math.random() * STICKY_COLORS.length)] });
+    saveStickyNotes();
+  }
+  function addStickyNoteEl(grid, note) {
+    var el = document.createElement("div");
+    el.className = "ba-sticky-note";
+    el.setAttribute("data-color", note.color || STICKY_COLORS[0]);
+    el.style.background = note.color || STICKY_COLORS[0];
+    var colorsDiv = document.createElement("div");
+    colorsDiv.className = "ba-sticky-colors";
+    STICKY_COLORS.forEach(function (c) {
+      var dot = document.createElement("span");
+      dot.className = "ba-sticky-color" + (c === note.color ? " active" : "");
+      dot.style.background = c;
+      dot.addEventListener("click", function () {
+        el.setAttribute("data-color", c); el.style.background = c;
+        colorsDiv.querySelectorAll(".ba-sticky-color").forEach(function (x) { x.classList.remove("active"); });
+        dot.classList.add("active");
+        saveStickyNotes();
+      });
+      colorsDiv.appendChild(dot);
+    });
+    el.appendChild(colorsDiv);
+    var titleInput = document.createElement("input");
+    titleInput.className = "ba-sticky-note-title"; titleInput.placeholder = "Title"; titleInput.value = note.title || "";
+    titleInput.addEventListener("input", function () { saveStickyNotes(); });
+    el.appendChild(titleInput);
+    var textArea = document.createElement("textarea");
+    textArea.className = "ba-sticky-note-text"; textArea.placeholder = "Write something..."; textArea.value = note.text || "";
+    textArea.addEventListener("input", function () { saveStickyNotes(); });
+    el.appendChild(textArea);
+    var delBtn = document.createElement("button");
+    delBtn.className = "ba-sticky-note-del"; delBtn.textContent = "✕";
+    delBtn.addEventListener("click", function () { el.remove(); saveStickyNotes(); });
+    el.appendChild(delBtn);
+    grid.appendChild(el);
   }
 /*__APPEND__*/
 
@@ -2439,6 +2738,7 @@ function createWhiteboard(folderId, subject) {
         if (eggTapCount >= 7) {
           eggTapCount = 0;
           console.log("[easter-egg] opening games modal");
+          if (focusRunning) stopFocusTimer();
           openModal("games-modal");
         }
       });
@@ -2484,7 +2784,7 @@ function createWhiteboard(folderId, subject) {
       setupHome, setupSchedule, setupSettings, setupSchoolbag, setupSubjectFolder,
       setupNewMenu, setupFolderModal, setupNbCreate, setupEditor, setupWhiteboard,
       setupSheetEditor, setupQuickNote, setupHomework, setupPdfReader, setupTools,
-      setupLibraryNoteForm, setupGames, setupHiddenGestures
+      setupLibraryNoteForm, setupGames, setupHiddenGestures, initOnboardingEvents
     ];
     setups.forEach(function (fn) { try { console.log("[init] running setup:", fn.name); fn(); console.log("[init] done setup:", fn.name); } catch (e) { console.warn("Setup failed:", fn.name, e); } });
     document.querySelectorAll(".ba-modal-close").forEach(function (b) { if (!b.id) return; b.addEventListener("click", function () { closeModal(b.closest(".ba-modal").id); }); });

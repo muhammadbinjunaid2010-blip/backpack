@@ -94,8 +94,9 @@ window.BAStore = (function () {
       schemaVersion: CURRENT_SCHEMA,
       settings: {
         userName: "", school: "Bahria College Karsaz", class: "X", section: "C",
-        teacher: "", address: "", email: "",
-        direction: "ltr", paper: "ruled", paperColor: "white", theme: "system"
+        address: "Habib Rehmatullah Rd", teacher: "Ms. Saeeda (47)",
+        direction: "ltr", paper: "ruled", paperColor: "white", theme: "system",
+        onboarded: false
       },
       documents: {}, documentOrder: [],
       folders: {}, folderOrder: [],
