@@ -155,6 +155,8 @@ h4 { font-size: 3.5rem; }
 
 /* nav over dark hero */
 body.is-hero .ba-logo { color: var(--white); }
+body.is-hero .ba-nav_link { color: var(--white); }
+body.is-hero .ba-hamburguer-line, body.is-hero .ba-hamburguer-line_2, body.is-hero .ba-hamburguer-line_3 { background-color: var(--white); }
 body.is-hero .ba-nav-wrapper { background-color: rgba(15, 15, 15, .38); border-bottom-color: rgba(255, 255, 255, .12); }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -699,6 +701,8 @@ body.nav-open .ba-hamburguer-line_3 { transform: translateY(-8px) rotate(-45deg)
   .ba-nav_menu-button { display: flex; position: relative; z-index: 110; }
   .ba-brand { position: relative; z-index: 110; }
   body.nav-open .ba-nav_menu-button { border-color: var(--black); }
+body.is-hero.nav-open .ba-hamburguer-line, body.is-hero.nav-open .ba-hamburguer-line_2, body.is-hero.nav-open .ba-hamburguer-line_3 { background-color: var(--black); }
+body.is-hero.nav-open .ba-nav_menu-button { border-color: var(--black); }
 
   /* hero transform */
   .ba-transform { flex-direction: column; align-items: center; }
@@ -820,3 +824,67 @@ body.nav-open .ba-hamburguer-line_3 { transform: translateY(-8px) rotate(-45deg)
   .ba-float-icon.fi-4 { transform: translate(110px, 90px); }
 }
 }
+
+/* ---------- TEACHER SECTION ---------- */
+.ba-ipad { display:flex; justify-content:center; }
+.ba-ipad_frame { width:min(340px,80vw); background:#1a1a2e; border-radius:20px; padding:14px 10px; box-shadow:0 30px 80px -20px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08); position:relative; }
+.ba-ipad_notch { width:80px; height:6px; background:#2a2a40; border-radius:3px; margin:0 auto 8px; }
+.ba-ipad_screen { background:#0f172a; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+.ba-ipad_status { display:flex; justify-content:space-between; padding:.5rem .7rem; font-size:.6rem; font-weight:800; color:#64748b; background:#0c1024; border-bottom:1px solid #1e293b; }
+.ba-ipad_content { padding:.7rem; flex:1; overflow:hidden; }
+.ba-ipad_greeting { font-size:.85rem; font-weight:800; color:#e2e8f0; margin-bottom:.7rem; }
+.ba-teacher-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:.35rem; margin-bottom:.7rem; }
+.ba-teacher-stat { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:.5rem .3rem; text-align:center; }
+.ba-teacher-stat-num { font-size:1.2rem; font-weight:800; color:#60a5fa; }
+.ba-teacher-stat-label { font-size:.5rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.04em; margin-top:.05rem; }
+.ba-ipad_section { margin-bottom:.6rem; }
+.ba-ipad_section_title { font-size:.5rem; font-weight:800; letter-spacing:.1em; color:#475569; margin-bottom:.3rem; }
+.ba-ipad_class { display:flex; align-items:center; gap:.4rem; padding:.3rem 0; border-bottom:1px solid #1e293b; }
+.ba-ipad_class_time { font-size:.55rem; font-weight:700; color:#60a5fa; min-width:32px; }
+.ba-ipad_class_name { font-size:.65rem; font-weight:700; color:#e2e8f0; flex:1; }
+.ba-ipad_class_tag { font-size:.45rem; font-weight:800; padding:.1rem .3rem; border-radius:4px; background:rgba(59,130,246,.15); color:#60a5fa; }
+.ba-ipad_student { display:flex; align-items:center; gap:.4rem; padding:.3rem 0; }
+.ba-ipad_student_avatar { width:22px; height:22px; border-radius:50%; color:#fff; font-size:.55rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ba-ipad_student_name { font-size:.65rem; font-weight:700; color:#e2e8f0; flex:1; }
+.ba-ipad_student_status { font-size:.45rem; font-weight:800; padding:.1rem .3rem; border-radius:4px; }
+.ba-ipad_tabs { display:flex; background:#0c1024; border-top:1px solid #1e293b; padding:.3rem 0; }
+.ba-ipad_tab { flex:1; text-align:center; font-size:.45rem; font-weight:700; color:#475569; padding:.2rem 0; }
+.ba-ipad_tab_active { color:#3b82f6; }
+
+/* ---------- FIND YOUR SCHOOL ---------- */
+.ba-schools-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:700px; margin:0 auto; padding:0 1rem; }
+@media (max-width:600px) { .ba-schools-grid { grid-template-columns:1fr; } }
+.ba-school-card-item { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:1.5rem; text-align:center; display:flex; flex-direction:column; align-items:center; gap:.5rem; }
+.ba-school-card-item_logo { width:64px; height:64px; border-radius:14px; overflow:hidden; background:#f1f5f9; display:flex; align-items:center; justify-content:center; }
+.ba-school-card-item_img { width:100%; height:100%; object-fit:contain; }
+.ba-school-card-item_logo-coming { font-size:2rem; color:#94a3b8; font-weight:300; }
+.ba-school-card-item_name { font-size:1.05rem; font-weight:800; color:#0f172a; }
+.ba-school-card-item_addr { font-size:.78rem; color:#64748b; }
+.ba-school-card-item_tag { font-size:.65rem; font-weight:800; padding:.2rem .6rem; border-radius:20px; background:#dcfce7; color:#166534; text-transform:uppercase; letter-spacing:.04em; }
+.ba-school-card-item_tag-coming { background:#f1f5f9; color:#64748b; }
+.ba-school-card-item-coming { border-style:dashed; border-color:#cbd5e1; background:#fafbfc; }
+
+/* ---------- DOWNLOAD ---------- */
+.ba-download-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:700px; margin:0 auto; padding:0 1rem; }
+@media (max-width:600px) { .ba-download-grid { grid-template-columns:1fr; } }
+.ba-download-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:1.5rem; }
+.ba-download-card_icon { width:64px; height:64px; border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
+.ba-download-card_icon svg { width:36px; height:36px; }
+.ba-download-card_icon.ba-dl-android { background:linear-gradient(135deg,#a4c639,#8ab12e); color:#fff; }
+.ba-download-card_icon.ba-dl-ios { background:linear-gradient(135deg,#333,#000); color:#fff; }
+.ba-download-card_title { font-size:1.1rem; font-weight:800; color:#0f172a; margin-bottom:.8rem; }
+.ba-download-card_note { font-size:.78rem; color:#64748b; margin-top:.8rem; padding-top:.6rem; border-top:1px solid #f1f5f9; font-style:italic; }
+.ba-steps-list { list-style:none; counter-reset:step; padding:0; margin:0 0 .5rem; }
+.ba-steps-list li { counter-increment:step; padding:.4rem 0 .4rem 2rem; font-size:.85rem; color:#334155; position:relative; }
+.ba-steps-list li::before { content:counter(step); position:absolute; left:0; top:.35rem; width:22px; height:22px; border-radius:50%; background:#eff6ff; color:#3b82f6; font-size:.7rem; font-weight:800; display:flex; align-items:center; justify-content:center; }
+
+/* ---------- SIGN IN ---------- */
+.ba-signin-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:700px; margin:0 auto; padding:0 1rem; }
+@media (max-width:600px) { .ba-signin-grid { grid-template-columns:1fr; } }
+.ba-signin-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:1.5rem; text-align:center; }
+.ba-signin-card_icon { font-size:2rem; margin-bottom:.4rem; }
+.ba-signin-card_title { font-size:1.1rem; font-weight:800; color:#0f172a; margin-bottom:.8rem; }
+.ba-signin-card_note { font-size:.78rem; color:#64748b; margin-top:.6rem; padding-top:.6rem; border-top:1px solid #f1f5f9; font-style:italic; }
+.ba-signin-card .ba-steps-list { text-align:left; }
+
+/* ---------- SEO STRUCTURED DATA ---------- */
