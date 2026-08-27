@@ -1806,18 +1806,107 @@ function createWhiteboard(folderId, subject) {
     var toolFormulas = $("tool-formulas"); if (toolFormulas) toolFormulas.addEventListener("click", function () { closeModal("tools-menu-modal"); openModal("formulas-modal"); renderFormulas("physics"); });
     var toolSticky = $("tool-stickynotes"); if (toolSticky) toolSticky.addEventListener("click", function () { closeModal("tools-menu-modal"); openModal("stickynotes-modal"); renderStickyNotes(); });
     var calcBack = $("calc-back"); if (calcBack) calcBack.addEventListener("click", function () { closeModal("calculator-modal"); });
+    /* --- Calc tabs --- */
+    document.querySelectorAll("#calc-tabs .ba-calc-tab").forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        document.querySelectorAll("#calc-tabs .ba-calc-tab").forEach(function (t) { t.classList.remove("ba-calc-tab-active"); });
+        tab.classList.add("ba-calc-tab-active");
+        var mode = tab.getAttribute("data-ctab");
+        document.querySelectorAll(".ba-calc-mode").forEach(function (m) { m.style.display = "none"; });
+        var target = $("calc-" + mode);
+        if (target) target.style.display = "";
+      });
+    });
+    /* --- Normal calculator --- */
     var disp = $("calc-display"), expr = "";
     function upd() { disp.textContent = expr || "0"; }
-    document.querySelectorAll("#calculator-modal .ba-calc-btn").forEach(function (b) {
+    document.querySelectorAll("#calc-normal .ba-calc-btn").forEach(function (b) {
       b.addEventListener("click", function () {
         var t = b.textContent;
         if (b.classList.contains("ba-calc-clear")) { expr = ""; }
         else if (b.classList.contains("ba-calc-eq")) { try { expr = String(Function('"use strict";return (' + expr.replace(/×/g, "*").replace(/÷/g, "/") + ')')()); } catch (e) { expr = "Error"; } }
-        else if (b.classList.contains("ba-calc-op")) { expr += t; }
         else { expr += t; }
         upd();
       });
     });
+    /* --- Scientific calculator --- */
+    var sciDisp = $("calc-sci-display"), sciExpr = "";
+    function sciUpd() { sciDisp.textContent = sciExpr || "0"; }
+    function fact(n) { n = Math.round(n); if (n < 0) return NaN; if (n <= 1) return 1; var r = 1; for (var i = 2; i <= n; i++) r *= i; return r; }
+    document.querySelectorAll("#calc-scientific .ba-calc-btn").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var sci = b.getAttribute("data-sci");
+        if (b.classList.contains("ba-calc-clear")) { sciExpr = ""; sciUpd(); return; }
+        if (b.classList.contains("ba-calc-eq")) {
+          try {
+            var val = Function('"use strict";return (' + sciExpr.replace(/×/g, "*").replace(/÷/g, "/") + ')')();
+            sciExpr = String(val);
+          } catch (e) { sciExpr = "Error"; }
+          sciUpd(); return;
+        }
+        if (sci === "sin") { sciExpr += "Math.sin("; }
+        else if (sci === "cos") { sciExpr += "Math.cos("; }
+        else if (sci === "tan") { sciExpr += "Math.tan("; }
+        else if (sci === "ln") { sciExpr += "Math.log("; }
+        else if (sci === "log") { sciExpr += "Math.log10("; }
+        else if (sci === "sqrt") { sciExpr += "Math.sqrt("; }
+        else if (sci === "pow") { sciExpr += "**2"; }
+        else if (sci === "abs") { sciExpr = "Math.abs(" + sciExpr + ")"; }
+        else if (sci === "inv") { sciExpr = "1/(" + sciExpr + ")"; }
+        else if (sci === "pi") { sciExpr += "Math.PI"; }
+        else if (sci === "e") { sciExpr += "Math.E"; }
+        else if (sci === "fact") { try { sciExpr = String(fact(parseFloat(sciExpr))); } catch (e) { sciExpr = "Error"; } }
+        else { sciExpr += b.textContent; }
+        sciUpd();
+      });
+    });
+    /* --- Conversions --- */
+    var CONV_DATA = {
+      length: { name: "Length", units: {"Meters":1,"Kilometers":1000,"Centimeters":0.01,"Millimeters":0.001,"Miles":1609.344,"Yards":0.9144,"Feet":0.3048,"Inches":0.0254} },
+      weight: { name: "Weight", units: {"Kilograms":1,"Grams":0.001,"Milligrams":0.000001,"Pounds":0.453592,"Ounces":0.0283495,"Tons":1000} },
+      temp: { name: "Temperature", special: true },
+      volume: { name: "Volume", units: {"Liters":1,"Milliliters":0.001,"Gallons":3.78541,"Cups":0.236588,"Fl Oz":0.0295735,"Cubic Meters":1000} },
+      area: { name: "Area", units: {"Sq Meters":1,"Sq Kilometers":1e6,"Sq Feet":0.092903,"Sq Yards":0.836127,"Acres":4046.86,"Hectares":10000,"Sq Inches":0.000645} },
+      speed: { name: "Speed", units: {"m/s":1,"km/h":0.277778,"mph":0.44704,"knots":0.514444,"ft/s":0.3048} }
+    };
+    document.querySelectorAll(".ba-calc-conv-card").forEach(function (card) {
+      card.addEventListener("click", function () {
+        var type = card.getAttribute("data-conv");
+        var data = CONV_DATA[type]; if (!data) return;
+        $("calc-conv-panel").style.display = "";
+        $("calc-conv-title").textContent = data.name + " Conversion";
+        var fromSel = $("calc-conv-from"), toSel = $("calc-conv-to");
+        fromSel.innerHTML = ""; toSel.innerHTML = "";
+        var keys = Object.keys(data.units || {});
+        if (data.special) { keys = ["Celsius","Fahrenheit","Kelvin"]; }
+        keys.forEach(function (k) {
+          fromSel.innerHTML += '<option value="' + k + '">' + k + '</option>';
+          toSel.innerHTML += '<option value="' + k + '">' + k + '</option>';
+        });
+        if (keys.length > 1) toSel.selectedIndex = 1;
+        function doConv() {
+          var val = parseFloat($("calc-conv-val").value);
+          if (isNaN(val)) { $("calc-conv-result").value = ""; return; }
+          var from = fromSel.value, to = toSel.value;
+          var result;
+          if (data.special) {
+            /* Temperature */
+            var c;
+            if (from === "Celsius") c = val; else if (from === "Fahrenheit") c = (val - 32) * 5/9; else c = val - 273.15;
+            if (to === "Celsius") result = c; else if (to === "Fahrenheit") result = c * 9/5 + 32; else result = c + 273.15;
+          } else {
+            var base = val * data.units[from];
+            result = base / data.units[to];
+          }
+          $("calc-conv-result").value = Math.round(result * 1e8) / 1e8;
+        }
+        $("calc-conv-val").oninput = doConv;
+        fromSel.onchange = doConv;
+        toSel.onchange = doConv;
+      });
+    });
+    var convBack = $("calc-conv-back");
+    if (convBack) convBack.addEventListener("click", function () { $("calc-conv-panel").style.display = "none"; });
     var clockBack = $("clock-back"); if (clockBack) clockBack.addEventListener("click", function () { closeModal("clock-modal"); if (clockTimer) clearInterval(clockTimer); });
     var focusBack = $("focus-back"); if (focusBack) focusBack.addEventListener("click", function () { stopFocusTimer(); closeModal("focus-modal"); });
     var formulasBack = $("formulas-back"); if (formulasBack) formulasBack.addEventListener("click", function () { closeModal("formulas-modal"); });
@@ -2058,7 +2147,7 @@ function createWhiteboard(folderId, subject) {
     html += '<option value="__new__">+ New Section</option>';
     html += '</select></div>';
     html += '<div style="display:none;flex:1;min-width:120px;" id="formula-new-sec-wrap"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">New Section Name</label><input id="formula-add-new-section" placeholder="e.g. My Formulas" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;"></div>';
-    html += '<div style="flex:1;min-width:120px;"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">Name</label><input id="formula-add-name" placeholder="e.g. Ohm's Law" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;"></div>';
+    html += '<div style="flex:1;min-width:120px;"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">Name</label><input id="formula-add-name" placeholder="e.g. Ohm\u2019s Law" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;"></div>';
     html += '<div style="flex:2;min-width:160px;"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">Expression</label><input id="formula-add-expr" placeholder="e.g. V = IR" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;"></div>';
     html += '<button class="ba-button ba-button-primary" id="formula-add-btn" style="padding:.5rem 1rem;font-size:.82rem;height:fit-content;">Add</button>';
     html += '</div></div>';

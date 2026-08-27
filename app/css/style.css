@@ -816,6 +816,17 @@ body.theme-dark .ba-calc-btn { background:#1d2138; color:#e7e9ff; }
 .ba-calc-eq { background:var(--blue); color:#fff; }
 .ba-calc-clear { background:#ffd6d6; color:#b00; }
 .ba-calc-zero { grid-column:span 2; }
+.ba-calc-tabs { display:flex; gap:0; background:var(--concrete); border-radius:12px; margin:1rem; padding:4px; }
+.ba-calc-tab { flex:1; border:none; background:transparent; padding:.6rem .8rem; border-radius:10px; font-size:.82rem; font-weight:700; cursor:pointer; color:var(--text-secondary); transition:all .15s; }
+.ba-calc-tab-active { background:#fff; color:var(--text); box-shadow:0 1px 4px rgba(0,0,0,.1); }
+body.theme-dark .ba-calc-tab-active { background:#2a2d4a; color:#fff; }
+.ba-calc-mode { flex:1; display:flex; flex-direction:column; overflow:auto; }
+.ba-calc-sci-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; padding:1rem 1.2rem 2rem; flex:1; }
+.ba-calc-conv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; }
+.ba-calc-conv-card { padding:1rem; border-radius:14px; border:1px solid var(--mercury); background:var(--white); text-align:center; cursor:pointer; transition:all .15s; }
+.ba-calc-conv-card:hover { border-color:var(--blue); background:var(--primary-light); }
+.ba-calc-conv-icon { font-size:1.5rem; margin-bottom:.4rem; }
+.ba-calc-conv-name { font-size:.78rem; font-weight:700; }
 
 /* Clock */
 .ba-clock-container { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:3rem 1rem; flex:1; }
