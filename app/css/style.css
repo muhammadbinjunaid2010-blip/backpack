@@ -42,9 +42,10 @@ h1,h2,h3,h4 { font-weight:800; line-height:1.1; letter-spacing:-0.03em; }
 .ba-app-logo { color:var(--blue); }
 .ba-app-logo-img { width:48px; height:48px; border-radius:10px; object-fit:cover; box-shadow:0 2px 8px rgba(0,0,0,.18); }
 .ba-app-header-name { font-weight:800; font-size:1rem; }
-.ba-app-header-school { text-align:right; min-width:0; }
-.ba-app-school-name { font-weight:800; font-size:.9rem; color:var(--blue); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.ba-app-school-address { font-size:.64rem; color:var(--silver); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ba-app-header-school { text-align:right; min-width:0; display:flex; flex-direction:column; align-items:flex-end; gap:.15rem; }
+.ba-app-school-name { font-weight:800; font-size:.9rem; color:var(--blue); line-height:1.2; }
+.ba-app-school-badge { display:inline-flex; align-items:center; gap:.25rem; padding:.1rem .4rem; background:#fef3c7; color:#92400e; border-radius:9999px; font-size:.5rem; font-weight:700; line-height:1; }
+.ba-app-school-address { font-size:.64rem; color:var(--silver); }
 
 /* ---------- MAIN / SCREENS ---------- */
 .ba-main { flex:1 1 auto; position:relative; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:calc(72px + var(--safe-bottom)); }
@@ -303,6 +304,45 @@ body.theme-dark .ba-timetable-day, body.theme-dark .ba-sch-tab, body.theme-dark 
 body.theme-dark .ba-modal-close, body.theme-dark .ba-nb-back, body.theme-dark .ba-school-logo { background:#1d2138; color:#c9cdf0; }
 body.theme-dark .ba-period-item.ba-period-break { background:#221f33; }
 
+/* Dark mode for settings elements */
+body.theme-dark .ba-settings-school { background:#1d2138; border-color:#2a3050; }
+body.theme-dark .ba-settings-school-row { border-color:#2a3050; }
+body.theme-dark .ba-homework-access { background:#1d2138; border-color:#2a3050; }
+body.theme-dark .ba-tool-card { background:#1d2138; border-color:#2a3050; }
+body.theme-dark .ba-tool-icon { background:#252a45; color:#93c5fd; }
+body.theme-dark .ba-folders-grid .ba-folder-card { background:#1d2138; border-color:#2a3050; }
+body.theme-dark .ba-cp-card { background:linear-gradient(160deg,#1a2744,#1e3a5f); }
+body.theme-dark .ba-cp-off { background:#1d2138; color:#e7e9ff; opacity:1; }
+body.theme-dark .ba-cp-card { color:#fff; }
+body.theme-dark .ba-pcn-tag { color:#94a3b8; }
+body.theme-dark .ba-pcn-subject { color:#e2e8f0; }
+body.theme-dark .ba-pcn-time { color:#94a3b8; }
+body.theme-dark .ba-homework-open { color:#93c5fd; }
+body.theme-dark .ba-settings-school-name { color:#e7e9f5; }
+body.theme-dark .ba-settings-school-address { color:#94a3b8; }
+body.theme-dark .ba-credit-block { color:#64748b; }
+body.theme-dark .ba-onb { background:#12152b; color:#e7e9ff; }
+body.theme-dark .ba-onb h2 { color:#fff; }
+body.theme-dark .ba-onb-sub { color:#94a3b8; }
+body.theme-dark .ba-home-greeting { color:#e7e9f5; }
+body.theme-dark .ba-section-title { color:#94a3b8; }
+body.theme-dark .ba-sf-page { background:#1d2138; border-color:#2a3050; color:#e7e9ff; }
+body.theme-dark .ba-modal-medium { background:#1d2138; border-color:#2a3050; }
+body.theme-dark .ba-title-4 { color:#e7e9ff; }
+body.theme-dark .ba-screen-subtitle { color:#94a3b8; }
+body.theme-dark .ba-sch-tab-active { color:#60a5fa; border-bottom-color:#60a5fa; }
+
+/* Teacher dashboard dark mode */
+body.theme-dark .td-quick-card { background:#1d2138; border-color:#2a3050; }
+body.theme-dark .td-class-row { border-color:#2a3050; }
+body.theme-dark .td-student-row { border-color:#2a3050; }
+body.theme-dark .td-student-avatar { background:var(--blue); }
+body.theme-dark .td-material-card { background:#1d2138; border-color:#2a3050; }
+body.theme-dark .td-mark-input { background:#1d2138; color:#e7e9ff; border-color:#2a3050; }
+body.theme-dark .td-att-btn { border-color:#2a3050 !important; }
+body.theme-dark .td-review-option { border-color:var(--mercury); }
+body.theme-dark .td-needs-attention:active { background:#252a45; }
+
 /* ---------- FULL-SCREEN MODALS BOUNDED TO PHONE FRAME ---------- */
 .ba-modal.ba-modal-fs { padding:0; align-items:stretch; justify-content:stretch; }
 .ba-modal-fs .ba-modal-content { width:100%; height:100%; max-width:none; max-height:none; border-radius:0; }
@@ -427,10 +467,12 @@ body.theme-dark .ba-focus-preset { background:#1d2138; color:#e7e9ff; border-col
 .ba-formulas-tab.ba-formulas-tab-active { color:var(--blue); border-bottom:2px solid var(--blue); }
 .ba-formulas-body { flex:1; padding:1.2rem; overflow-y:auto; }
 .ba-formula-section-title { font-size:.75rem; font-weight:800; letter-spacing:.08em; color:var(--silver); margin:1.2rem 0 .5rem; }
-.ba-formula-card { background:var(--white); border:1px solid var(--mercury); border-radius:14px; padding:1rem; margin-bottom:.8rem; }
+.ba-formula-card { position:relative; background:var(--white); border:1px solid var(--mercury); border-radius:14px; padding:1rem; padding-right:2.2rem; margin-bottom:.8rem; }
 body.theme-dark .ba-formula-card { background:#1d2138; border-color:#2a3050; }
 .ba-formula-name { font-weight:800; font-size:.9rem; margin-bottom:.3rem; }
 .ba-formula-expr { font-family:monospace; background:var(--concrete); padding:.4rem .6rem; border-radius:8px; font-size:.85rem; color:var(--blue-dark); }
+.ba-formula-del { position:absolute; top:.6rem; right:.6rem; width:22px; height:22px; border-radius:50%; border:none; background:var(--concrete); color:var(--text-secondary); font-size:.7rem; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:.4; transition:opacity .15s; }
+.ba-formula-del:hover { opacity:1; background:#fee2e2; color:#ef4444; }
 body.theme-dark .ba-formula-expr { background:#0c0f20; color:#7dffb0; }
 
 /* ---------- CALCULATOR TABS ---------- */
@@ -705,8 +747,8 @@ body.theme-dark .ba-sf-page { background:#1d2138; border-color:#2a3050; }
 .ba-form-group textarea, .ba-modal-body textarea { width:100%; border:1px solid var(--mercury); border-radius:10px; padding:.6rem; font-family:inherit; font-size:.95rem; resize:vertical; box-sizing:border-box; }
 body.theme-dark .ba-form-group textarea { background:#1d2138; color:#e7e9ff; border-color:#2a3050; }
 .ba-sf-page-type { font-size:.7rem; color:var(--silver); }
-.ba-sf-del { border:none; background:transparent; cursor:pointer; font-size:.95rem; opacity:.6; }
-.ba-sf-del:hover { opacity:1; }
+.ba-sf-more, .ba-sf-del { border:none; background:transparent; cursor:pointer; font-size:.95rem; opacity:.6; padding:.2rem .3rem; border-radius:6px; }
+.ba-sf-more:hover, .ba-sf-del:hover { opacity:1; background:rgba(0,0,0,.05); }
 .ba-sf-actions { display:flex; gap:.5rem; flex-wrap:wrap; }
 .ba-sf-actions .ba-button { flex:1; min-width:120px; }
 
@@ -896,29 +938,3 @@ body.theme-dark .td-att-btn { border-color:#2a3050 !important; }
 .td-review-active { color:#fff !important; }
 .td-needs-attention:active { background:var(--concrete); border-radius:8px; }
 body.theme-dark .td-needs-attention:active { background:#252a45; }
-
-/* ---------- STUDENT DARK MODE FIXES ---------- */
-body.theme-dark .ba-tool-card { background:#1d2138; border-color:#2a3050; }
-body.theme-dark .ba-tool-icon { background:#252a45; color:#93c5fd; }
-body.theme-dark .ba-homework-access { background:#1d2138; border-color:#2a3050; }
-body.theme-dark .ba-folders-grid .ba-folder-card { background:#1d2138; border-color:#2a3050; }
-body.theme-dark .ba-cp-card { background:linear-gradient(160deg,#1a2744,#1e3a5f); }
-body.theme-dark .ba-cp-off { background:#1d2138; color:#e7e9ff; opacity:1; }
-body.theme-dark .ba-cp-card { color:#fff; }
-body.theme-dark .ba-pcn-tag { color:#94a3b8; }
-body.theme-dark .ba-pcn-subject { color:#e2e8f0; }
-body.theme-dark .ba-pcn-time { color:#94a3b8; }
-body.theme-dark .ba-homework-open { color:#93c5fd; }
-body.theme-dark .ba-settings-school-name { color:#e7e9f5; }
-body.theme-dark .ba-settings-school-address { color:#94a3b8; }
-body.theme-dark .ba-credit-block { color:#64748b; }
-body.theme-dark .ba-onb { background:#12152b; color:#e7e9ff; }
-body.theme-dark .ba-onb h2 { color:#fff; }
-body.theme-dark .ba-onb-sub { color:#94a3b8; }
-body.theme-dark .ba-home-greeting { color:#e7e9f5; }
-body.theme-dark .ba-section-title { color:#94a3b8; }
-body.theme-dark .ba-sf-page { background:#1d2138; border-color:#2a3050; color:#e7e9ff; }
-body.theme-dark .ba-modal-medium { background:#1d2138; border-color:#2a3050; }
-body.theme-dark .ba-title-4 { color:#e7e9ff; }
-body.theme-dark .ba-screen-subtitle { color:#94a3b8; }
-body.theme-dark .ba-sch-tab-active { color:#60a5fa; border-bottom-color:#60a5fa; }

@@ -16,7 +16,7 @@
   <div class="ba-page-wrapper"><div class="app-shell" id="app-shell">
     <div class="ba-focus-bar" id="focus-bar" style="display:none;"><span class="ba-focus-bar-icon">⏱</span><span class="ba-focus-bar-time" id="focus-bar-time">25:00</span><span class="ba-focus-bar-label">Focus</span><button class="ba-focus-bar-end" id="focus-bar-end">End</button></div><header class="ba-app-header"><div class="ba-container"><div class="ba-app-header-content">
       <div class="ba-app-header-identity"><img src="assets/brand-logo.png" alt="Backpack Air" class="ba-app-logo-img"><span class="ba-app-header-name">Backpack Air</span></div>
-      <div class="ba-app-header-school"><div class="ba-app-school-name" id="hdr-school">Bahria College Karsaz</div><div class="ba-app-school-address" id="hdr-class">Class X-C</div></div>
+      <div class="ba-app-header-school"><div class="ba-app-school-name" id="hdr-school">Bahria College Karsaz</div><div class="ba-app-school-badge">• Prototype & Testing</div><div class="ba-app-school-address" id="hdr-class">Class X-C</div></div>
     </div></div></header>
 
     <main class="ba-main" id="ba-main">
@@ -45,7 +45,7 @@
         <div id="schedule-timetable"><div class="ba-timetable-nav" role="tablist">
           <button class="ba-timetable-day ba-timetable-day-active" data-day="mon">MON</button><button class="ba-timetable-day" data-day="tue">TUE</button><button class="ba-timetable-day" data-day="wed">WED</button><button class="ba-timetable-day" data-day="thu">THU</button><button class="ba-timetable-day" data-day="fri">FRI</button>
         </div><div class="ba-timetable-content" id="ba-timetable-content"></div></div>
-        <div id="schedule-exams" style="display:none;"><div class="ba-exam-block" id="ba-exam-block"><div class="ba-exam-cap">1ST ASSESSMENT</div><div class="ba-exam-row"><span>Starting</span><span>MID-SEPTEMBER</span></div><div class="ba-exam-row"><span>Class</span><span>X-C</span></div><div class="ba-exam-row"><span>School</span><span>Bahria College Karsaz</span></div></div></div>
+        <div id="schedule-exams" style="display:none;"><div class="ba-exam-block" id="ba-exam-block"><div class="ba-exam-cap">1ST ASSESSMENT</div><div class="ba-exam-row"><span>Starting</span><span>MID-SEPTEMBER</span></div><div class="ba-exam-row"><span>Class</span><span>X-C</span></div><div class="ba-exam-row"><span>School</span><span>Bahria College Karsaz <span class="ba-prototype-badge" style="display:inline-flex;align-items:center;gap:.25rem;padding:.1rem .4rem;background:#fef3c7;color:#92400e;border-radius:9999px;font-size:.55rem;font-weight:700;">• Prototype & Testing</span></span></div></div></div>
       </div></section>
 
       <section class="ba-screen" id="settings-screen" data-section="settings"><div class="ba-container">
@@ -58,9 +58,10 @@
             <div class="ba-settings-school">
               <img src="assets/bahria-clg-logo.png" alt="School" class="ba-settings-school-logo">
               <div class="ba-settings-school-name" id="setting-school-display">Bahria College Karsaz</div>
+              <div class="ba-app-school-badge">• Prototype & Testing</div>
               <div class="ba-settings-school-row"><span>Address</span><span id="setting-address-display">Habib Rehmatullah Rd</span></div>
               <div class="ba-settings-school-row"><span>Class</span><span id="setting-class-display">X-C</span></div>
-              <div class="ba-settings-school-row"><span>Class Teacher</span><span id="setting-teacher-display">Ms. Saeeda (47)</span></div>
+              <div class="ba-settings-school-row"><span>Class Teacher</span><span id="setting-teacher-display">Ms. Sadia (47)</span></div>
             </div>
             <button class="ba-button ba-button-secondary ba-doc-action" id="settings-change-school">Change School</button>
           </div>
@@ -69,6 +70,9 @@
             <div class="ba-form-row"><label>Default Paper</label><select id="setting-paper">
               <option value="legal">Legal</option><option value="legal-left">Legal — Left</option><option value="ruled">Ruled</option><option value="ruled-narrow">Ruled — Narrow</option><option value="ruled-wide">Ruled — Wide</option><option value="dotted">Dotted</option><option value="grid">Grid</option><option value="graph">Graph Paper</option><option value="green">Green</option><option value="blank">Blank</option></select></div>
             <div class="ba-form-row"><label>Theme</label><select id="setting-theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+          </div>
+          <div class="ba-setting-group"><div class="ba-section-title">ACCOUNT</div>
+            <button class="ba-button ba-button-secondary" id="setting-logout" style="width:100%;color:#ef4444;border-color:#fca5a5;">Log Out</button>
           </div>
           <div class="ba-form-row" style="border:none;"><label>Version</label><span id="easter-egg-trigger" style="color:var(--silver);cursor:pointer;font-size:.85rem;padding:.3rem .6rem;border-radius:8px;">1.0.0</span></div>
           <div class="ba-credit-block">Backpack Air · A project of MO Digital</div>
@@ -145,23 +149,23 @@
         <!-- NOTEBOOK / BOOK EDITOR -->
         <div class="ba-modal ba-modal-fs" id="editor-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full ba-editor">
           <header class="ba-editor-topbar">
-            <button class="ba-etb-btn" data-act="home" title="Home">🏠</button>
-            <button class="ba-etb-btn" data-act="sidebar" title="Pages">▦</button>
+            <button class="ba-etb-btn" data-act="home" title="Home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+            <button class="ba-etb-btn" data-act="sidebar" title="Pages"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
             <span class="ba-etb-sep"></span>
-            <button class="ba-etb-btn" data-tool="select" title="Select">⬚</button>
-            <button class="ba-etb-btn" data-tool="pen" title="Pen">✒️</button>
-            <button class="ba-etb-btn" data-tool="pencil" title="Pencil">✏️</button>
-            <button class="ba-etb-btn" data-tool="highlighter" title="Highlighter">🖍️</button>
-            <button class="ba-etb-btn" data-tool="shapes" title="Shapes">△</button>
+            <button class="ba-etb-btn" data-tool="select" title="Select"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 3"/></svg></button>
+            <button class="ba-etb-btn" data-tool="pen" title="Pen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></button>
+            <button class="ba-etb-btn" data-tool="pencil" title="Pencil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+            <button class="ba-etb-btn" data-tool="highlighter" title="Highlighter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 4.5l4 4L8 20H4v-4L15.5 4.5z"/><line x1="4" y1="20" x2="20" y2="20"/></svg></button>
+            <button class="ba-etb-btn" data-tool="shapes" title="Shapes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"/></svg></button>
             <span class="ba-etb-sep"></span>
             <button class="ba-etb-ve" data-act="viewedit" title="View / Edit"><span class="ba-ve-mode">Edit</span></button>
-            <button class="ba-etb-btn" data-tool="eraser" title="Eraser">🧽</button>
-            <button class="ba-etb-btn" data-act="undo" title="Undo">↶</button>
-            <button class="ba-etb-btn" data-act="redo" title="Redo">↷</button>
+            <button class="ba-etb-btn" data-tool="eraser" title="Eraser"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H7L3 16l9-9 8 8-4 4"/><path d="M6.5 13.5l8-8"/></svg></button>
+            <button class="ba-etb-btn" data-act="undo" title="Undo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></button>
+            <button class="ba-etb-btn" data-act="redo" title="Redo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.13-9.36L23 10"/></svg></button>
             <span class="ba-etb-sep"></span>
-            <button class="ba-etb-btn" data-act="share" title="Share / Export">⤓</button>
+            <button class="ba-etb-btn" data-act="share" title="Share / Export"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
             <button class="ba-etb-btn ba-etb-addpage" data-act="addpage" title="Add Page">＋ Page</button>
-            <button class="ba-etb-btn" data-act="more" title="More">⋮</button>
+            <button class="ba-etb-btn" data-act="more" title="More"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
           </header>
           <div class="ba-editor-body">
             <aside class="ba-editor-sidebar" id="ed-sidebar">
@@ -179,21 +183,21 @@
         <!-- WHITEBOARD -->
         <div class="ba-modal ba-modal-fs" id="whiteboard-modal" role="dialog" aria-modal="true"><div class="ba-modal-content ba-modal-full ba-editor">
           <header class="ba-editor-topbar">
-            <button class="ba-etb-btn" data-act="home" title="Home">🏠</button>
-            <button class="ba-etb-btn" data-act="wb-fit" title="Fit">⤢</button>
+            <button class="ba-etb-btn" data-act="home" title="Home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+            <button class="ba-etb-btn" data-act="wb-fit" title="Fit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
             <span class="ba-etb-sep"></span>
-            <button class="ba-etb-btn" data-tool="pen" title="Pen">✒️</button>
-            <button class="ba-etb-btn" data-tool="pencil" title="Pencil">✏️</button>
-            <button class="ba-etb-btn" data-tool="highlighter" title="Highlighter">🖍️</button>
-            <button class="ba-etb-btn" data-tool="shapes" title="Shapes">△</button>
-            <button class="ba-etb-btn" data-tool="text" title="Text">T</button>
+            <button class="ba-etb-btn" data-tool="pen" title="Pen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></button>
+            <button class="ba-etb-btn" data-tool="pencil" title="Pencil"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
+            <button class="ba-etb-btn" data-tool="highlighter" title="Highlighter"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 4.5l4 4L8 20H4v-4L15.5 4.5z"/><line x1="4" y1="20" x2="20" y2="20"/></svg></button>
+            <button class="ba-etb-btn" data-tool="shapes" title="Shapes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 20 2 20"/></svg></button>
+            <button class="ba-etb-btn" data-tool="text" title="Text"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></button>
             <span class="ba-etb-sep"></span>
-            <button class="ba-etb-btn" data-tool="eraser" title="Eraser">🧽</button>
-            <button class="ba-etb-btn" data-act="undo" title="Undo">↶</button>
-            <button class="ba-etb-btn" data-act="redo" title="Redo">↷</button>
+            <button class="ba-etb-btn" data-tool="eraser" title="Eraser"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H7L3 16l9-9 8 8-4 4"/><path d="M6.5 13.5l8-8"/></svg></button>
+            <button class="ba-etb-btn" data-act="undo" title="Undo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></button>
+            <button class="ba-etb-btn" data-act="redo" title="Redo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.13-9.36L23 10"/></svg></button>
             <span class="ba-etb-sep"></span>
-            <button class="ba-etb-btn" data-act="share" title="Share">⤓</button>
-            <button class="ba-etb-btn" data-act="more" title="More">⋮</button>
+            <button class="ba-etb-btn" data-act="share" title="Share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+            <button class="ba-etb-btn" data-act="more" title="More"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
           </header>
           <div class="ba-editor-stage ba-wb-stage" id="wb-stage"><canvas id="wb-canvas"></canvas></div>
           <div class="ba-editor-toolopts" id="wb-toolopts"></div>

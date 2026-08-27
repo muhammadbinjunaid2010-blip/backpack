@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Backpack Air — Digital Schoolbag Pilot Proposal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+       ============================================================ */
+    :root {
+      --primary: #2f5bff;
+      --primary-dark: #1e46d4;
+      --primary-light: #eef2ff;
+      --secondary: #f1f5f9;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --font: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      --page-w: 210mm;
+      --page-h: 297mm;
+      --margin: 48px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 14px; }
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background: #e8ecf1;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    /* ============================================================
+       PAGE SYSTEM
+       ============================================================ */
+    @page { size: A4; margin: 0; }
+    .page {
+      width: var(--page-w);
+      min-height: var(--page-h);
+      margin: 0 auto 32px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.12);
+    }
+    .page-inner {
+      position: relative;
+      z-index: 2;
+      min-height: var(--page-h);
+      padding: var(--margin);
+      display: flex;
+      flex-direction: column;
+    }
+    .page-no {
+      position: absolute;
+      right: var(--margin);
+      bottom: 32px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .no-print { display: none; }
+
+    /* ============================================================
+       TYPOGRAPHY
+       ============================================================ */
+    .micro {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+    .section-number {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .page-heading {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 800;
+      line-height: 0.92;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    .body-text {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+    .accent-rule {
+      width: 60px;
+      height: 5px;
+      background: var(--primary);
+      border-radius: 3px;
+      margin: 16px 0;
+    }
+
+    /* ============================================================
+       COMPONENTS
+       ============================================================ */
+    .card {
+      border-radius: 14px;
+      padding: 22px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .card-blue {
+      background: var(--primary-light);
+      border-color: #c7d2fe;
+    }
+    .card-dark {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+    }
+    .bullet {
+      width: 7px;
+      height: 7px;
+      background: var(--primary);
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .config-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .config-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .config-table td:first-child {
+      font-weight: 700;
+      color: var(--text);
+      width: 40%;
+    }
+    .config-table td:last-child {
+      color: var(--text-secondary);
+    }
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .tag-blue { background: var(--primary-light); color: var(--primary); }
+    .tag-green { background: #ecfdf5; color: #059669; }
+    .tag-amber { background: #fffbeb; color: #d97706; }
+
+    /* ============================================================
+       BRAND MARK (3x3 grid)
+       ============================================================ */
+    .brand-mark {
+      display: grid;
+      grid-template-columns: repeat(3, 8px);
+      grid-template-rows: repeat(3, 8px);
+      gap: 3px;
+    }
+    .brand-mark span {
+      border-radius: 2px;
+      background: var(--primary);
+    }
+    .brand-mark span:nth-child(2) { opacity: 0.5; }
+    .brand-mark span:nth-child(4) { opacity: 0.3; }
+    .brand-mark span:nth-child(8) { opacity: 0.4; }
+
+    /* ============================================================
+       PRINT
+       ============================================================ */
+    @media print {
+      @page { size: A4; margin: 0; }
+      body { background: #fff !important; padding: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .page { width: var(--page-w); height: var(--page-h); min-height: var(--page-h); margin: 0 !important; box-shadow: none; break-after: page; page-break-after: always; }
+      .page:last-child { break-after: auto; page-break-after: auto; }
+      .page-inner { height: var(--page-h); min-height: var(--page-h); }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     PAGE 1 — COVER
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between; align-items: center; text-align: center;">
+    <!-- Top bar -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="brand-mark"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <span style="font-weight: 800; font-size: 16px; letter-spacing: -0.02em;">Backpack Air</span>
+      </div>
+      <div style="text-align: right;">
+        <div class="tag tag-blue">Proposal</div>
+        <div class="micro" style="margin-top: 6px;">2026 · Version 1.0</div>
+      </div>
+    </div>
+
+    <!-- Center content -->
+    <div style="max-width: 480px;">
+      <div style="width: 80px; height: 5px; background: var(--primary); border-radius: 3px; margin: 0 auto 32px;"></div>
+      <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--primary); margin-bottom: 20px;">Digital Schoolbag Pilot Proposal</p>
+      <h1 style="font-size: 56px; font-weight: 800; line-height: 0.92; text-transform: uppercase; letter-spacing: -0.04em; margin-bottom: 16px;">Backpack<br>Air</h1>
+      <p style="font-size: 18px; font-weight: 500; color: var(--text-secondary); line-height: 1.4; margin-bottom: 40px;">The School Bag, Reimagined.</p>
+      <div style="font-size: 14px; font-weight: 600; color: var(--primary);">Prepared for</div>
+      <div style="font-size: 20px; font-weight: 800; margin-top: 4px;">The Principal</div>
+      <div style="font-size: 16px; font-weight: 600; color: var(--text-secondary);">Bahria College Karsaz, Karachi</div>
+    </div>
+
+    <!-- Bottom metadata -->
+    <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; border-top: 2px solid var(--border); padding-top: 24px; text-align: left;">
+      <div>
+        <div class="micro">Prepared By</div>
+        <div style="font-weight: 700; margin-top: 4px;">MO Digital</div>
+      </div>
+      <div>
+        <div class="micro">Date</div>
+        <div style="font-weight: 700; margin-top: 4px;">August 2026</div>
+      </div>
+      <div>
+        <div class="micro">Classification</div>
+        <div style="font-weight: 700; margin-top: 4px;">Confidential</div>
+      </div>
+    </div>
+    <span class="page-no">01</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 2 — EXECUTIVE SUMMARY
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between;">
+    <div>
+      <div class="section-number">Section 01</div>
+      <h2 class="page-heading" style="margin-bottom: 8px;">Executive<br>Summary</h2>
+      <div class="accent-rule"></div>
+
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; margin-top: 24px;">
+        <div>
+          <p class="body-text" style="margin-bottom: 16px;">
+            Backpack Air is a school-focused digital schoolbag designed for a future in which students use tablets instead of carrying a large collection of physical textbooks, notebooks and stationery throughout the school day.
+          </p>
+          <p class="body-text" style="margin-bottom: 16px;">
+            Rather than attempting to replace a school's teaching system or Learning Management System, Backpack Air focuses on the student's everyday schoolbag.
+          </p>
+          <p class="body-text">
+            The current prototype has been configured around Bahria College Karsaz, Class X-C to demonstrate how such a system could work in a real school environment.
+          </p>
+        </div>
+        <div>
+          <div class="card card-blue" style="margin-bottom: 16px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 12px;">It brings together</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Authorized school textbooks</div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Digital notebooks</div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Timetable &amp; exam schedule</div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Homework diary</div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Digital writing tools</div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Offline utilities</div>
+            </div>
+          </div>
+          <div class="card" style="background: var(--text); color: #fff; border: none;">
+            <div style="font-size: 24px; font-weight: 800; line-height: 1;">1</div>
+            <div style="font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 4px;">Tablet · 1 Stylus · 1 Digital Schoolbag</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 32px;">
+      <div class="brand-mark" style="opacity: 0.3;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="page-no">02</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 3 — THE PROBLEM
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between;">
+    <div>
+      <div class="section-number">Section 02</div>
+      <h2 class="page-heading" style="margin-bottom: 8px;">The<br>Problem</h2>
+      <div class="accent-rule"></div>
+      <div style="font-size: 18px; font-weight: 700; margin: 20px 0 24px; color: var(--text);">What does a student carry every day?</div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;">
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--primary-light); border-radius: 12px;">
+            <span style="font-size: 20px;">📚</span>
+            <span style="font-weight: 700; font-size: 14px;">Textbooks</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 12px;">
+            <span style="font-size: 20px;">📓</span>
+            <span style="font-weight: 700; font-size: 14px;">Notebooks</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 12px;">
+            <span style="font-size: 20px;">📝</span>
+            <span style="font-weight: 700; font-size: 14px;">Copies &amp; Sheets</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 12px;">
+            <span style="font-size: 20px;">✏️</span>
+            <span style="font-weight: 700; font-size: 14px;">Pens &amp; Pencils</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 12px;">
+            <span style="font-size: 20px;">🖍️</span>
+            <span style="font-weight: 700; font-size: 14px;">Markers &amp; Highlighters</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 12px;">
+            <span style="font-size: 20px;">📐</span>
+            <span style="font-weight: 700; font-size: 14px;">Geometry Tools</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 12px;">
+            <span style="font-size: 20px;">📅</span>
+            <span style="font-weight: 700; font-size: 14px;">Homework Diary</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--primary-light); border-radius: 12px; border: 1px solid #c7d2fe;">
+            <span style="font-size: 20px;">➕</span>
+            <span style="font-weight: 700; font-size: 14px; color: var(--primary);">And more...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-dark" style="text-align: center; padding: 28px 32px;">
+        <p style="font-size: 16px; font-weight: 600; line-height: 1.5; color: #cbd5e1;">
+          The problem isn't simply the <strong style="color: #fff;">weight</strong>.<br>
+          It is the number of <strong style="color: #fff;">separate things</strong> students need to manage every school day.
+        </p>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 32px;">
+      <div class="brand-mark" style="opacity: 0.3;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="page-no">03</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 4 — WHAT BACKPACK AIR PROVIDES
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between;">
+    <div>
+      <div class="section-number">Section 03</div>
+      <h2 class="page-heading" style="margin-bottom: 8px;">What Backpack<br>Air Provides</h2>
+      <div class="accent-rule"></div>
+      <p style="font-size: 16px; font-weight: 600; color: var(--text-secondary); margin-top: 8px; margin-bottom: 28px;">One Digital Schoolbag — everything the student needs for the school day.</p>
+
+      <div class="feature-grid">
+        <div class="card" style="padding: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+            <div class="icon-box" style="font-size: 18px;">📖</div>
+            <div>
+              <div style="font-weight: 800; font-size: 15px; text-transform: uppercase;">Books</div>
+            </div>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">School-provided digital textbooks that can be available offline. Authorized by the school and publisher.</p>
+        </div>
+
+        <div class="card" style="padding: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+            <div class="icon-box" style="font-size: 18px;">📓</div>
+            <div>
+              <div style="font-weight: 800; font-size: 15px; text-transform: uppercase;">Notebooks</div>
+            </div>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">Students can create subject notebooks with ruled, grid, dotted, graph, blank paper and custom covers.</p>
+        </div>
+
+        <div class="card" style="padding: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+            <div class="icon-box" style="font-size: 18px;">📅</div>
+            <div>
+              <div style="font-weight: 800; font-size: 15px; text-transform: uppercase;">Timetable</div>
+            </div>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">The student's daily timetable is immediately available. Shows current class, next class, and full weekly view.</p>
+        </div>
+
+        <div class="card" style="padding: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+            <div class="icon-box" style="font-size: 18px;">📋</div>
+            <div>
+              <div style="font-weight: 800; font-size: 15px; text-transform: uppercase;">Exams</div>
+            </div>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">Upcoming assessment information is presented directly in the schoolbag.</p>
+        </div>
+
+        <div class="card" style="padding: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+            <div class="icon-box" style="font-size: 18px;">✅</div>
+            <div>
+              <div style="font-weight: 800; font-size: 15px; text-transform: uppercase;">Homework Diary</div>
+            </div>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">A personal place for students to keep track of schoolwork. Organized by today, tomorrow, upcoming and completed.</p>
+        </div>
+
+        <div class="card" style="padding: 20px;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+            <div class="icon-box" style="font-size: 18px;">🛠️</div>
+            <div>
+              <div style="font-weight: 800; font-size: 15px; text-transform: uppercase;">Offline Tools</div>
+            </div>
+          </div>
+          <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">Calculator, formula book, sticky notes, focus timer, clock and other utilities — all work without internet.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px;">
+      <div class="brand-mark" style="opacity: 0.3;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="page-no">04</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 5 — SCHOOL CONFIGURATION
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between;">
+    <div>
+      <div class="section-number">Section 04</div>
+      <h2 class="page-heading" style="margin-bottom: 8px;">Designed for<br>the School</h2>
+      <div class="accent-rule"></div>
+      <p class="body-text" style="max-width: 480px; margin-bottom: 32px;">
+        Backpack Air is intended to be configured for each participating school. The school stays in control of the environment.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <!-- Left: Configuration -->
+        <div class="card" style="padding: 24px;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 16px;">School Configuration</div>
+          <table class="config-table">
+            <tr><td>School</td><td>Bahria College Karsaz</td></tr>
+            <tr><td>Class</td><td>X-C</td></tr>
+            <tr><td>Section</td><td>C</td></tr>
+            <tr><td>Subjects</td><td>Per school curriculum</td></tr>
+            <tr><td>Books</td><td>Authorized school files</td></tr>
+            <tr><td>Timetable</td><td>School timetable</td></tr>
+            <tr><td>Exam Schedule</td><td>School-provided</td></tr>
+            <tr><td>Teacher Access</td><td>Role-based</td></tr>
+          </table>
+        </div>
+
+        <!-- Right: Prototype -->
+        <div>
+          <div class="card card-blue" style="padding: 24px; margin-bottom: 16px;">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 12px;">Current Prototype</div>
+            <p style="font-size: 13px; line-height: 1.6; color: var(--text-secondary);">
+              The current prototype has been configured with:
+            </p>
+            <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Class X-C timetable</div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>7 subjects (Chemistry, Physics, Mathematics, English, Urdu, CS, Pak Studies)</div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Exam schedule</div>
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;"><span class="bullet"></span>Teacher access (Ms. Sadia — Chemistry)</div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 24px; border-color: var(--accent);">
+            <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 8px;">Important Note</div>
+            <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.55;">
+              Digital textbook availability depends on school/publisher authorization and licensing. Backpack Air provides the framework; the school provides the content.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px;">
+      <div class="brand-mark" style="opacity: 0.3;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="page-no">05</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 6 — TEACHER EXPERIENCE
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between;">
+    <div>
+      <div class="section-number">Section 05</div>
+      <h2 class="page-heading" style="margin-bottom: 8px;">Teacher<br>Experience</h2>
+      <div class="accent-rule"></div>
+      <p class="body-text" style="max-width: 480px; margin-bottom: 32px;">
+        Teachers can eventually have access to the classes and subjects assigned to them.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <!-- Teacher profile card -->
+        <div class="card" style="padding: 28px;">
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; font-weight: 800;">S</div>
+            <div>
+              <div style="font-size: 18px; font-weight: 800;">Ms. Sadia</div>
+              <div style="font-size: 12px; color: var(--muted); font-weight: 600;">Teacher ID: T-2024-048</div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+              <span style="font-size: 12px; color: var(--muted); font-weight: 600;">Subject</span>
+              <span style="font-size: 12px; font-weight: 700;">Chemistry</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+              <span style="font-size: 12px; color: var(--muted); font-weight: 600;">Class</span>
+              <span style="font-size: 12px; font-weight: 700;">X-C</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+              <span style="font-size: 12px; color: var(--muted); font-weight: 600;">Role</span>
+              <span style="font-size: 12px; font-weight: 700;">Class Teacher</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher capabilities -->
+        <div>
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 16px;">Teacher Capabilities</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <span class="bullet"></span>
+              <div>
+                <div style="font-size: 13px; font-weight: 700;">View assigned classes</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Access class lists, schedules, and student data</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <span class="bullet"></span>
+              <div>
+                <div style="font-size: 13px; font-weight: 700;">Review student notebooks</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Open and mark student notebook pages</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <span class="bullet"></span>
+              <div>
+                <div style="font-size: 13px; font-weight: 700;">Mark notebook status</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Stamp pages, add comments, track review status</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <span class="bullet"></span>
+              <div>
+                <div style="font-size: 13px; font-weight: 700;">Record marks &amp; attendance</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Manage assessment scores and daily attendance</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <span class="bullet"></span>
+              <div>
+                <div style="font-size: 13px; font-weight: 700;">Share with Vice Principal</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Flag notebooks for administrative review</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tag tag-amber" style="margin-top: 28px;">Note: Teacher functionality is currently represented by a prototype interface and would be connected to real school data during a pilot.</div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px;">
+      <div class="brand-mark" style="opacity: 0.3;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="page-no">06</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 7 — PROPOSED PILOT
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between;">
+    <div>
+      <div class="section-number">Section 06</div>
+      <h2 class="page-heading" style="margin-bottom: 8px;">Proposed<br>Pilot</h2>
+      <div class="accent-rule"></div>
+      <p style="font-size: 18px; font-weight: 700; color: var(--text); margin: 16px 0 32px;">Start small. Learn from the school.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+        <!-- Pilot params -->
+        <div class="card card-blue" style="padding: 24px;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 16px;">Possible Pilot</div>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: var(--text-secondary);">Class</span>
+              <span style="font-size: 14px; font-weight: 800; color: var(--primary);">X-C</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: var(--text-secondary);">School</span>
+              <span style="font-size: 13px; font-weight: 700;">Bahria College Karsaz</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 12px; color: var(--text-secondary);">Duration</span>
+              <span style="font-size: 13px; font-weight: 700;">To be decided</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- What we'd evaluate -->
+        <div class="card" style="padding: 24px;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 16px;">Pilot Evaluation</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Student usability</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Teacher usability</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Offline operation</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Digital book access</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Notebook usage</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Timetable access</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>School configuration</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Tablet suitability</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Technical requirements</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600;"><span class="bullet"></span>Practical challenges</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-dark" style="padding: 28px; text-align: center;">
+        <p style="font-size: 15px; font-weight: 600; line-height: 1.6; color: #cbd5e1;">
+          The pilot would allow the school to determine whether the concept is appropriate<br>
+          before considering broader implementation.
+        </p>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px;">
+      <div class="brand-mark" style="opacity: 0.3;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <span class="page-no">07</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAGE 8 — CLOSING
+     ============================================================ -->
+<section class="page">
+  <div class="page-inner" style="justify-content: space-between; text-align: center; align-items: center;">
+    <div></div>
+
+    <div style="max-width: 440px;">
+      <div class="brand-mark" style="margin: 0 auto 32px; opacity: 0.4;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <h2 style="font-size: 36px; font-weight: 800; line-height: 1; text-transform: uppercase; letter-spacing: -0.03em; margin-bottom: 24px;">The Question</h2>
+      <p style="font-size: 16px; font-weight: 600; color: var(--text-secondary); line-height: 1.6; margin-bottom: 32px;">
+        Could the traditional school bag eventually become a digital one?
+      </p>
+      <div class="accent-rule" style="margin: 0 auto 32px;"></div>
+      <p class="body-text" style="margin-bottom: 40px;">
+        Backpack Air is an attempt to explore that question with a real school environment rather than simply building another education application.
+      </p>
+      <p style="font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.6;">
+        We would like to demonstrate the prototype and discuss whether a small pilot could be explored with Bahria College Karsaz.
+      </p>
+    </div>
+
+    <div style="width: 100%; border-top: 2px solid var(--border); padding-top: 28px; text-align: center;">
+      <div style="font-size: 20px; font-weight: 800; margin-bottom: 4px;">MO Digital</div>
+      <div style="font-size: 12px; color: var(--text-secondary); font-weight: 600;">Built by Muhammad</div>
+      <div style="margin-top: 16px; display: flex; justify-content: center; gap: 32px;">
+        <div>
+          <div class="micro">Contact</div>
+          <div style="font-size: 12px; font-weight: 600; margin-top: 4px;">[Your Phone]</div>
+        </div>
+        <div>
+          <div class="micro">Email</div>
+          <div style="font-size: 12px; font-weight: 600; margin-top: 4px;">[Your Email]</div>
+        </div>
+      </div>
+    </div>
+    <span class="page-no">08</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRINT NOTICE
+     ============================================================ -->
+<div class="no-print" style="text-align: center; padding: 32px; font-size: 13px; color: var(--muted);">
+  Press <strong>Ctrl + P</strong> → Save as PDF to export this document.
+</div>
+
+</body>
+</html>

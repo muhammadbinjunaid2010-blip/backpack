@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Backpack Air — Presentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+       ============================================================ */
+    :root {
+      --primary: #2f5bff;
+      --primary-dark: #1e46d4;
+      --primary-light: #eef2ff;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --muted: #94a3b8;
+      --border: #e2e8f0;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --success: #10b981;
+      --font: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      --page-w: 297mm;
+      --page-h: 210mm;
+      --margin: 40px;
+    }
+
+    /* ============================================================
+       RESET & BASE
+       ============================================================ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 14px; }
+    body {
+      font-family: var(--font);
+      color: var(--text);
+      background: #e8ecf1;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    ul { list-style: none; }
+
+    /* ============================================================
+       SLIDE SYSTEM
+       ============================================================ */
+    @page { size: A4 landscape; margin: 0; }
+    .slide {
+      width: var(--page-w);
+      height: var(--page-h);
+      min-height: var(--page-h);
+      margin: 0 auto 32px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.12);
+      page-break-after: always;
+    }
+    .slide-inner {
+      position: relative;
+      z-index: 2;
+      height: var(--page-h);
+      min-height: var(--page-h);
+      padding: var(--margin);
+      display: flex;
+      flex-direction: column;
+    }
+    .slide-no {
+      position: absolute;
+      right: var(--margin);
+      bottom: 28px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .slide-header {
+      position: absolute;
+      top: var(--margin);
+      left: var(--margin);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+    .no-print { display: none; }
+
+    /* ============================================================
+       TYPOGRAPHY
+       ============================================================ */
+    .micro {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+    .slide-title {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
+      line-height: 0.92;
+      text-transform: uppercase;
+      letter-spacing: -0.04em;
+    }
+    .accent-rule {
+      width: 60px;
+      height: 5px;
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    /* ============================================================
+       COMPONENTS
+       ============================================================ */
+    .bullet {
+      width: 7px;
+      height: 7px;
+      background: var(--primary);
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .bullet-white {
+      width: 7px;
+      height: 7px;
+      background: rgba(255,255,255,.5);
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .brand-mark {
+      display: grid;
+      grid-template-columns: repeat(3, 8px);
+      grid-template-rows: repeat(3, 8px);
+      gap: 3px;
+    }
+    .brand-mark span { border-radius: 2px; background: currentColor; }
+    .brand-mark span:nth-child(2) { opacity: 0.5; }
+    .brand-mark span:nth-child(4) { opacity: 0.3; }
+    .brand-mark span:nth-child(8) { opacity: 0.4; }
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .feature-pill .fp-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .stat-card {
+      text-align: center;
+      padding: 24px 16px;
+      border-radius: 16px;
+      background: var(--primary-light);
+    }
+    .stat-card .stat-num {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--primary);
+    }
+    .stat-card .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    /* ============================================================
+       PRINT
+       ============================================================ */
+    @media print {
+      @page { size: A4 landscape; margin: 0; }
+      body { background: #fff !important; padding: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .slide { width: var(--page-w); height: var(--page-h); min-height: var(--page-h); margin: 0 !important; box-shadow: none; }
+      .slide:last-child { page-break-after: auto; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     SLIDE 1 — COVER
+     ============================================================ -->
+<section class="slide" style="background: var(--primary); color: #fff;">
+  <div class="slide-inner" style="justify-content: space-between; align-items: center; text-align: center;">
+    <!-- Top -->
+    <div style="display: flex; justify-content: space-between; width: 100%; align-items: flex-start;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="brand-mark" style="color: #fff;"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <span style="font-weight: 800; font-size: 15px;">Backpack Air</span>
+      </div>
+      <div class="micro" style="color: rgba(255,255,255,.5);">Bahria College Karsaz · 2026</div>
+    </div>
+
+    <!-- Center -->
+    <div>
+      <h1 style="font-size: 64px; font-weight: 800; line-height: 0.88; text-transform: uppercase; letter-spacing: -0.04em; margin-bottom: 24px;">Backpack<br>Air</h1>
+      <div style="width: 60px; height: 5px; background: rgba(255,255,255,.4); border-radius: 3px; margin: 0 auto 24px;"></div>
+      <p style="font-size: 20px; font-weight: 600; color: rgba(255,255,255,.8);">The School Bag, Reimagined.</p>
+      <p style="font-size: 13px; color: rgba(255,255,255,.5); margin-top: 12px; max-width: 420px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+        A digital schoolbag designed for schools moving from physical books and notebooks toward tablets.
+      </p>
+    </div>
+
+    <!-- Bottom -->
+    <div style="width: 100%; border-top: 1px solid rgba(255,255,255,.2); padding-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.4);">Prepared for</div>
+        <div style="font-size: 14px; font-weight: 700;">Bahria College Karsaz</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.4);">Presented by</div>
+        <div style="font-size: 14px; font-weight: 700;">MO Digital</div>
+      </div>
+    </div>
+    <span class="slide-no" style="color: rgba(255,255,255,.4);">01 / 10</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 2 — THE PROBLEM
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · The Problem</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">The Problem</div>
+      <h2 class="slide-title" style="margin-bottom: 12px;">What does a student<br>carry every day?</h2>
+      <div class="accent-rule" style="margin-bottom: 32px;"></div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--border);">
+          <span style="font-size: 22px;">📚</span>
+          <span style="font-weight: 700;">Books</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--border);">
+          <span style="font-size: 22px;">📓</span>
+          <span style="font-weight: 700;">Notebooks</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--border);">
+          <span style="font-size: 22px;">✏️</span>
+          <span style="font-weight: 700;">Pens &amp; Pencils</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--border);">
+          <span style="font-size: 22px;">📐</span>
+          <span style="font-weight: 700;">Geometry Tools</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--border);">
+          <span style="font-size: 22px;">🖍️</span>
+          <span style="font-weight: 700;">Markers &amp; Highlighters</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 14px; padding: 16px 20px; background: var(--bg-alt); border-radius: 12px; border: 1px solid var(--border);">
+          <span style="font-size: 22px;">📅</span>
+          <span style="font-weight: 700;">Homework Diary</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <p style="font-size: 15px; font-weight: 700; color: var(--text-secondary); max-width: 420px;">
+        The problem isn't simply the <strong style="color: var(--text);">weight</strong>.<br>
+        It is the number of <strong style="color: var(--text);">separate things</strong> students need to manage.
+      </p>
+      <span class="slide-no">02 / 10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 3 — THE IDEA
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · The Idea</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">The Idea</div>
+      <h2 class="slide-title" style="margin-bottom: 12px;">One Tablet.<br>One Stylus.<br>One Digital<br>Schoolbag.</h2>
+      <div class="accent-rule" style="margin-bottom: 28px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 32px;">
+      <div style="padding: 18px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">📖</div>
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase;">School Books</div>
+      </div>
+      <div style="padding: 18px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">📓</div>
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Digital Notebooks</div>
+      </div>
+      <div style="padding: 18px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">📅</div>
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Timetable</div>
+      </div>
+      <div style="padding: 18px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">📋</div>
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Exam Schedule</div>
+      </div>
+      <div style="padding: 18px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">✅</div>
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Homework Diary</div>
+      </div>
+      <div style="padding: 18px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 8px;">🛠️</div>
+        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase;">Offline Tools</div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <p style="font-size: 14px; color: var(--text-secondary); font-weight: 600;">Into one school-configured environment.</p>
+      <span class="slide-no">03 / 10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 4 — STUDENT'S SCHOOLBAG
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · Student Experience</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">The Student Experience</div>
+      <h2 class="slide-title" style="font-size: 40px; margin-bottom: 12px;">A Student's<br>Schoolbag</h2>
+      <div class="accent-rule" style="margin-bottom: 28px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; flex: 1;">
+      <!-- Phone frame mockup -->
+      <div style="background: var(--bg-alt); border-radius: 24px; border: 2px solid var(--border); padding: 12px; display: flex; flex-direction: column; align-items: center;">
+        <div style="width: 80px; height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 12px;"></div>
+        <div style="width: 100%; background: var(--bg); border-radius: 16px; padding: 16px; flex: 1;">
+          <div style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 4px;">Backpack Air</div>
+          <div style="font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 12px;">Good morning, Muhammad</div>
+          <!-- Mini timetable card -->
+          <div style="background: var(--primary); border-radius: 10px; padding: 10px 12px; color: #fff; margin-bottom: 10px;">
+            <div style="font-size: 8px; font-weight: 700; text-transform: uppercase; opacity: .6;">Now</div>
+            <div style="font-size: 13px; font-weight: 800;">Chemistry</div>
+            <div style="font-size: 9px; opacity: .7;">08:00 – 08:40</div>
+          </div>
+          <!-- Mini folders -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <div style="background: var(--primary-light); border-radius: 8px; padding: 8px; text-align: center;">
+              <div style="font-size: 16px;">📖</div>
+              <div style="font-size: 7px; font-weight: 700; text-transform: uppercase;">Books</div>
+            </div>
+            <div style="background: var(--primary-light); border-radius: 8px; padding: 8px; text-align: center;">
+              <div style="font-size: 16px;">📓</div>
+              <div style="font-size: 7px; font-weight: 700; text-transform: uppercase;">Notebooks</div>
+            </div>
+            <div style="background: var(--primary-light); border-radius: 8px; padding: 8px; text-align: center;">
+              <div style="font-size: 16px;">📅</div>
+              <div style="font-size: 7px; font-weight: 700; text-transform: uppercase;">Schedule</div>
+            </div>
+            <div style="background: var(--primary-light); border-radius: 8px; padding: 8px; text-align: center;">
+              <div style="font-size: 16px;">🛠️</div>
+              <div style="font-size: 7px; font-weight: 700; text-transform: uppercase;">Tools</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature list -->
+      <div style="display: flex; flex-direction: column; gap: 14px; justify-content: center;">
+        <div class="feature-pill">
+          <div class="fp-icon">📖</div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700;">Books</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">School-provided textbooks, offline ready</div>
+          </div>
+        </div>
+        <div class="feature-pill">
+          <div class="fp-icon">📓</div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700;">Notebooks</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Create and write in subject notebooks</div>
+          </div>
+        </div>
+        <div class="feature-pill">
+          <div class="fp-icon">📅</div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700;">Timetable</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Always visible — current &amp; next class</div>
+          </div>
+        </div>
+        <div class="feature-pill">
+          <div class="fp-icon">✅</div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700;">Homework Diary</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Track tasks, due dates, completed work</div>
+          </div>
+        </div>
+        <div class="feature-pill">
+          <div class="fp-icon">🛠️</div>
+          <div>
+            <div style="font-size: 14px; font-weight: 700;">Offline Tools</div>
+            <div style="font-size: 11px; color: var(--text-secondary);">Calculator, formulas, focus timer &amp; more</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px;">
+      <p style="font-size: 12px; color: var(--muted); font-weight: 600; font-style: italic;">Designed to work offline after the required content has been installed.</p>
+      <span class="slide-no">04 / 10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 5 — SCHOOL BOOKS
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · School Books</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">School Books</div>
+      <h2 class="slide-title" style="font-size: 40px; margin-bottom: 12px;">The school's books.<br>Already there.</h2>
+      <div class="accent-rule" style="margin-bottom: 24px;"></div>
+    </div>
+
+    <p style="font-size: 14px; color: var(--text-secondary); max-width: 460px; margin-bottom: 28px; line-height: 1.6;">
+      The school can provide authorized digital textbook files for each class. Students see their class subjects and can access books offline.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 24px;">
+      <div style="padding: 20px; border-radius: 14px; background: var(--bg-alt); border: 1px solid var(--border); text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 10px;">📕</div>
+        <div style="font-size: 12px; font-weight: 700;">Mathematics</div>
+        <div style="font-size: 10px; color: var(--muted);">Class X</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; background: var(--bg-alt); border: 1px solid var(--border); text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 10px;">📗</div>
+        <div style="font-size: 12px; font-weight: 700;">Chemistry</div>
+        <div style="font-size: 10px; color: var(--muted);">Class X</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; background: var(--bg-alt); border: 1px solid var(--border); text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 10px;">📘</div>
+        <div style="font-size: 12px; font-weight: 700;">Physics</div>
+        <div style="font-size: 10px; color: var(--muted);">Class X</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; background: var(--bg-alt); border: 1px solid var(--border); text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 10px;">📙</div>
+        <div style="font-size: 12px; font-weight: 700;">English</div>
+        <div style="font-size: 10px; color: var(--muted);">Class X</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; background: var(--bg-alt); border: 1px solid var(--border); text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 10px;">📒</div>
+        <div style="font-size: 12px; font-weight: 700;">Urdu</div>
+        <div style="font-size: 10px; color: var(--muted);">Class X</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 28px; margin-bottom: 10px;">💻</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--primary);">Computer Science</div>
+        <div style="font-size: 10px; color: var(--muted);">Class X</div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <div style="padding: 10px 16px; background: #fffbeb; border-radius: 10px; border: 1px solid #fde68a; font-size: 11px; font-weight: 600; color: #92400e;">
+        Digital textbook availability depends on school/publisher authorization and licensing.
+      </div>
+      <span class="slide-no">05 / 10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 6 — DIGITAL NOTEBOOKS
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · Digital Notebooks</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">Digital Notebooks</div>
+      <h2 class="slide-title" style="font-size: 40px; margin-bottom: 12px;">Write without carrying<br>another copy.</h2>
+      <div class="accent-rule" style="margin-bottom: 28px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; flex: 1;">
+      <!-- Paper types -->
+      <div>
+        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 14px;">Paper Styles Available</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700;">Ruled</div>
+            <div style="font-size: 9px; color: var(--muted);">Standard lines</div>
+          </div>
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700;">Narrow Ruled</div>
+            <div style="font-size: 9px; color: var(--muted);">Tight spacing</div>
+          </div>
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700;">Wide Ruled</div>
+            <div style="font-size: 9px; color: var(--muted);">Extra spacing</div>
+          </div>
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700;">Grid</div>
+            <div style="font-size: 9px; color: var(--muted);">Square grid</div>
+          </div>
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700;">Graph Paper</div>
+            <div style="font-size: 9px; color: var(--muted);">Fine grid</div>
+          </div>
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700;">Dotted</div>
+            <div style="font-size: 9px; color: var(--muted);">Dot matrix</div>
+          </div>
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700;">Blank</div>
+            <div style="font-size: 9px; color: var(--muted);">No lines</div>
+          </div>
+          <div style="padding: 14px; border-radius: 10px; border: 1px solid var(--primary); background: var(--primary-light); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--primary);">+ Custom Covers</div>
+            <div style="font-size: 9px; color: var(--muted);">Multiple styles</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Writing tools -->
+      <div>
+        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 14px;">Writing Tools</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span style="font-size: 18px;">✒️</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Pen</div>
+              <div style="font-size: 10px; color: var(--muted);">Ball, Fountain, Brush styles</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span style="font-size: 18px;">✏️</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Pencil</div>
+              <div style="font-size: 10px; color: var(--muted);">Natural pencil texture</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span style="font-size: 18px;">🖍️</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Highlighter</div>
+              <div style="font-size: 10px; color: var(--muted);">Adjustable density</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span style="font-size: 18px;">△</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Shapes</div>
+              <div style="font-size: 10px; color: var(--muted);">Rect, circle, line, arrow</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span style="font-size: 18px;">🧽</span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Eraser</div>
+              <div style="font-size: 10px; color: var(--muted);">Stroke or regular mode</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px;">
+      <p style="font-size: 12px; color: var(--muted); font-style: italic;">Multiple paper colors and custom covers available.</p>
+      <span class="slide-no">06 / 10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 7 — THE SCHOOL DAY
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · The School Day</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">The School Day</div>
+      <h2 class="slide-title" style="font-size: 40px; margin-bottom: 12px;">The timetable becomes<br>part of the schoolbag.</h2>
+      <div class="accent-rule" style="margin-bottom: 24px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; flex: 1;">
+      <!-- Timetable -->
+      <div>
+        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 12px;">Monday — Class X-C</div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <div style="display: flex; align-items: center; padding: 10px 14px; background: var(--primary); color: #fff; border-radius: 10px; gap: 14px;">
+            <span style="font-size: 11px; font-weight: 700; width: 90px;">08:00 – 09:20</span>
+            <span style="font-size: 13px; font-weight: 700;">Chemistry (Double)</span>
+            <span style="font-size: 10px; opacity: .7; margin-left: auto;">Ms. Sadia</span>
+          </div>
+          <div style="display: flex; align-items: center; padding: 8px 14px; background: var(--bg-alt); border-radius: 10px; gap: 14px; border: 1px solid var(--border);">
+            <span style="font-size: 11px; font-weight: 600; width: 90px; color: var(--muted);">09:20 – 10:00</span>
+            <span style="font-size: 12px; font-weight: 700;">Pak Studies</span>
+          </div>
+          <div style="display: flex; align-items: center; padding: 8px 14px; background: var(--bg-alt); border-radius: 10px; gap: 14px; border: 1px solid var(--border);">
+            <span style="font-size: 11px; font-weight: 600; width: 90px; color: var(--muted);">10:00 – 10:40</span>
+            <span style="font-size: 12px; font-weight: 700;">Mathematics</span>
+          </div>
+          <div style="display: flex; align-items: center; padding: 6px 14px; background: #f1f5f9; border-radius: 8px; gap: 14px;">
+            <span style="font-size: 10px; font-weight: 600; width: 90px; color: var(--muted);">10:40 – 11:00</span>
+            <span style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase;">Break</span>
+          </div>
+          <div style="display: flex; align-items: center; padding: 8px 14px; background: var(--bg-alt); border-radius: 10px; gap: 14px; border: 1px solid var(--border);">
+            <span style="font-size: 11px; font-weight: 600; width: 90px; color: var(--muted);">11:00 – 12:20</span>
+            <span style="font-size: 12px; font-weight: 700;">Physics (Double)</span>
+          </div>
+          <div style="display: flex; align-items: center; padding: 8px 14px; background: var(--bg-alt); border-radius: 10px; gap: 14px; border: 1px solid var(--border);">
+            <span style="font-size: 11px; font-weight: 600; width: 90px; color: var(--muted);">12:20 – 01:00</span>
+            <span style="font-size: 12px; font-weight: 700;">Urdu</span>
+          </div>
+          <div style="display: flex; align-items: center; padding: 8px 14px; background: var(--bg-alt); border-radius: 10px; gap: 14px; border: 1px solid var(--border);">
+            <span style="font-size: 11px; font-weight: 600; width: 90px; color: var(--muted);">01:00 – 01:40</span>
+            <span style="font-size: 12px; font-weight: 700;">Computer Science</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current/Next -->
+      <div style="display: flex; flex-direction: column; gap: 16px; justify-content: center;">
+        <div style="padding: 24px; border-radius: 16px; background: var(--primary); color: #fff; text-align: center;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; opacity: .6; margin-bottom: 8px;">Now</div>
+          <div style="font-size: 22px; font-weight: 800;">Chemistry</div>
+          <div style="font-size: 12px; opacity: .7; margin-top: 4px;">08:00 – 08:40 · Ms. Sadia</div>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+          <div style="width: 2px; height: 24px; background: var(--border);"></div>
+        </div>
+
+        <div style="padding: 24px; border-radius: 16px; background: var(--bg-alt); border: 1px solid var(--border); text-align: center;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 8px;">Next</div>
+          <div style="font-size: 22px; font-weight: 800;">Computer Science</div>
+          <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">01:00 – 01:40</div>
+        </div>
+
+        <p style="font-size: 13px; font-weight: 600; color: var(--text-secondary); text-align: center; margin-top: 8px;">Students don't need to search for the timetable. It is already there.</p>
+      </div>
+    </div>
+
+    <span class="slide-no">07 / 10</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 8 — BEYOND BOOKS
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · Beyond Books</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">Beyond Books</div>
+      <h2 class="slide-title" style="font-size: 40px; margin-bottom: 12px;">It isn't just a<br>PDF reader.</h2>
+      <div class="accent-rule" style="margin-bottom: 28px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 28px;">
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">✅</div>
+        <div style="font-size: 12px; font-weight: 700;">Homework Diary</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">🧮</div>
+        <div style="font-size: 12px; font-weight: 700;">Calculator</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">📐</div>
+        <div style="font-size: 12px; font-weight: 700;">Formula Book</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">📌</div>
+        <div style="font-size: 12px; font-weight: 700;">Sticky Notes</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">⏱️</div>
+        <div style="font-size: 12px; font-weight: 700;">Focus Timer</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">🕐</div>
+        <div style="font-size: 12px; font-weight: 700;">School Clock</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">⬜</div>
+        <div style="font-size: 12px; font-weight: 700;">Whiteboard</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; border: 1px solid var(--border); background: var(--bg); text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">📊</div>
+        <div style="font-size: 12px; font-weight: 700;">Sheets</div>
+      </div>
+      <div style="padding: 20px; border-radius: 14px; background: var(--primary-light); border: 1px solid #c7d2fe; text-align: center;">
+        <div style="font-size: 26px; margin-bottom: 10px;">🔌</div>
+        <div style="font-size: 12px; font-weight: 700; color: var(--primary);">Offline Tools</div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <div class="card" style="max-width: 480px; padding: 20px; background: var(--bg-alt); border: 1px solid var(--border);">
+        <p style="font-size: 13px; font-weight: 600; color: var(--text-secondary); line-height: 1.6;">
+          The goal is not to replace every educational application.<br>
+          The goal is to provide the digital tools needed during a school day <strong style="color: var(--text);">in one place</strong>.
+        </p>
+      </div>
+      <span class="slide-no">08 / 10</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 9 — DESIGNED FOR THE SCHOOL
+     ============================================================ -->
+<section class="slide">
+  <div class="slide-inner" style="justify-content: space-between;">
+    <div class="slide-header">Backpack Air · School Control</div>
+    <div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 8px;">Designed for the School</div>
+      <h2 class="slide-title" style="font-size: 40px; margin-bottom: 12px;">The school stays<br>in control.</h2>
+      <div class="accent-rule" style="margin-bottom: 28px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px; flex: 1;">
+      <div>
+        <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 14px;">School Configuration</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span class="bullet"></span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">School identity</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">Name, logo, address</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span class="bullet"></span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Classes &amp; Sections</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">X-A, X-B, X-C, X-D</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span class="bullet"></span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Subjects</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">Per school curriculum</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span class="bullet"></span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Books &amp; Timetable</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">School-provided files</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: var(--bg-alt); border-radius: 10px; border: 1px solid var(--border);">
+            <span class="bullet"></span>
+            <div>
+              <div style="font-size: 13px; font-weight: 700;">Teacher &amp; Student access</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">Role-based permissions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; justify-content: center; gap: 20px;">
+        <div class="card" style="padding: 24px; background: var(--text); color: #fff; border: none; text-align: center;">
+          <p style="font-size: 14px; font-weight: 600; line-height: 1.6; color: #cbd5e1;">
+            The student doesn't need to search the internet for their school material.<br><br>
+            <strong style="color: #fff; font-size: 16px;">The school provides the environment.</strong>
+          </p>
+        </div>
+        <div class="card" style="padding: 20px; background: var(--primary-light); border-color: #c7d2fe; text-align: center;">
+          <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary); margin-bottom: 8px;">Current Prototype</div>
+          <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+            Configured for <strong style="color: var(--text);">Bahria College Karsaz</strong>, Class <strong style="color: var(--text);">X-C</strong> with 7 subjects and full timetable.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <span class="slide-no">09 / 10</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     SLIDE 10 — THE PROPOSAL
+     ============================================================ -->
+<section class="slide" style="background: var(--text); color: #fff;">
+  <div class="slide-inner" style="justify-content: space-between; align-items: center; text-align: center;">
+    <div class="slide-header" style="color: rgba(255,255,255,.3);">Backpack Air · Next Steps</div>
+
+    <div>
+      <div class="brand-mark" style="margin: 0 auto 32px; color: var(--primary);"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="micro" style="color: var(--primary); margin-bottom: 12px;">The Proposal</div>
+      <h2 class="slide-title" style="color: #fff; margin-bottom: 24px;">Let's test it.</h2>
+      <div style="width: 60px; height: 5px; background: var(--primary); border-radius: 3px; margin: 0 auto 32px;"></div>
+    </div>
+
+    <div style="max-width: 520px;">
+      <p style="font-size: 14px; color: #94a3b8; margin-bottom: 28px; line-height: 1.6;">
+        Instead of asking the school to immediately change its entire system, start with a controlled pilot.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 32px;">
+        <div style="padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05);">
+          <div style="font-size: 28px; font-weight: 800; color: var(--primary);">1</div>
+          <div style="font-size: 12px; font-weight: 700; margin-top: 8px;">One class</div>
+        </div>
+        <div style="padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05);">
+          <div style="font-size: 28px; font-weight: 800; color: var(--primary);">1</div>
+          <div style="font-size: 12px; font-weight: 700; margin-top: 8px;">Tablet config</div>
+        </div>
+        <div style="padding: 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05);">
+          <div style="font-size: 28px; font-weight: 800; color: var(--primary);">1</div>
+          <div style="font-size: 12px; font-weight: 700; margin-top: 8px;">Term</div>
+        </div>
+      </div>
+
+      <p style="font-size: 14px; font-weight: 700; color: #e2e8f0; line-height: 1.6;">
+        We would like to demonstrate the prototype and discuss whether a small pilot could be explored with Bahria College Karsaz.
+      </p>
+    </div>
+
+    <div style="width: 100%; border-top: 1px solid rgba(255,255,255,.1); padding-top: 24px;">
+      <div style="display: flex; justify-content: center; gap: 48px;">
+        <div>
+          <div style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.3);">Contact</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">[Your Phone]</div>
+        </div>
+        <div>
+          <div style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.3);">Email</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">[Your Email]</div>
+        </div>
+        <div>
+          <div style="font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,.3);">Built by</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">MO Digital</div>
+        </div>
+      </div>
+    </div>
+    <span class="slide-no" style="color: rgba(255,255,255,.3);">10 / 10</span>
+  </div>
+</section>
+
+<!-- PRINT NOTICE -->
+<div class="no-print" style="text-align: center; padding: 32px; font-size: 13px; color: var(--muted);">
+  Press <strong>Ctrl + P</strong> → Save as PDF to export this presentation.
+</div>
+
+</body>
+</html>

@@ -330,4 +330,49 @@
       if (success) success.classList.add("is-visible");
     });
   }
+
+  /* ---------------- Device Switcher (Download section) ---------------- */
+  var switcher = document.getElementById("ba-device-switcher");
+  if (switcher) {
+    var tabs = switcher.querySelectorAll(".ba-device-tab");
+    var panels = switcher.querySelectorAll(".ba-device-panel");
+
+    /* Auto-detect device and select the right tab */
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 769;
+    var defaultDevice = isMobile ? ( /iPad|iPod/.test(navigator.userAgent) ? "ios" : "android" ) : "laptop";
+
+    /* On mobile, hide laptop tab entirely */
+    var laptopTab = switcher.querySelector(".ba-device-tab-laptop");
+    if (isMobile && laptopTab) laptopTab.style.display = "none";
+
+    tabs.forEach(function (tab) {
+      /* Skip laptop tab on mobile */
+      if (isMobile && tab.classList.contains("ba-device-tab-laptop")) {
+        tab.style.display = "none";
+        return;
+      }
+      tab.addEventListener("click", function () {
+        var device = this.getAttribute("data-device");
+        tabs.forEach(function (t) { t.classList.remove("active"); });
+        this.classList.add("active");
+        panels.forEach(function (p) {
+          p.classList.remove("active");
+          if (p.getAttribute("data-panel") === device) p.classList.add("active");
+        });
+      });
+    });
+
+    /* Activate the default tab */
+    var defaultTab = switcher.querySelector(".ba-device-tab[data-device='" + defaultDevice + "']");
+    if (defaultTab && defaultTab.style.display !== "none") {
+      defaultTab.click();
+    }
+  }
+
+  /* ---------------- Redirect web.html on mobile ---------------- */
+  if (window.location.pathname.indexOf("web.html") !== -1) {
+    if (window.innerWidth < 1024) {
+      window.location.replace("find-school.html#download");
+    }
+  }
 })();

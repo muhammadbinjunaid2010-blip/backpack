@@ -16,8 +16,8 @@ window.TeacherDashboard = (function () {
 
   /* ---- Teacher data ---- */
   var TEACHER = {
-    name: DB.settings.name || "Ms. Saeeda",
-    id: "T-2024-047",
+    name: DB.settings.name || "Ms. Sadia",
+    id: "T-2024-048",
     school: DB.settings.school || "Bahria College Karsaz",
     address: "Habib Rahmatullah Road, Karsaz, Karachi",
     subjects: ["Chemistry"],
@@ -203,7 +203,7 @@ window.TeacherDashboard = (function () {
     var needsAttention = getNeedsAttention();
 
     var h = '<div class="ba-container">';
-    h += '<div class="ba-home-greeting">' + todayGreeting() + ', ' + esc(TEACHER.name) + '</div>';
+    h += '<div class="ba-home-greeting">' + todayGreeting() + '</div>';
     h += '<div style="font-size:.8rem;color:var(--silver);margin-bottom:1rem;">' + esc(TEACHER.subjects.join(", ")) + " Teacher · " + esc(TEACHER.school) + " · " + todayDateStr() + '</div>';
 
     h += '<div class="td-quick-cards">';
@@ -472,7 +472,7 @@ window.TeacherDashboard = (function () {
           /* Add stamp */
           if (!nbStamps[docId]) nbStamps[docId] = {};
           if (!nbStamps[docId][pageIdx]) nbStamps[docId][pageIdx] = [];
-          nbStamps[docId][pageIdx].push({ text: "Signed — Ms. Saeeda", date: todayStamp() });
+          nbStamps[docId][pageIdx].push({ text: "Signed — Ms. Sadia", date: todayStamp() });
           /* Add comment if any */
           if (text.trim()) {
             if (!nbComments[docId]) nbComments[docId] = {};
@@ -871,58 +871,65 @@ window.TeacherDashboard = (function () {
     var curTheme = DB.settings.theme || 'system';
     var h = '<div class="ba-container">';
     h += '<div class="ba-screen-header"><h2 class="ba-title-4">Settings</h2></div>';
+    h += '<div class="ba-settings-content">';
 
-    h += '<div class="ba-section-block"><div class="ba-section-title">PROFILE</div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">Name</div><div>' + esc(TEACHER.name) + '</div></div></div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">Teacher ID</div><div>' + esc(TEACHER.id) + '</div></div></div>';
+    h += '<div class="ba-setting-group"><div class="ba-section-title">YOUR PROFILE</div>';
+    h += '<div class="ba-form-row"><label>Name</label><input id="ts-name" placeholder="Teacher Name" value="' + esc(TEACHER.name) + '"></div>';
+    h += '<div class="ba-form-row"><label>Teacher ID</label><input id="ts-id" value="' + esc(TEACHER.id) + '" readonly style="background:var(--concrete);color:var(--silver);"></div>';
     h += '</div>';
 
-    h += '<div class="ba-section-block"><div class="ba-section-title">SCHOOL</div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">School</div><div>' + esc(TEACHER.school) + '</div></div></div>';
+    h += '<div class="ba-setting-group"><div class="ba-section-title">SCHOOL INFO</div>';
+    h += '<div class="ba-settings-school">';
+    h += '<img src="assets/bahria-clg-logo.png" alt="School" class="ba-settings-school-logo">';
+    h += '<div class="ba-settings-school-name">' + esc(TEACHER.school) + '</div>';
+    h += '<div class="ba-settings-school-row"><span>Address</span><span>Habib Rahmatullah Road, Karsaz, Karachi</span></div>';
+    h += '<div class="ba-settings-school-row"><span>Subjects</span><span>' + esc(TEACHER.subjects.join(", ")) + '</span></div>';
+    h += '<div class="ba-settings-school-row"><span>Classes</span><span>' + esc(TEACHER.classes.map(function (c) { return c.name; }).join(", ")) + '</span></div>';
+    h += '</div>';
     h += '</div>';
 
-    h += '<div class="ba-section-block"><div class="ba-section-title">TEACHING</div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">Subjects</div><div>' + esc(TEACHER.subjects.join(", ")) + '</div></div></div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">Classes</div><div>' + esc(TEACHER.classes.map(function (c) { return c.name; }).join(", ")) + '</div></div></div>';
+    h += '<div class="ba-setting-group"><div class="ba-section-title">PREFERENCES</div>';
+    h += '<div class="ba-form-row"><label>Theme</label><select id="ts-theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>';
     h += '</div>';
 
-    h += '<div class="ba-section-block"><div class="ba-section-title">PREFERENCES</div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">Theme</div></div>';
-    h += '<select id="ts-theme" style="padding:.4rem .7rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;font-weight:600;">';
-    h += '<option value="light"' + (curTheme === 'light' ? ' selected' : '') + '>Light</option>';
-    h += '<option value="dark"' + (curTheme === 'dark' ? ' selected' : '') + '>Dark</option>';
-    h += '<option value="system"' + (curTheme === 'system' ? ' selected' : '') + '>System</option>';
-    h += '</select></div>';
+    h += '<div class="ba-setting-group"><div class="ba-section-title">ACCOUNT</div>';
+    h += '<button class="ba-button ba-button-secondary" id="ts-logout" style="width:100%;color:#ef4444;border-color:#fca5a5;">Log Out</button>';
     h += '</div>';
 
-    h += '<div class="ba-section-block"><div class="ba-section-title">APP</div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">Version</div><div>1.0.0</div></div></div>';
-    h += '<div class="ba-homework-access"><div><div class="ba-section-title" style="color:var(--silver);">Built by</div><div>MO Digital</div></div></div>';
+    h += '<div class="ba-form-row" style="border:none;"><label>Version</label><span style="color:var(--silver);cursor:pointer;font-size:.85rem;padding:.3rem .6rem;border-radius:8px;">1.0.0</span></div>';
+    h += '<div class="ba-credit-block">Backpack Air · A project of MO Digital</div>';
     h += '</div>';
-
-    h += '<button class="ba-button ba-button-secondary" id="ts-switch" style="width:100%;margin:1rem 0;color:#ef4444;border-color:#fca5a5;">Switch to Student Mode</button>';
     h += '</div>';
     return h;
   }
 
   function bindTeacherSettings() {
-    $("ts-switch") && $("ts-switch").addEventListener("click", function () {
-      confirmAction("Switch to student mode?", function (yes) {
+    var ts = $("ts-theme");
+    if (ts) {
+      ts.value = DB.settings.theme || "system";
+      ts.addEventListener("change", function () {
+        DB.settings.theme = this.value;
+        S.saveSettings(DB.settings);
+        var t = DB.settings.theme || 'system';
+        var dark = t === 'dark' || (t === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.body.classList.toggle('theme-dark', !!dark);
+      });
+    }
+    var tn = $("ts-name");
+    if (tn) tn.addEventListener("input", function () {
+      DB.settings.name = this.value;
+      S.saveSettings(DB.settings);
+    });
+    $("ts-logout") && $("ts-logout").addEventListener("click", function () {
+      confirmAction("Log out and return to onboarding?", function (yes) {
         if (yes) {
+          DB.settings.onboarded = false;
           DB.settings.isTeacher = false;
-          S.save(DB);
+          delete DB.settings.teacherCode;
+          S.saveSettings(DB.settings);
           location.reload();
         }
       });
-    });
-    var themeSel = $("ts-theme");
-    if (themeSel) themeSel.addEventListener("change", function () {
-      DB.settings.theme = themeSel.value;
-      S.saveSettings(DB.settings);
-      /* Apply theme same as student mode */
-      var t = DB.settings.theme || 'system';
-      var dark = t === 'dark' || (t === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      document.body.classList.toggle('theme-dark', !!dark);
     });
   }
 

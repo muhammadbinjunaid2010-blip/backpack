@@ -2,7 +2,7 @@
    BACKPACK AIR — Service Worker (Offline-First)
    ============================================================ */
 
-const CACHE_NAME = "backpack-air-v5";
+const CACHE_NAME = "backpack-air-v7";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -12,6 +12,8 @@ const APP_SHELL = [
   "./js/ui.js",
   "./js/teacher.js",
   "./manifest.webmanifest",
+  "./assets/brand-logo.png",
+  "./assets/bahria-clg-logo.png",
   "./assets/math-10.pdf",
   "./assets/eng-10.pdf",
   "./assets/urd-10.pdf",
@@ -47,7 +49,7 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  // Skip non-GET requests
+  // Handle both fetch and navigation requests (iframe src)
   if (event.request.method !== "GET") return;
 
   var url = new URL(event.request.url);
@@ -83,4 +85,25 @@ self.addEventListener("fetch", event => {
       });
     })
   );
+});
+
+// Also handle navigation requests for iframe PDF loading
+self.addEventListener("fetch", event => {
+  if (event.request.mode === "navigate" || event.request.destination === "iframe") {
+    var url = new URL(event.request.url);
+    if (url.origin === self.location.origin && url.pathname.endsWith(".pdf")) {
+      event.respondWith(
+        caches.match(event.request).then(cachedResponse => {
+          if (cachedResponse) return cachedResponse;
+          return fetch(event.request).then(fetchResponse => {
+            var responseClone = fetchResponse.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, responseClone);
+            });
+            return fetchResponse;
+          });
+        })
+      );
+    }
+  }
 });

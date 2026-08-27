@@ -94,7 +94,7 @@ window.BAStore = (function () {
       schemaVersion: CURRENT_SCHEMA,
       settings: {
         userName: "", school: "Bahria College Karsaz", class: "X", section: "C",
-        address: "Habib Rehmatullah Rd", teacher: "Ms. Saeeda (47)",
+        address: "Habib Rehmatullah Rd", teacher: "Ms. Sadia (47)",
         direction: "ltr", paper: "ruled", paperColor: "white", theme: "system",
         onboarded: false
       },
@@ -219,7 +219,7 @@ window.BAStore = (function () {
     { subject: "Mathematics",  file: "math-10.pdf",  rtl: false, teacher: "", cover: "academic", paper: "grid" },
     { subject: "English",      file: "eng-10.pdf",   rtl: false, teacher: "", cover: "classic",  paper: "ruled" },
     { subject: "Urdu",         file: "urd-10.pdf",   rtl: true,  teacher: "", cover: "minimal",  paper: "ruled" },
-    { subject: "Physics",      file: "phy-10.pdf",   rtl: false, teacher: "47 — Ms. Saeeda", cover: "academic", paper: "ruled-narrow" },
+    { subject: "Physics",      file: "phy-10.pdf",   rtl: false, teacher: "47 — Ms. Sadia", cover: "academic", paper: "ruled-narrow" },
     { subject: "Chemistry",    file: "chem-10.pdf",  rtl: false, teacher: "", cover: "classic",  paper: "graph" },
     { subject: "Computer Science", file: "cs-10.pdf", rtl: false, teacher: "", cover: "dark",    paper: "grid" },
     { subject: "Pakistan Studies", file: "pst-10.pdf", rtl: false, teacher: "", cover: "simple", paper: "ruled-wide" },

@@ -30,8 +30,8 @@ function $(id) { return document.getElementById(id); }
   var SUBJECTS = S.SYSTEM_SUBJECTS;
   var TIMETABLE = {
     mon: [
-      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Saeeda", type: "double" },
-      { time: "08:40", end: "09:20", subject: "Chemistry", teacher: "Ms. Saeeda", type: "double" },
+      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Sadia", type: "double" },
+      { time: "08:40", end: "09:20", subject: "Chemistry", teacher: "Ms. Sadia", type: "double" },
       { time: "09:20", end: "10:00", subject: "Pakistan Studies", teacher: "Mr. Imran", type: "single" },
       { time: "10:00", end: "10:40", subject: "Mathematics", teacher: "", type: "single" },
       { time: "10:40", end: "11:00", subject: "BREAK", teacher: "", type: "break" },
@@ -41,7 +41,7 @@ function $(id) { return document.getElementById(id); }
       { time: "01:00", end: "01:40", subject: "Computer Science", teacher: "", type: "single" }
     ],
     tue: [
-      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Saeeda", type: "single" },
+      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Sadia", type: "single" },
       { time: "08:40", end: "09:20", subject: "Physics", teacher: "Mr. Farhan", type: "single" },
       { time: "09:20", end: "10:00", subject: "English", teacher: "Mr. Hussain", type: "single" },
       { time: "10:00", end: "10:40", subject: "Mathematics", teacher: "", type: "single" },
@@ -52,7 +52,7 @@ function $(id) { return document.getElementById(id); }
       { time: "01:00", end: "01:40", subject: "T-E-Q", teacher: "Mr. Tahir", type: "single" }
     ],
     wed: [
-      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Saeeda", type: "single" },
+      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Sadia", type: "single" },
       { time: "08:40", end: "09:20", subject: "Pakistan Studies", teacher: "Mr. Imran", type: "single" },
       { time: "09:20", end: "10:00", subject: "T-E-Q", teacher: "Mr. Tahir", type: "single" },
       { time: "10:00", end: "10:40", subject: "Mathematics", teacher: "", type: "single" },
@@ -63,7 +63,7 @@ function $(id) { return document.getElementById(id); }
       { time: "01:00", end: "01:40", subject: "English", teacher: "Mr. Hussain", type: "single" }
     ],
     thu: [
-      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Saeeda", type: "single" },
+      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Sadia", type: "single" },
       { time: "08:40", end: "09:20", subject: "Urdu", teacher: "", type: "single" },
       { time: "09:20", end: "10:00", subject: "English", teacher: "Mr. Hussain", type: "single" },
       { time: "10:00", end: "10:40", subject: "Physics", teacher: "Mr. Farhan", type: "single" },
@@ -74,7 +74,7 @@ function $(id) { return document.getElementById(id); }
       { time: "01:00", end: "01:40", subject: "T-E-Q", teacher: "Mr. Tahir", type: "single" }
     ],
     fri: [
-      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Saeeda", type: "single" },
+      { time: "08:00", end: "08:40", subject: "Chemistry", teacher: "Ms. Sadia", type: "single" },
       { time: "08:40", end: "09:20", subject: "Library", teacher: "Ms. Zinhar", type: "single" },
       { time: "09:20", end: "10:00", subject: "Computer Science", teacher: "", type: "double" },
       { time: "10:00", end: "10:40", subject: "Computer Science", teacher: "", type: "double" },
@@ -96,7 +96,8 @@ function $(id) { return document.getElementById(id); }
     document.body.classList.toggle("theme-dark", !!dark);
   }
   function applyHeader() {
-    if ($("hdr-school")) $("hdr-school").textContent = DB.settings.school || "Bahria College Karsaz";
+    var _schoolName = (DB.settings.school || "Bahria College Karsaz").replace(/\s*[·•]\s*Prototype\s*&\s*Testing/gi, "").trim();
+    if ($("hdr-school")) $("hdr-school").textContent = _schoolName;
     if ($("hdr-class")) $("hdr-class").textContent = "Class " + (DB.settings.class || "X") + "-" + (DB.settings.section || "C");
   }
 
@@ -129,7 +130,7 @@ function $(id) { return document.getElementById(id); }
     if (codeInput) {
       codeInput.addEventListener("input", function () {
         var code = codeInput.value.trim().toUpperCase();
-        var schoolCodes = { "BCKZ103": { school: "Bahria College Karsaz", address: "Habib Rehmatullah Rd", teacher: "Ms. Saeeda (47)", logo: "assets/bahria-clg-logo.png" } };
+        var schoolCodes = { "BCKZ103": { school: "Bahria College Karsaz", address: "Habib Rehmatullah Rd", teacher: "Ms. Sadia (47)", logo: "assets/bahria-clg-logo.png" } };
         if (schoolCodes[code]) {
           if (classGroup) classGroup.style.display = "";
           DB.settings._pendingSchool = schoolCodes[code];
@@ -171,8 +172,8 @@ function $(id) { return document.getElementById(id); }
       if (!school) { showErr("Please select your school."); return; }
       if (!code) { showErr("Please enter your teacher number."); return; }
       if (!pass) { showErr("Please enter your password."); return; }
-      /* Validate: only teacher 47 with password m.saeeda2024 */
-      var validTeachers = { "47": { pass: "m.saeeda2024", name: "Ms. Saeeda" } };
+      /* Validate: teacher 47 with password m.sadia2024 */
+      var validTeachers = { "47": { pass: "m.sadia2024", name: "Ms. Sadia" } };
       var t = validTeachers[code];
       if (!t || pass !== t.pass) { showErr("Invalid teacher number or password."); return; }
       if (errEl) errEl.style.display = "none";
@@ -351,6 +352,15 @@ function $(id) { return document.getElementById(id); }
       DB.settings.onboarded = false; S.saveSettings(DB.settings);
       openModal("onboarding");
     });
+    var logoutBtn = $("setting-logout"); if (logoutBtn) logoutBtn.addEventListener("click", function () {
+      if (window.BAUI) {
+        BAUI.confirm("Log out and return to onboarding?", function(yes) {
+          if (yes) doLogout();
+        });
+      } else if (confirm("Log out and return to onboarding?")) {
+        doLogout();
+      }
+    });
     function bind(id, key, after) {
       var el = $(id); if (el) el.addEventListener("change", function () { DB.settings[key] = this.value; S.saveSettings(DB.settings); if (after) after(); });
     }
@@ -360,6 +370,16 @@ function $(id) { return document.getElementById(id); }
     bind("setting-direction", "direction");
     bind("setting-paper", "paper");
     bind("setting-theme", "theme", applyTheme);
+  }
+
+  function doLogout() {
+    DB.settings.onboarded = false;
+    DB.settings.isTeacher = false;
+    delete DB.settings.teacherCode;
+    S.saveSettings(DB.settings);
+    closeAllModals();
+    openModal("onboarding");
+    navigate("home");
   }
 
   /* ---------- schoolbag ---------- */
@@ -528,8 +548,11 @@ function $(id) { return document.getElementById(id); }
     var icon = d.type === "sheet" ? "📊" : d.type === "whiteboard" ? "⬜" : d.type === "quicknote" ? "📝" : "📄";
     var typeLabel = d.type === "sheet" ? "Sheet" : d.type === "whiteboard" ? "Whiteboard" : d.type === "quicknote" ? "Quick Note" : (d.system ? "School Notebook" : "Notebook");
     var name = d.title || d.name || "Untitled";
-    row.innerHTML = '<span class="ba-sf-page-icon">' + icon + '</span><span class="ba-sf-page-name">' + esc(name) + '</span>' + (d.sharedWithTeacher ? '<span class="ba-sf-shared">SHARED WITH TEACHER</span>' : '') + '<span class="ba-sf-page-type">' + typeLabel + '</span><button class="ba-sf-del" title="Delete">🗑</button>';
-    row.addEventListener("click", function (e) { if (e.target.classList.contains("ba-sf-del")) return; openDocument(d); });
+    row.innerHTML = '<span class="ba-sf-page-icon">' + icon + '</span><span class="ba-sf-page-name">' + esc(name) + '</span>' + (d.sharedWithTeacher ? '<span class="ba-sf-shared">SHARED WITH TEACHER</span>' : '') + '<span class="ba-sf-page-type">' + typeLabel + '</span>' + (d.system ? '' : '<button class="ba-sf-more" title="Options">⋮</button>') + '<button class="ba-sf-del" title="Delete">🗑</button>';
+    row.addEventListener("click", function (e) { if (e.target.classList.contains("ba-sf-del") || e.target.classList.contains("ba-sf-more")) return; openDocument(d); });
+    var moreBtn = row.querySelector(".ba-sf-more");
+    if (moreBtn) moreBtn.addEventListener("click", function (e) { e.stopPropagation(); showDocMenu(d.id); });
+    row.addEventListener("contextmenu", function (e) { if (d.system) return; e.preventDefault(); showDocMenu(d.id); });
     row.querySelector(".ba-sf-del").addEventListener("click", function (e) {
       e.stopPropagation();
       if (d.system) { if (window.BAUI) BAUI.toast("This is a mandatory school notebook."); else alert("This is a mandatory school notebook and cannot be deleted."); return; }
@@ -554,6 +577,8 @@ function $(id) { return document.getElementById(id); }
       renameBtn.style.display = "block";
       renameBtn.textContent = "Rename Folder";
       renameBtn.onclick = function () { renameGroup.style.display = "block"; renameInput.value = folder.name; renameInput.onblur = function () {}; renameInput.onkeydown = function (e) { if (e.key === "Enter") { S.updateFolder(folder.id, { name: renameInput.value || folder.name }); renameGroup.style.display = "none"; closeModal("doc-menu-modal"); renderSchoolbag(); } }; renameInput.focus(); };
+      var moveFolderBtn2 = $("doc-move-folder"); if (moveFolderBtn2) moveFolderBtn2.style.display = "none";
+      var moveGroup2 = $("doc-move-group"); if (moveGroup2) moveGroup2.style.display = "none";
       var delFolder = $("doc-delete-folder"); delFolder.style.display = "block";
       delFolder.onclick = function () {
         var n = S.getDocumentsByFolder(folder.id).length;
@@ -577,6 +602,36 @@ function $(id) { return document.getElementById(id); }
       renameBtn.textContent = "Rename";
       $("doc-delete-folder").style.display = "none";
       renameBtn.onclick = function () { renameGroup.style.display = "block"; renameInput.value = d.title || ""; renameInput.onkeydown = function (e) { if (e.key === "Enter") { S.updateDocument(d.id, { title: renameInput.value || d.title }); renameGroup.style.display = "none"; closeModal("doc-menu-modal"); renderSchoolbag(); renderFolderIfOpen(); } }; renameInput.focus(); };
+      /* Move to Folder */
+      var moveFolderBtn = $("doc-move-folder");
+      var moveGroup = $("doc-move-group");
+      var moveSelect = $("doc-move-select");
+      var moveConfirm = $("doc-move-confirm");
+      var moveCancel = $("doc-move-cancel");
+      if (moveFolderBtn && moveGroup && moveSelect) {
+        moveGroup.style.display = "none";
+        moveFolderBtn.style.display = d.system ? "none" : "block";
+        moveFolderBtn.onclick = function () {
+          moveGroup.style.display = "block";
+          moveSelect.innerHTML = '<option value="">— Schoolbag (no folder) —</option>';
+          S.getFolders().forEach(function (f) {
+            if (!f) return;
+            var opt = document.createElement("option");
+            opt.value = f.id;
+            opt.textContent = f.name;
+            if (d.folderId === f.id) opt.selected = true;
+            moveSelect.appendChild(opt);
+          });
+        };
+        if (moveConfirm) moveConfirm.onclick = function () {
+          var newFolderId = moveSelect.value || null;
+          S.updateDocument(d.id, { folderId: newFolderId });
+          moveGroup.style.display = "none";
+          closeModal("doc-menu-modal");
+          renderSchoolbag(); renderFolderIfOpen();
+        };
+        if (moveCancel) moveCancel.onclick = function () { moveGroup.style.display = "none"; };
+      }
       $("doc-menu-close").onclick = function () { closeModal("doc-menu-modal"); };
     }
     openModal("doc-menu-modal");
@@ -1687,7 +1742,7 @@ function createWhiteboard(folderId, subject) {
     var block = $("ba-exam-block");
     if (!block) return;
     var cls = (DB.settings.class || "X") + "-" + (DB.settings.section || "C");
-    var school = DB.settings.school || "Bahria College Karsaz";
+    var school = (DB.settings.school || "Bahria College Karsaz").replace(/\s*[·•]\s*Prototype\s*&\s*Testing/gi, "").trim();
     var rows = block.querySelectorAll(".ba-exam-row");
     rows.forEach(function (r) {
       var spans = r.querySelectorAll("span");
@@ -1698,9 +1753,9 @@ function createWhiteboard(folderId, subject) {
     });
   }
   function renderSettingsSchoolInfo() {
-    var school = DB.settings.school || "Bahria College Karsaz";
+    var school = (DB.settings.school || "Bahria College Karsaz").replace(/\s*[·•]\s*Prototype\s*&\s*Testing/gi, "").trim();
     var cls = (DB.settings.class || "X") + "-" + (DB.settings.section || "C");
-    var teacher = DB.settings.teacher || "Ms. Saeeda (47)";
+    var teacher = DB.settings.teacher || "Ms. Sadia (47)";
     var address = DB.settings.address || "Habib Rehmatullah Rd";
     var logo = DB.settings.logo || "assets/bahria-clg-logo.png";
     if ($("setting-school-display")) $("setting-school-display").textContent = school;
@@ -1911,17 +1966,97 @@ function createWhiteboard(folderId, subject) {
       ]}
     ]
   };
+  /* Custom formulas stored per subject in localStorage */
+  var CUSTOM_FORMULAS_KEY = "ba_custom_formulas";
+  function loadCustomFormulas() {
+    try { var raw = localStorage.getItem(CUSTOM_FORMULAS_KEY); return raw ? JSON.parse(raw) : {}; } catch (e) { return {}; }
+  }
+  function saveCustomFormulas(data) {
+    try { localStorage.setItem(CUSTOM_FORMULAS_KEY, JSON.stringify(data)); } catch (e) {} }
+  function addCustomFormula(type, sectionName, name, expr) {
+    var all = loadCustomFormulas();
+    if (!all[type]) all[type] = [];
+    all[type].push({ section: sectionName, name: name, expr: expr });
+    saveCustomFormulas(all);
+  }
+  function deleteFormula(type, sectionName, name, expr) {
+    /* Check custom first */
+    var all = loadCustomFormulas();
+    if (all[type]) {
+      all[type] = all[type].filter(function (f) { return !(f.section === sectionName && f.name === name && f.expr === expr); });
+      saveCustomFormulas(all);
+      return;
+    }
+    /* Built-in: remove from FORMULAS object */
+    var data = FORMULAS[type];
+    if (!data) return;
+    data.forEach(function (sec) {
+      if (sec.section === sectionName) {
+        sec.items = sec.items.filter(function (f) { return !(f.name === name && f.expr === expr); });
+      }
+    });
+  }
   function renderFormulas(type) {
     var body = $("formulas-body"); if (!body) return;
     var data = FORMULAS[type] || [];
+    var custom = loadCustomFormulas()[type] || [];
     var html = "";
+    /* Built-in sections */
     data.forEach(function (sec) {
       html += '<div class="ba-formula-section-title">' + esc(sec.section) + '</div>';
       sec.items.forEach(function (item) {
-        html += '<div class="ba-formula-card"><div class="ba-formula-name">' + esc(item.name) + '</div><div class="ba-formula-expr">' + esc(item.expr) + '</div></div>';
+        html += '<div class="ba-formula-card"><div class="ba-formula-name">' + esc(item.name) + '</div><div class="ba-formula-expr">' + esc(item.expr) + '</div><button class="ba-formula-del" data-section="' + esc(sec.section) + '" data-name="' + esc(item.name) + '" data-expr="' + esc(item.expr) + '">✕</button></div>';
       });
     });
+    /* Group custom formulas by section */
+    var customGroups = {};
+    custom.forEach(function (f) {
+      if (!customGroups[f.section]) customGroups[f.section] = [];
+      customGroups[f.section].push(f);
+    });
+    Object.keys(customGroups).forEach(function (secName) {
+      html += '<div class="ba-formula-section-title">' + esc(secName) + ' <span style="font-size:.65rem;color:var(--blue);font-weight:700;margin-left:.4rem;">CUSTOM</span></div>';
+      customGroups[secName].forEach(function (item) {
+        html += '<div class="ba-formula-card" style="border-color:#c7d2fe;background:#f0f4ff;"><div class="ba-formula-name">' + esc(item.name) + '</div><div class="ba-formula-expr">' + esc(item.expr) + '</div><button class="ba-formula-del" data-section="' + esc(item.section) + '" data-name="' + esc(item.name) + '" data-expr="' + esc(item.expr) + '" data-custom="1">✕</button></div>';
+      });
+    });
+    /* Add formula section */
+    html += '<div style="margin-top:1rem;padding:1rem;border:1px dashed var(--mercury);border-radius:12px;" id="formula-add-area">';
+    html += '<div style="font-size:.78rem;font-weight:700;color:var(--primary);margin-bottom:.6rem;">ADD YOUR FORMULA</div>';
+    html += '<div style="display:flex;gap:.5rem;flex-wrap:wrap;">';
+    html += '<input id="formula-add-section" placeholder="Section (e.g. My Formulas)" style="flex:1;min-width:140px;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;">';
+    html += '<input id="formula-add-name" placeholder="Name" style="flex:1;min-width:120px;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;">';
+    html += '<input id="formula-add-expr" placeholder="Expression (e.g. F = ma)" style="flex:2;min-width:160px;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;">';
+    html += '<button class="ba-button ba-button-primary" id="formula-add-btn" style="padding:.5rem 1rem;font-size:.82rem;">Add</button>';
+    html += '</div></div>';
     body.innerHTML = html;
+    /* Bind delete buttons */
+    body.querySelectorAll(".ba-formula-del").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var sec = btn.getAttribute("data-section");
+        var nm = btn.getAttribute("data-name");
+        var ex = btn.getAttribute("data-expr");
+        var isCustom = btn.getAttribute("data-custom");
+        function doDel() {
+          deleteFormula(type, sec, nm, ex);
+          renderFormulas(type);
+          if (window.BAUI) BAUI.toast("Formula removed.");
+        }
+        if (window.BAUI) BAUI.confirm("Remove \"" + nm + "\"?", function (yes) { if (yes) doDel(); });
+        else { if (confirm("Remove \"" + nm + "\"?")) doDel(); }
+      });
+    });
+    /* Bind add button */
+    var addBtn = $("formula-add-btn");
+    if (addBtn) addBtn.addEventListener("click", function () {
+      var sec = $("formula-add-section").value.trim() || "My Formulas";
+      var nm = $("formula-add-name").value.trim();
+      var ex = $("formula-add-expr").value.trim();
+      if (!nm || !ex) { if (window.BAUI) BAUI.toast("Enter both name and expression."); return; }
+      addCustomFormula(type, sec, nm, ex);
+      renderFormulas(type);
+      if (window.BAUI) BAUI.toast("Formula added.");
+    });
   }
 
   /* ---------- STICKY NOTES ---------- */
@@ -2054,11 +2189,11 @@ function createWhiteboard(folderId, subject) {
       });
 
       // Start button
-      var startBtn = $(g + "-start");
+      var startBtn = $(gameElId(g, "start"));
       if (startBtn) {
         startBtn.addEventListener("click", function () {
-          var setup = $(g + "-setup");
-          var play = $(g + "-play");
+          var setup = $(gameElId(g, "setup"));
+          var play = $(gameElId(g, "play"));
           if (setup) setup.style.display = "none";
           if (play) play.style.display = "flex";
           if (starters[g]) starters[g]();
@@ -2072,9 +2207,10 @@ function createWhiteboard(folderId, subject) {
     if ($("connect4-restart")) $("connect4-restart").addEventListener("click", startConnect4);
   }
 
+  function gameElId(g, suffix) { return g === "2048" ? "game-2048-" + suffix : g + "-" + suffix; }
   function showGameSetup(g) {
-    var setup = $(g + "-setup");
-    var play = $(g + "-play");
+    var setup = $(gameElId(g, "setup"));
+    var play = $(gameElId(g, "play"));
     if (setup) setup.style.display = "flex";
     if (play) play.style.display = "none";
   }

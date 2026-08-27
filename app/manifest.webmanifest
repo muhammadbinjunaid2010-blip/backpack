@@ -1,8 +1,8 @@
 {
-  "id": "./app.html",
+  "id": "./index.html",
   "name": "Backpack Air — Digital Schoolbag",
   "short_name": "Backpack Air",
-  "start_url": "./app.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#2f5bff",

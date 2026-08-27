@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <title>Backpack Air — Find Your School, Download & Sign In</title>
 <meta name="description" content="Find your school on Backpack Air, download the PWA on Android or iPad, and learn how to sign in as a student or teacher."/>
-<meta name="keywords" content="Backpack Air, download school app, PWA install, find school, Bahria College Karsaz, student login, teacher login, digital schoolbag"/>
+<meta name="keywords" content="Backpack Air, download school app, PWA install, find school, Bahria College Karsaz, student login, teacher login, digital schoolbag, Prototype & Testing"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="robots" content="index, follow"/>
 <meta property="og:title" content="Backpack Air — Get Started"/>
@@ -84,11 +84,11 @@
         <div class="ba-schools-grid">
           <div class="ba-school-card-item">
             <div class="ba-school-card-item_logo">
-              <img src="app/assets/bahria-clg-logo.png" alt="Bahria College Karsaz" class="ba-school-card-item_img">
+              <img src="app/assets/bahria-clg-logo.png" alt="Prototype School" class="ba-school-card-item_img">
             </div>
             <div class="ba-school-card-item_name">Bahria College Karsaz</div>
             <div class="ba-school-card-item_addr">Habib Rahmatullah Road, Karsaz, Karachi</div>
-            <div class="ba-school-card-item_tag">Available Now</div>              <a href="#download" class="ba-button cc-small">
+            <div class="ba-school-card-item_tag">Prototype Mode</div>              <a href="#download" class="ba-button cc-small">
               <div class="ba-cta-label">Download App</div>
               <div class="ba-cta-bg cc-blue"></div>
             </a>
@@ -118,33 +118,81 @@
           <img src="app/assets/qr code.png" alt="Scan QR code to open Backpack Air" style="width:160px;height:160px;border-radius:14px;border:3px solid #e5e7eb;box-shadow:0 4px 16px rgba(0,0,0,.08);">
           <div style="font-size:.78rem;color:#64748b;margin-top:.4rem;font-weight:600;">Scan to open backpackair.vercel.app</div>
         </div>
-        <div class="ba-download-grid">
-          <div class="ba-download-card">
-            <div class="ba-download-card_icon ba-dl-android">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
-            </div>
-            <h3 class="ba-download-card_title">Android</h3>
-            <ol class="ba-steps-list">
-              <li>Open <strong>backpackair.vercel.app</strong> in Chrome</li>
-              <li>Tap the <strong>⋮ menu</strong> (top right)</li>
-              <li>Tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong></li>
-              <li>Tap <strong>"Install"</strong></li>
-            </ol>
-            <div class="ba-download-card_note">Backpack Air opens as its own app — full screen, no browser bar.</div>
+
+        <!-- DEVICE SWITCHER -->
+        <div class="ba-device-switcher" id="ba-device-switcher">
+          <div class="ba-device-tabs">
+            <button class="ba-device-tab active" data-device="android">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
+              <span>Android</span>
+            </button>
+            <button class="ba-device-tab" data-device="ios">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+              <span>iPhone / iPad</span>
+            </button>
+            <button class="ba-device-tab ba-device-tab-laptop" data-device="laptop">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+              <span>Laptop / Desktop</span>
+            </button>
           </div>
-          <div class="ba-download-card">
-            <div class="ba-download-card_icon ba-dl-ios">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+
+          <div class="ba-device-panels">
+            <!-- ANDROID PANEL -->
+            <div class="ba-device-panel active" data-panel="android">
+              <div class="ba-download-card">
+                <div class="ba-download-card_icon ba-dl-android">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
+                </div>
+                <h3 class="ba-download-card_title">Android</h3>
+                <ol class="ba-steps-list">
+                  <li>Open <strong>backpackair.vercel.app</strong> in Chrome</li>
+                  <li>Tap the <strong>⋮ menu</strong> (top right)</li>
+                  <li>Tap <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong></li>
+                  <li>Tap <strong>"Install"</strong></li>
+                </ol>
+                <div class="ba-download-card_note">Backpack Air opens as its own app — full screen, no browser bar.</div>
+              </div>
             </div>
-            <h3 class="ba-download-card_title">iOS / iPad</h3>
-            <ol class="ba-steps-list">
-              <li>Open <strong>backpackair.vercel.app</strong> in Safari</li>
-              <li>Tap the <strong>Share button</strong> (⬆ square)</li>
-              <li>Tap <strong>"Add to Home Screen"</strong>, then <strong>"Add"</strong></li>
-            </ol>
-            <div class="ba-download-card_note">Runs as its own app on your home screen — full screen, no browser.</div>
+
+            <!-- iOS PANEL -->
+            <div class="ba-device-panel" data-panel="ios">
+              <div class="ba-download-card">
+                <div class="ba-download-card_icon ba-dl-ios">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                </div>
+                <h3 class="ba-download-card_title">iOS / iPad</h3>
+                <ol class="ba-steps-list">
+                  <li>Open <strong>backpackair.vercel.app</strong> in Safari</li>
+                  <li>Tap the <strong>Share button</strong> (⬆ square)</li>
+                  <li>Tap <strong>"Add to Home Screen"</strong>, then <strong>"Add"</strong></li>
+                </ol>
+                <div class="ba-download-card_note">Runs as its own app on your home screen — full screen, no browser.</div>
+              </div>
+            </div>
+
+            <!-- LAPTOP PANEL -->
+            <div class="ba-device-panel ba-device-panel-laptop" data-panel="laptop">
+              <div class="ba-download-card ba-download-card-laptop">
+                <div class="ba-download-card_icon ba-dl-laptop">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                </div>
+                <h3 class="ba-download-card_title">Laptop / Desktop</h3>
+                <p class="ba-laptop-desc">Backpack Air has a full web dashboard for laptop and desktop. It features a sidebar layout designed for bigger screens.</p>
+                <ol class="ba-steps-list">
+                  <li>Click the button below to open the web version</li>
+                  <li>Sign in with your student or teacher credentials</li>
+                  <li>Use the sidebar to navigate between sections</li>
+                </ol>
+                <div class="ba-download-card_note">The web version is optimized for screens 1024px and wider. Mobile users are automatically redirected to the mobile app.</div>
+                <a href="app/web.html" class="ba-button cc-blue-solid ba-laptop-btn" target="_blank">
+                  <div class="ba-cta-label">Open in Web</div>
+                  <div class="ba-cta-bg cc-blue-deep"></div>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
+
       </div>
     </section>
 
@@ -184,19 +232,14 @@
     <!-- CTA -->
     <section class="ba-section cc-demo">
       <div class="ba-container">
-        <div class="ba-demo" style="text-align:center;">
-          <div class="ba-demo_text" style="max-width:500px;margin:0 auto;">
-            <h2 class="ba-title-4">Ready to start?</h2>
-            <p class="ba-text-1">Open Backpack Air and set up your digital schoolbag in under a minute.</p>
-            <div class="ba-cta-row" style="justify-content:center;">
-              <a href="#download" class="ba-button cc-blue-solid">
-                <div class="ba-cta-label">Download the App</div>
-                <div class="ba-cta-bg cc-blue-deep"></div>
-              </a>
-              <a href="app/index.html" class="ba-button cc-secondary-white">
-                <div class="ba-cta-label">Open Backpack Air</div>
-              </a>
-            </div>
+        <div style="text-align:center;max-width:500px;margin:0 auto;">
+          <h2 class="ba-title-4">Ready to start?</h2>
+          <p class="ba-text-1">Download Backpack Air and set up your digital schoolbag in under a minute.</p>
+          <div class="ba-cta-row" style="justify-content:center;">
+            <a href="#download" class="ba-button cc-blue-solid">
+              <div class="ba-cta-label">Download the App</div>
+              <div class="ba-cta-bg cc-blue-deep"></div>
+            </a>
           </div>
         </div>
       </div>

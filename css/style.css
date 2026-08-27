@@ -826,30 +826,24 @@ body.is-hero.nav-open .ba-nav_menu-button { border-color: var(--black); }
 }
 
 /* ---------- TEACHER SECTION ---------- */
-.ba-ipad { display:flex; justify-content:center; }
-.ba-ipad_frame { width:min(340px,80vw); background:#1a1a2e; border-radius:20px; padding:14px 10px; box-shadow:0 30px 80px -20px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08); position:relative; }
-.ba-ipad_notch { width:80px; height:6px; background:#2a2a40; border-radius:3px; margin:0 auto 8px; }
-.ba-ipad_screen { background:#0f172a; border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
-.ba-ipad_status { display:flex; justify-content:space-between; padding:.5rem .7rem; font-size:.6rem; font-weight:800; color:#64748b; background:#0c1024; border-bottom:1px solid #1e293b; }
-.ba-ipad_content { padding:.7rem; flex:1; overflow:hidden; }
-.ba-ipad_greeting { font-size:.85rem; font-weight:800; color:#e2e8f0; margin-bottom:.7rem; }
-.ba-teacher-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:.35rem; margin-bottom:.7rem; }
-.ba-teacher-stat { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:10px; padding:.5rem .3rem; text-align:center; }
-.ba-teacher-stat-num { font-size:1.2rem; font-weight:800; color:#60a5fa; }
-.ba-teacher-stat-label { font-size:.5rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:.04em; margin-top:.05rem; }
-.ba-ipad_section { margin-bottom:.6rem; }
-.ba-ipad_section_title { font-size:.5rem; font-weight:800; letter-spacing:.1em; color:#475569; margin-bottom:.3rem; }
-.ba-ipad_class { display:flex; align-items:center; gap:.4rem; padding:.3rem 0; border-bottom:1px solid #1e293b; }
-.ba-ipad_class_time { font-size:.55rem; font-weight:700; color:#60a5fa; min-width:32px; }
-.ba-ipad_class_name { font-size:.65rem; font-weight:700; color:#e2e8f0; flex:1; }
-.ba-ipad_class_tag { font-size:.45rem; font-weight:800; padding:.1rem .3rem; border-radius:4px; background:rgba(59,130,246,.15); color:#60a5fa; }
-.ba-ipad_student { display:flex; align-items:center; gap:.4rem; padding:.3rem 0; }
-.ba-ipad_student_avatar { width:22px; height:22px; border-radius:50%; color:#fff; font-size:.55rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.ba-ipad_student_name { font-size:.65rem; font-weight:700; color:#e2e8f0; flex:1; }
-.ba-ipad_student_status { font-size:.45rem; font-weight:800; padding:.1rem .3rem; border-radius:4px; }
-.ba-ipad_tabs { display:flex; background:#0c1024; border-top:1px solid #1e293b; padding:.3rem 0; }
-.ba-ipad_tab { flex:1; text-align:center; font-size:.45rem; font-weight:700; color:#475569; padding:.2rem 0; }
-.ba-ipad_tab_active { color:#3b82f6; }
+.ba-teacher-card { background:#fff; border:1px solid #e5e7eb; border-radius:20px; padding:1.5rem; max-width:340px; margin:0 auto; box-shadow:0 20px 50px -15px rgba(0,0,0,.12); }
+.ba-teacher-card_head { border-bottom:1px solid #f1f5f9; padding-bottom:.7rem; margin-bottom:.7rem; }
+.ba-teacher-card_school { font-size:.7rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:.06em; }
+.ba-teacher-card_name { font-size:.85rem; font-weight:700; color:#0f172a; margin-top:.15rem; }
+.ba-teacher-card_greeting { font-size:1rem; font-weight:800; color:#0f172a; margin-bottom:.8rem; }
+.ba-teacher-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; margin-bottom:1rem; }
+.ba-teacher-stat { background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px; padding:.6rem .4rem; text-align:center; }
+.ba-teacher-stat-num { font-size:1.3rem; font-weight:800; color:#3b82f6; }
+.ba-teacher-stat-label { font-size:.6rem; font-weight:700; color:#94a3b8; text-transform:uppercase; letter-spacing:.04em; margin-top:.05rem; }
+.ba-teacher-card_section { margin-bottom:1rem; }
+.ba-teacher-card_section_title { font-size:.6rem; font-weight:800; letter-spacing:.1em; color:#94a3b8; margin-bottom:.4rem; }
+.ba-teacher-card_row { display:flex; align-items:center; gap:.6rem; padding:.4rem 0; border-bottom:1px solid #f1f5f9; }
+.ba-teacher-card_row:last-child { border-bottom:none; }
+.ba-teacher-card_time { font-size:.75rem; font-weight:700; color:#3b82f6; min-width:36px; }
+.ba-teacher-card_subject { font-size:.85rem; font-weight:700; color:#334155; }
+.ba-teacher-card_tabs { display:flex; border-top:1px solid #f1f5f9; padding-top:.6rem; gap:.2rem; }
+.ba-teacher-card_tab { flex:1; text-align:center; font-size:.6rem; font-weight:700; color:#94a3b8; padding:.3rem 0; border-radius:8px; }
+.ba-teacher-card_tab_active { color:#3b82f6; background:#eff6ff; }
 
 /* ---------- FIND YOUR SCHOOL ---------- */
 .ba-schools-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:700px; margin:0 auto; padding:0 1rem; }
@@ -867,13 +861,42 @@ body.is-hero.nav-open .ba-nav_menu-button { border-color: var(--black); }
 /* ---------- DOWNLOAD ---------- */
 .ba-download-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:700px; margin:0 auto; padding:0 1rem; }
 @media (max-width:600px) { .ba-download-grid { grid-template-columns:1fr; } }
-.ba-download-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:1.5rem; }
+.ba-download-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:1.5rem; max-width:480px; margin:0 auto; }
 .ba-download-card_icon { width:64px; height:64px; border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
 .ba-download-card_icon svg { width:36px; height:36px; }
 .ba-download-card_icon.ba-dl-android { background:linear-gradient(135deg,#a4c639,#8ab12e); color:#fff; }
 .ba-download-card_icon.ba-dl-ios { background:linear-gradient(135deg,#333,#000); color:#fff; }
+.ba-download-card_icon.ba-dl-laptop { background:linear-gradient(135deg,#3b82f6,#2563eb); color:#fff; }
 .ba-download-card_title { font-size:1.1rem; font-weight:800; color:#0f172a; margin-bottom:.8rem; }
 .ba-download-card_note { font-size:.78rem; color:#64748b; margin-top:.8rem; padding-top:.6rem; border-top:1px solid #f1f5f9; font-style:italic; }
+
+/* ---------- DEVICE SWITCHER ---------- */
+.ba-device-switcher { max-width:520px; margin:0 auto; }
+.ba-device-tabs { display:flex; gap:.4rem; background:#e9ecf5; border-radius:12px; padding:.3rem; margin-bottom:1.5rem; }
+.ba-device-tab { flex:1; display:flex; align-items:center; justify-content:center; gap:.4rem; padding:.6rem .5rem; border:none; border-radius:10px; background:transparent; color:#64748b; font-size:.8rem; font-weight:700; cursor:pointer; transition:all .2s ease; white-space:nowrap; }
+.ba-device-tab:hover { color:#334155; background:rgba(255,255,255,.5); }
+.ba-device-tab.active { background:#fff; color:#0f172a; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+.ba-device-tab svg { width:16px; height:16px; flex-shrink:0; }
+.ba-device-panels { position:relative; }
+.ba-device-panel { display:none; animation:panelIn .25s ease; }
+.ba-device-panel.active { display:block; }
+@keyframes panelIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+/* Laptop panel extras */
+.ba-laptop-desc { font-size:.85rem; color:#475569; margin-bottom:1rem; line-height:1.5; }
+.ba-laptop-btn { display:inline-flex; margin-top:1rem; }
+
+/* Hide laptop tab on mobile/tablet */
+@media (max-width:768px) {
+  .ba-device-tab-laptop { display:none; }
+  .ba-device-panel-laptop { display:none !important; }
+}
+
+/* Auto-select android on mobile, laptop on desktop */
+@media (max-width:768px) {
+  .ba-device-tab[data-device="android"].active,
+  .ba-device-tab[data-device="ios"].active { }
+}
 .ba-steps-list { list-style:none; counter-reset:step; padding:0; margin:0 0 .5rem; }
 .ba-steps-list li { counter-increment:step; padding:.4rem 0 .4rem 2rem; font-size:.85rem; color:#334155; position:relative; }
 .ba-steps-list li::before { content:counter(step); position:absolute; left:0; top:.35rem; width:22px; height:22px; border-radius:50%; background:#eff6ff; color:#3b82f6; font-size:.7rem; font-weight:800; display:flex; align-items:center; justify-content:center; }
