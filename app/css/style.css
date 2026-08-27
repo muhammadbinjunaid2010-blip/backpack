@@ -211,6 +211,10 @@ body.theme-dark .ba-settings-school-row { border-color:#2a3050; }
 .ba-form-group label { font-size:.8rem; font-weight:800; color:var(--silver); }
 .ba-form-group input, .ba-form-group select { width:100%; border:1px solid var(--alto); border-radius:12px; padding:.7rem .9rem;
   font-size:.9rem; font-weight:600; background:var(--white); }
+.ba-pass-wrap { position:relative; }
+.ba-pass-wrap input { padding-right:2.8rem; }
+.ba-pass-toggle { position:absolute; right:8px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:4px; color:var(--silver); display:flex; align-items:center; justify-content:center; border-radius:6px; }
+.ba-pass-toggle:hover { color:var(--text); background:var(--concrete); }
 .ba-modal-actions { display:flex; gap:.6rem; justify-content:flex-end; margin-top:.5rem; }
 .ba-button { display:inline-flex; align-items:center; justify-content:center; gap:.4rem; border:none; border-radius:var(--radius-pill);
   padding:.7rem 1.3rem; font-weight:800; font-size:.88rem; cursor:pointer; }

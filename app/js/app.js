@@ -193,6 +193,19 @@ function $(id) { return document.getElementById(id); }
       closeModal("teacher-login-modal");
       openModal("onboarding");
     });
+    /* Password eye toggle */
+    var passToggle = $("tl-pass-toggle");
+    var passInput = $("tl-pass");
+    if (passToggle && passInput) {
+      passToggle.addEventListener("click", function () {
+        var isPassword = passInput.type === "password";
+        passInput.type = isPassword ? "text" : "password";
+        var eyeOpen = passToggle.querySelector(".ba-eye-open");
+        var eyeClosed = passToggle.querySelector(".ba-eye-closed");
+        if (eyeOpen) eyeOpen.style.display = isPassword ? "none" : "";
+        if (eyeClosed) eyeClosed.style.display = isPassword ? "" : "none";
+      });
+    }
   }
 
   /* ---------- home ---------- */
