@@ -118,6 +118,15 @@
         }
       });
     });
+
+    /* Render teacher home into ba-main if not already rendered */
+    var main = $('ba-main');
+    if (main && main.children.length > 0 && main.querySelector('.ba-screen')) {
+      /* Student screens are still visible, render teacher content */
+      if (window.TeacherDashboard && window.TeacherDashboard.renderScreen) {
+        window.TeacherDashboard.renderScreen('home');
+      }
+    }
   }
 
   /* Watch for teacher mode activation */
@@ -125,11 +134,25 @@
     try {
       var DB = window.DB || (window.S && window.S.load && window.S.load());
       if (DB && DB.settings && DB.settings.isTeacher) {
-        clearInterval(teacherWatch);
         setupTeacherSidebar();
       }
     } catch (e) { /* silent */ }
-  }, 500);
+  }, 1000);
+
+  /* Also trigger sidebar setup right after teacher login button is clicked */
+  var tlBtn = $('tl-continue');
+  if (tlBtn) {
+    tlBtn.addEventListener('click', function () {
+      setTimeout(function () {
+        try {
+          var DB = window.DB || (window.S && window.S.load && window.S.load());
+          if (DB && DB.settings && DB.settings.isTeacher) {
+            setupTeacherSidebar();
+          }
+        } catch (e) { /* silent */ }
+      }, 300);
+    });
+  }
 
   /* ---------- Mobile redirect (runtime check) ---------- */
   window.addEventListener('resize', function () {
