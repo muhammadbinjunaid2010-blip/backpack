@@ -42,13 +42,14 @@
   /* ---------- Sync sidebar header with app data ---------- */
   function syncWebHeader() {
     try {
-      var DB = window.DB || (window.S && window.S.load && window.S.load());
+      var DB = loadDB();
       if (!DB || !DB.settings) return;
 
       var school = (DB.settings.school || 'Bahria College Karsaz')
         .replace(/\s*[·•]\s*Prototype\s*&\s*Testing/gi, '').trim();
-      var userName = DB.settings.userName || DB.settings.name || 'Student';
       var isTeacher = DB.settings.isTeacher;
+      /* In teacher mode always use DB.settings.name; in student mode prefer userName */
+      var userName = isTeacher ? (DB.settings.name || 'Teacher') : (DB.settings.userName || DB.settings.name || 'Student');
 
       var schoolEl = $('web-hdr-school');
       var classEl = $('web-hdr-class');
@@ -76,6 +77,8 @@
   setInterval(syncWebHeader, 2000);
 
   /* ---------- Teacher dashboard sidebar override ---------- */
+  var teacherSidebarActive = 'home'; /* track active section across re-renders */
+  var teacherSidebarSetup = false;
   function setupTeacherSidebar() {
     var sidebar = $('ba-web-sidebar-nav');
     if (!sidebar) return;
@@ -98,7 +101,7 @@
     /* Replace sidebar nav with teacher tabs */
     var html = '';
     TEACHER_TABS.forEach(function (tab) {
-      html += '<button class="ba-web-nav-item' + (tab.id === 'home' ? ' active' : '') + '" data-tsection="' + tab.id + '">';
+      html += '<button class="ba-web-nav-item' + (tab.id === teacherSidebarActive ? ' active' : '') + '" data-tsection="' + tab.id + '">';
       html += tab.svg + '<span>' + tab.label + '</span></button>';
     });
     sidebar.innerHTML = html;
@@ -112,6 +115,7 @@
         sidebar.querySelectorAll('.ba-web-nav-item').forEach(function (b) { b.classList.remove('active'); });
         this.classList.add('active');
         var section = this.getAttribute('data-tsection');
+        teacherSidebarActive = section;
         if (pageTitle) pageTitle.textContent = TEACHER_TITLES[section] || section;
         if (window.TeacherDashboard && window.TeacherDashboard.renderScreen) {
           window.TeacherDashboard.renderScreen(section);
@@ -129,11 +133,28 @@
     }
   }
 
-  /* Watch for teacher mode activation */
+  /* Helper: load DB from BAStore */
+  function loadDB() {
+    try {
+      if (window.BAStore && window.BAStore.load) return window.BAStore.load();
+    } catch (e) { /* silent */ }
+    return null;
+  }
+
+  /* Check immediately on load — handles returning teachers */
+  try {
+    var initDB = loadDB();
+    if (initDB && initDB.settings && initDB.settings.isTeacher) {
+      setupTeacherSidebar();
+    }
+  } catch (e) { /* silent */ }
+
+  /* Watch for teacher mode activation (stop once detected) */
   var teacherWatch = setInterval(function () {
     try {
-      var DB = window.DB || (window.S && window.S.load && window.S.load());
+      var DB = loadDB();
       if (DB && DB.settings && DB.settings.isTeacher) {
+        clearInterval(teacherWatch);
         setupTeacherSidebar();
       }
     } catch (e) { /* silent */ }
@@ -145,8 +166,9 @@
     tlBtn.addEventListener('click', function () {
       setTimeout(function () {
         try {
-          var DB = window.DB || (window.S && window.S.load && window.S.load());
+          var DB = loadDB();
           if (DB && DB.settings && DB.settings.isTeacher) {
+            teacherSidebarActive = 'home'; /* reset to home on fresh login */
             setupTeacherSidebar();
           }
         } catch (e) { /* silent */ }

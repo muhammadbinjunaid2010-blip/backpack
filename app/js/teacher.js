@@ -131,6 +131,18 @@ window.TeacherDashboard = (function () {
     if (hdrSchool) hdrSchool.textContent = TEACHER.school;
     if (hdrClass) hdrClass.textContent = "Teacher · " + TEACHER.subjects.join(", ");
 
+    /* Update web (desktop) sidebar header if present */
+    var webSchool = $("web-hdr-school");
+    var webClass = $("web-hdr-class");
+    var webUserName = $("web-user-name");
+    var webUserAvatar = $("web-user-avatar");
+    var webUserRole = $("web-user-role");
+    if (webSchool) webSchool.textContent = TEACHER.school;
+    if (webClass) webClass.textContent = "Teacher · " + TEACHER.subjects.join(", ");
+    if (webUserName) webUserName.textContent = TEACHER.name;
+    if (webUserAvatar) webUserAvatar.textContent = (TEACHER.name.charAt(0) || "T").toUpperCase();
+    if (webUserRole) webUserRole.textContent = "Teacher Mode";
+
     var tabbar = $("ba-tabbar");
     if (tabbar) {
       var html = "";

@@ -399,6 +399,63 @@
   display: none;
 }
 
+/* ---- DARK MODE (web) ---- */
+body.theme-dark .ba-web-topbar {
+  background: #12152b;
+  border-color: #262b4a;
+}
+body.theme-dark .ba-web-topbar-title {
+  color: #e7e9f5;
+}
+body.theme-dark .ba-web-content {
+  background: #0c1024;
+}
+body.theme-dark .ba-web-content .ba-container {
+  color: #e7e9f5;
+}
+body.theme-dark .ba-web-topbar-btn {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Calculator conversion — dark mode fixes */
+body.theme-dark #calc-convert .ba-calc-container {
+  background: #1a1c2e;
+}
+body.theme-dark #calc-convert .ba-calc-conv-card {
+  background: #2a2d4a;
+  color: #e7e9f5;
+  border-color: #3a3d5a;
+}
+body.theme-dark #calc-convert .ba-calc-conv-name {
+  color: #e7e9f5;
+}
+body.theme-dark #calc-conv-panel input,
+body.theme-dark #calc-conv-panel select {
+  background: #2a2d4a;
+  color: #e7e9f5;
+  border-color: #3a3d5a;
+}
+body.theme-dark #calc-conv-panel #calc-conv-result {
+  background: #1d2138;
+  color: #e7e9f5;
+}
+body.theme-dark #calc-conv-back {
+  color: #60a5fa;
+}
+body.theme-dark #calc-conv-title {
+  color: #e7e9f5;
+}
+body.theme-dark #calc-convert [style*="color:var(--primary)"] {
+  color: #94a3b8 !important;
+}
+body.theme-dark #calc-convert .ba-calc-conv-grid {
+  color: #e7e9f5;
+}
+body.theme-dark .ba-web-sidebar {
+  background: linear-gradient(180deg, #12152b 0%, #0a0d1a 100%);
+}
+
 /* ---- Media query fallback ---- */
 @media (max-width: 1023px) {
   .ba-web-shell {
