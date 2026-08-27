@@ -390,17 +390,45 @@ function $(id) { return document.getElementById(id); }
   function renderSchoolbag() {
     var grid = $("schoolbag-folders"); if (!grid) return;
     grid.innerHTML = "";
+    /* Show all user documents (unfiled) at the top */
+    var allUserDocs = S.getDocuments().filter(function (d) { return !d.system && !d.folderId; });
+    if (allUserDocs.length > 0) {
+      var recentCard = document.createElement("div");
+      recentCard.className = "ba-folder-card";
+      recentCard.innerHTML = '<div class="ba-folder-cover" style="background:var(--blue);">📄</div><div class="ba-folder-subject">Your Documents</div><div class="ba-folder-meta">' + allUserDocs.length + ' unfiled doc' + (allUserDocs.length === 1 ? '' : 's') + '</div>';
+      recentCard.addEventListener("click", function () { openUnfiledDocs(); });
+      grid.appendChild(recentCard);
+    }
     SUBJECTS.forEach(function (s) {
       var card = document.createElement("div");
       card.className = "ba-folder-card";
       var sysNb = S.getDocument(S.systemNotebookId(s.subject));
       var userDocs = S.getDocumentsBySubject(s.subject).filter(function (d) { return !d.system; });
-      var meta = (s.file ? "Book · " : "No book · ") + (sysNb ? "1 school notebook" : "0") + " · " + userDocs.length + " your doc" + (userDocs.length === 1 ? "" : "s");
+      var meta = (s.file ? "Book · " : "No book · ") + (sysNb ? "1 school notebook" : "0") + " · " + userDocs.length + " your doc" + (userDocs.length === 1 ? '' : 's');
       card.innerHTML = '<div class="ba-folder-cover">' + esc(s.subject) + '</div><div class="ba-folder-subject">' + esc(s.subject) + '</div><div class="ba-folder-meta">' + meta + '</div>';
       card.addEventListener("click", function () { openSubjectFolder(s.subject); });
       grid.appendChild(card);
     });
     renderFolders();
+  }
+  function openUnfiledDocs() {
+    var docs = S.getDocuments().filter(function (d) { return !d.system && !d.folderId; });
+    activeFolder = null;
+    var subjEl = $("sf-subject"); if (subjEl) subjEl.textContent = "Your Documents";
+    var bookEl = $("sf-book"); if (bookEl) bookEl.innerHTML = "";
+    var head = $("sf-pages-head"); if (head) head.textContent = "ALL UNFILED DOCUMENTS";
+    var nbBtn = $("sf-new-notebook"); if (nbBtn) nbBtn.onclick = function () { openNotebookCreate(null); };
+    var shBtn = $("sf-new-sheet"); if (shBtn) shBtn.onclick = function () { openSheetCreate(null); };
+    var wbBtn = $("sf-new-whiteboard"); if (wbBtn) wbBtn.onclick = function () { createWhiteboard(null); };
+    var qnBtn = $("sf-new-quicknote"); if (qnBtn) qnBtn.onclick = function () { openQuickNote(null); };
+    var libBtn = $("sf-new-library"); if (libBtn) libBtn.style.display = "none";
+    var list = $("sf-pages");
+    if (list) {
+      list.innerHTML = "";
+      if (!docs.length) list.innerHTML = '<div class="ba-sf-book-none">No unfiled documents yet. Create a notebook, sheet, or whiteboard.</div>';
+      docs.forEach(function (d) { list.appendChild(docRow(d)); });
+    }
+    openModal("subject-folder-modal");
   }
   function renderFolders() {
     var grid = $("schoolbag-folders"); if (!grid) return;
@@ -2001,42 +2029,50 @@ function createWhiteboard(folderId, subject) {
     var data = FORMULAS[type] || [];
     var custom = loadCustomFormulas()[type] || [];
     var html = "";
-    /* Built-in sections */
+    /* Collect all section names for the dropdown */
+    var sectionNames = [];
+    data.forEach(function (sec) { if (sectionNames.indexOf(sec.section) === -1) sectionNames.push(sec.section); });
+    custom.forEach(function (f) { if (sectionNames.indexOf(f.section) === -1) sectionNames.push(f.section); });
+    /* Render sections (built-in + custom mixed in) */
+    var allBySection = {};
     data.forEach(function (sec) {
-      html += '<div class="ba-formula-section-title">' + esc(sec.section) + '</div>';
-      sec.items.forEach(function (item) {
-        html += '<div class="ba-formula-card"><div class="ba-formula-name">' + esc(item.name) + '</div><div class="ba-formula-expr">' + esc(item.expr) + '</div><button class="ba-formula-del" data-section="' + esc(sec.section) + '" data-name="' + esc(item.name) + '" data-expr="' + esc(item.expr) + '">✕</button></div>';
-      });
+      if (!allBySection[sec.section]) allBySection[sec.section] = [];
+      sec.items.forEach(function (item) { allBySection[sec.section].push(item); });
     });
-    /* Group custom formulas by section */
-    var customGroups = {};
     custom.forEach(function (f) {
-      if (!customGroups[f.section]) customGroups[f.section] = [];
-      customGroups[f.section].push(f);
+      if (!allBySection[f.section]) allBySection[f.section] = [];
+      allBySection[f.section].push(f);
     });
-    Object.keys(customGroups).forEach(function (secName) {
-      html += '<div class="ba-formula-section-title">' + esc(secName) + ' <span style="font-size:.65rem;color:var(--blue);font-weight:700;margin-left:.4rem;">CUSTOM</span></div>';
-      customGroups[secName].forEach(function (item) {
-        html += '<div class="ba-formula-card" style="border-color:#c7d2fe;background:#f0f4ff;"><div class="ba-formula-name">' + esc(item.name) + '</div><div class="ba-formula-expr">' + esc(item.expr) + '</div><button class="ba-formula-del" data-section="' + esc(item.section) + '" data-name="' + esc(item.name) + '" data-expr="' + esc(item.expr) + '" data-custom="1">✕</button></div>';
+    Object.keys(allBySection).forEach(function (secName) {
+      html += '<div class="ba-formula-section-title">' + esc(secName) + '</div>';
+      allBySection[secName].forEach(function (item) {
+        html += '<div class="ba-formula-card"><div class="ba-formula-name">' + esc(item.name) + '</div><div class="ba-formula-expr">' + esc(item.expr) + '</div><button class="ba-formula-del" data-section="' + esc(item.section || secName) + '" data-name="' + esc(item.name) + '" data-expr="' + esc(item.expr) + '">✕</button></div>';
       });
     });
     /* Add formula section */
     html += '<div style="margin-top:1rem;padding:1rem;border:1px dashed var(--mercury);border-radius:12px;" id="formula-add-area">';
-    html += '<div style="font-size:.78rem;font-weight:700;color:var(--primary);margin-bottom:.6rem;">ADD YOUR FORMULA</div>';
-    html += '<div style="display:flex;gap:.5rem;flex-wrap:wrap;">';
-    html += '<input id="formula-add-section" placeholder="Section (e.g. My Formulas)" style="flex:1;min-width:140px;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;">';
-    html += '<input id="formula-add-name" placeholder="Name" style="flex:1;min-width:120px;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;">';
-    html += '<input id="formula-add-expr" placeholder="Expression (e.g. F = ma)" style="flex:2;min-width:160px;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;">';
-    html += '<button class="ba-button ba-button-primary" id="formula-add-btn" style="padding:.5rem 1rem;font-size:.82rem;">Add</button>';
+    html += '<div style="font-size:.78rem;font-weight:700;color:var(--primary);margin-bottom:.6rem;">ADD FORMULA</div>';
+    html += '<div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:flex-end;">';
+    html += '<div style="flex:1;min-width:120px;"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">Section</label><select id="formula-add-section" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;">';
+    sectionNames.forEach(function (s) { html += '<option value="' + esc(s) + '">' + esc(s) + '</option>'; });
+    html += '<option value="__new__">+ New Section</option>';
+    html += '</select></div>';
+    html += '<div style="display:none;flex:1;min-width:120px;" id="formula-new-sec-wrap"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">New Section Name</label><input id="formula-add-new-section" placeholder="e.g. My Formulas" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;"></div>';
+    html += '<div style="flex:1;min-width:120px;"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">Name</label><input id="formula-add-name" placeholder="e.g. Ohm's Law" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;"></div>';
+    html += '<div style="flex:2;min-width:160px;"><label style="font-size:.7rem;font-weight:700;color:var(--text-secondary);margin-bottom:.2rem;display:block;">Expression</label><input id="formula-add-expr" placeholder="e.g. V = IR" style="width:100%;padding:.5rem;border:1px solid var(--mercury);border-radius:8px;font-size:.85rem;"></div>';
+    html += '<button class="ba-button ba-button-primary" id="formula-add-btn" style="padding:.5rem 1rem;font-size:.82rem;height:fit-content;">Add</button>';
     html += '</div></div>';
     body.innerHTML = html;
+    /* Toggle new section input */
+    var secSel = $("formula-add-section");
+    var newSecWrap = $("formula-new-sec-wrap");
+    if (secSel && newSecWrap) secSel.addEventListener("change", function () { newSecWrap.style.display = this.value === "__new__" ? "block" : "none"; });
     /* Bind delete buttons */
     body.querySelectorAll(".ba-formula-del").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var sec = btn.getAttribute("data-section");
         var nm = btn.getAttribute("data-name");
         var ex = btn.getAttribute("data-expr");
-        var isCustom = btn.getAttribute("data-custom");
         function doDel() {
           deleteFormula(type, sec, nm, ex);
           renderFormulas(type);
@@ -2049,7 +2085,8 @@ function createWhiteboard(folderId, subject) {
     /* Bind add button */
     var addBtn = $("formula-add-btn");
     if (addBtn) addBtn.addEventListener("click", function () {
-      var sec = $("formula-add-section").value.trim() || "My Formulas";
+      var sel = $("formula-add-section");
+      var sec = sel.value === "__new__" ? ($("formula-add-new-section").value.trim() || "My Formulas") : sel.value;
       var nm = $("formula-add-name").value.trim();
       var ex = $("formula-add-expr").value.trim();
       if (!nm || !ex) { if (window.BAUI) BAUI.toast("Enter both name and expression."); return; }

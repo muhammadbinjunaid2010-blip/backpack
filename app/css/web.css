@@ -348,16 +348,41 @@
 
 /* ---- Game grid improvements ---- */
 .ba-web-body .ba-ttt-grid {
-  max-width: 360px;
+  max-width: 400px;
   margin: 0 auto;
+  gap: .5rem;
+}
+.ba-web-body .ba-ttt-cell {
+  font-size: 2.5rem;
+  border-radius: 12px;
 }
 .ba-web-body .ba-c4-grid {
-  max-width: 420px;
+  max-width: 480px;
   margin: 0 auto;
+  gap: .4rem;
+}
+.ba-web-body .ba-c4-cell {
+  border-radius: 50%;
 }
 .ba-web-body .ba-2048-grid {
-  max-width: 360px;
+  max-width: 400px;
   margin: 0 auto;
+}
+/* Game body fills available space */
+.ba-web-body .ba-game-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+.ba-web-body .ba-game-topbar {
+  margin-bottom: 1rem;
+}
+.ba-web-body .ba-games-grid {
+  gap: 1rem;
+}
+.ba-web-body .ba-game-card {
+  padding: 1rem;
 }
 
 /* ---- Calculator on web ---- */
