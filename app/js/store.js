@@ -101,6 +101,7 @@ window.BAStore = (function () {
       documents: {}, documentOrder: [],
       folders: {}, folderOrder: [],
       homework: [], pdfAnnotations: {}, bookmarks: {},
+      studyTracker: { examTargets: [], studySessions: [] },
       legacyImported: false, seededSystem: 0
     };
   }
@@ -157,6 +158,7 @@ window.BAStore = (function () {
       raw.homework = raw.homework || [];
       raw.pdfAnnotations = raw.pdfAnnotations || {};
       raw.bookmarks = raw.bookmarks || {};
+      raw.studyTracker = raw.studyTracker || { examTargets: [], studySessions: [] };
     }
     db = raw;
     seedSystem(db);
@@ -435,6 +437,14 @@ window.BAStore = (function () {
     db = null; load();
   }
 
+  /* ---------- STUDY TRACKER ---------- */
+  function getStudyTracker() { var d = getDB(); if (!d.studyTracker) d.studyTracker = { examTargets: [], studySessions: [] }; return d.studyTracker; }
+  function addExamTarget(t) { var d = getDB(); if (!d.studyTracker) d.studyTracker = { examTargets: [], studySessions: [] }; t.id = uid("exam"); t.createdAt = nowISO(); d.studyTracker.examTargets.push(t); persist(); return t; }
+  function updateExamTarget(id, patch) { var d = getDB(); var list = d.studyTracker && d.studyTracker.examTargets; if (!list) return; for (var i = 0; i < list.length; i++) { if (list[i].id === id) { Object.keys(patch).forEach(function (k) { list[i][k] = patch[k]; }); persist(); return; } } }
+  function removeExamTarget(id) { var d = getDB(); if (!d.studyTracker) return; d.studyTracker.examTargets = (d.studyTracker.examTargets || []).filter(function (t) { return t.id !== id; }); persist(); }
+  function addStudySession(s) { var d = getDB(); if (!d.studyTracker) d.studyTracker = { examTargets: [], studySessions: [] }; s.id = uid("ss"); s.createdAt = nowISO(); d.studyTracker.studySessions.push(s); persist(); return s; }
+  function getStudySessions() { return (getStudyTracker().studySessions || []).slice(); }
+
   /* ---------- public API ---------- */
   return {
     load: load,
@@ -458,6 +468,8 @@ window.BAStore = (function () {
     getPdfAnnotation: getPdfAnnotation, setPdfAnnotation: setPdfAnnotation,
     getBookmark: getBookmark, setBookmark: setBookmark,
     getSettings: getSettings, saveSettings: saveSettings,
+    getStudyTracker: getStudyTracker, addExamTarget: addExamTarget, updateExamTarget: updateExamTarget, removeExamTarget: removeExamTarget,
+    addStudySession: addStudySession, getStudySessions: getStudySessions,
     forceRemigrate: forceRemigrate
   };
 })();

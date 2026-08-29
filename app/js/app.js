@@ -355,6 +355,146 @@ function $(id) { return document.getElementById(id); }
   }
   function openScheduleExams() { navigate("schedule"); switchSch("exams"); }
 
+  /* ---------- STUDY TRACKER ---------- */
+  var studyTimer = { active: false, subject: "", start: 0, interval: null };
+  var ST_SUBJECTS = ["Mathematics","English","Urdu","Physics","Chemistry","Computer Science","Pakistan Studies","Tarjumatul Quran"];
+
+  function setupStudyTracker() {
+    var addBtn = $("st-add-target");
+    if (addBtn) addBtn.addEventListener("click", openAddExamTarget);
+    var logBtn = $("st-log-session");
+    if (logBtn) logBtn.addEventListener("click", openLogStudySession);
+    renderStudyTracker();
+  }
+
+  function renderStudyTracker() {
+    var tracker = S.getStudyTracker();
+    var targets = tracker.examTargets || [];
+    var sessions = tracker.studySessions || [];
+
+    /* Summary */
+    var summary = $("st-summary");
+    if (summary) {
+      var totalMinutes = 0;
+      sessions.forEach(function (s) { totalMinutes += (s.minutes || 0); });
+      var hours = Math.floor(totalMinutes / 60);
+      var mins = totalMinutes % 60;
+      var todaySessions = sessions.filter(function (s) {
+        var d = new Date(s.createdAt); var now = new Date();
+        return d.toDateString() === now.toDateString();
+      });
+      var todayMins = 0;
+      todaySessions.forEach(function (s) { todayMins += (s.minutes || 0); });
+      var upcoming = targets.filter(function (t) { return new Date(t.date) >= new Date(); }).length;
+      summary.innerHTML = '<div class="ba-study-stat"><div class="ba-study-stat-num">' + hours + 'h ' + mins + 'm</div><div class="ba-study-stat-label">Total Studied</div></div>' +
+        '<div class="ba-study-stat"><div class="ba-study-stat-num">' + Math.floor(todayMins / 60) + 'h ' + (todayMins % 60) + 'm</div><div class="ba-study-stat-label">Today</div></div>' +
+        '<div class="ba-study-stat"><div class="ba-study-stat-num">' + upcoming + '</div><div class="ba-study-stat-label">Upcoming Exams</div></div>';
+    }
+
+    /* Targets */
+    var tEl = $("st-targets");
+    if (tEl) {
+      if (!targets.length) { tEl.innerHTML = '<div class="ba-study-empty">No exam targets yet. Add one to start tracking!</div>'; }
+      else {
+        tEl.innerHTML = "";
+        targets.forEach(function (t) {
+          var now = new Date(); var examDate = new Date(t.date);
+          var diffMs = examDate - now;
+          var diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+          var statusClass = diffDays < 0 ? "ba-study-past" : diffDays <= 3 ? "ba-study-urgent" : diffDays <= 14 ? "ba-study-soon" : "ba-study-ok";
+          var statusText = diffDays < 0 ? "Completed" : diffDays === 0 ? "TODAY!" : diffDays + " day" + (diffDays === 1 ? "" : "s") + " left";
+          var subSessions = sessions.filter(function (s) { return s.subject === t.subject; });
+          var subMins = 0; subSessions.forEach(function (s) { subMins += (s.minutes || 0); });
+          var row = document.createElement("div");
+          row.className = "ba-study-target " + statusClass;
+          row.innerHTML = '<div class="ba-study-target-top"><span class="ba-study-target-subject">' + esc(t.subject) + '</span><span class="ba-study-target-status">' + statusText + '</span></div>' +
+            '<div class="ba-study-target-date">' + new Date(t.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) + '</div>' +
+            '<div class="ba-study-target-progress"><span>' + Math.floor(subMins / 60) + 'h ' + (subMins % 60) + 'm studied</span></div>' +
+            '<button class="ba-study-del" title="Remove">✕</button>';
+          row.querySelector(".ba-study-del").addEventListener("click", function (e) {
+            e.stopPropagation();
+            if (window.BAUI) { BAUI.confirm("Remove this exam target?", function(yes) { if (yes) { S.removeExamTarget(t.id); renderStudyTracker(); } }); }
+            else { if (confirm("Remove this exam target?")) { S.removeExamTarget(t.id); renderStudyTracker(); } }
+          });
+          tEl.appendChild(row);
+        });
+      }
+    }
+
+    /* Sessions */
+    var sEl = $("st-sessions");
+    if (sEl) {
+      var recent = sessions.slice().reverse().slice(0, 20);
+      if (!recent.length) { sEl.innerHTML = '<div class="ba-study-empty">No study sessions yet. Start logging!</div>'; }
+      else {
+        sEl.innerHTML = "";
+        recent.forEach(function (s) {
+          var row = document.createElement("div");
+          row.className = "ba-study-session";
+          var d = new Date(s.createdAt);
+          row.innerHTML = '<div class="ba-study-sess-top"><span class="ba-study-sess-subject">' + esc(s.subject) + '</span><span class="ba-study-sess-time">' + (s.minutes || 0) + ' min</span></div>' +
+            '<div class="ba-study-sess-meta">' + d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + ' · ' + (s.notes || "No notes") + '</div>';
+          sEl.appendChild(row);
+        });
+      }
+    }
+  }
+
+  function openAddExamTarget() {
+    var html = '<div class="ba-study-modal-inner"><div class="ba-section-title">ADD EXAM TARGET</div>' +
+      '<div class="ba-form-group"><label>Subject</label><select id="st-target-subject">';
+    ST_SUBJECTS.forEach(function (s) { html += '<option value="' + esc(s) + '">' + esc(s) + '</option>'; });
+    html += '</select></div>' +
+      '<div class="ba-form-group"><label>Exam Date</label><input type="date" id="st-target-date"></div>' +
+      '<div class="ba-form-group"><label>Notes (optional)</label><input id="st-target-notes" placeholder="e.g. Chapter 1-5"></div>' +
+      '<div class="ba-modal-actions"><button class="ba-button ba-button-secondary" id="st-target-cancel">Cancel</button>' +
+      '<button class="ba-button ba-button-primary" id="st-target-save">Save</button></div></div>';
+    showStudyModal(html);
+    $("st-target-date").valueAsDate = new Date();
+    $("st-target-cancel").addEventListener("click", closeStudyModal);
+    $("st-target-save").addEventListener("click", function () {
+      var subj = $("st-target-subject").value;
+      var date = $("st-target-date").value;
+      if (!date) { if (window.BAUI) BAUI.toast("Please select a date."); else alert("Please select a date."); return; }
+      S.addExamTarget({ subject: subj, date: date, notes: $("st-target-notes").value.trim() });
+      closeStudyModal(); renderStudyTracker();
+    });
+  }
+
+  function openLogStudySession() {
+    var tracker = S.getStudyTracker();
+    var targets = (tracker.examTargets || []).map(function (t) { return t.subject; });
+    var subjects = targets.length ? targets : ST_SUBJECTS;
+    var html = '<div class="ba-study-modal-inner"><div class="ba-section-title">LOG STUDY SESSION</div>' +
+      '<div class="ba-form-group"><label>Subject</label><select id="st-session-subject">';
+    subjects.forEach(function (s) { html += '<option value="' + esc(s) + '">' + esc(s) + '</option>'; });
+    html += '</select></div>' +
+      '<div class="ba-form-group"><label>Duration (minutes)</label><input type="number" id="st-session-mins" min="1" max="600" value="30"></div>' +
+      '<div class="ba-form-group"><label>Notes (optional)</label><input id="st-session-notes" placeholder="e.g. Solved past paper"></div>' +
+      '<div class="ba-modal-actions"><button class="ba-button ba-button-secondary" id="st-session-cancel">Cancel</button>' +
+      '<button class="ba-button ba-button-primary" id="st-session-save">Save</button></div></div>';
+    showStudyModal(html);
+    $("st-session-cancel").addEventListener("click", closeStudyModal);
+    $("st-session-save").addEventListener("click", function () {
+      var mins = parseInt($("st-session-mins").value, 10);
+      if (!mins || mins < 1) { if (window.BAUI) BAUI.toast("Enter valid minutes."); else alert("Enter valid minutes."); return; }
+      S.addStudySession({ subject: $("st-session-subject").value, minutes: mins, notes: $("st-session-notes").value.trim() });
+      closeStudyModal(); renderStudyTracker();
+    });
+  }
+
+  function showStudyModal(html) {
+    var existing = $("study-modal");
+    if (existing) existing.remove();
+    var m = document.createElement("div");
+    m.id = "study-modal"; m.className = "ba-modal ba-modal-open";
+    m.innerHTML = '<div class="ba-modal-content"><header class="ba-modal-header"><h3>Study Tracker</h3><button class="ba-modal-close" id="st-modal-close">✕</button></header><div class="ba-modal-body">' + html + '</div></div>';
+    document.body.appendChild(m);
+    m.addEventListener("click", function (e) { if (e.target === m) closeStudyModal(); });
+    $("st-modal-close").addEventListener("click", closeStudyModal);
+  }
+  function closeStudyModal() { var m = $("study-modal"); if (m) m.remove(); }
+
   /* ---------- settings ---------- */  function setupSettings() {
     var sn = $("setting-name"); if (sn) sn.value = DB.settings.userName || "";
     renderSettingsSchoolInfo();
@@ -3091,7 +3231,7 @@ function createWhiteboard(folderId, subject) {
       setupHome, setupSchedule, setupSettings, setupSchoolbag, setupSubjectFolder,
       setupNewMenu, setupFolderModal, setupNbCreate, setupEditor, setupWhiteboard,
       setupSheetEditor, setupQuickNote, setupHomework, setupPdfReader, setupTools,
-      setupLibraryNoteForm, setupGames, setupHiddenGestures, initOnboardingEvents
+      setupLibraryNoteForm, setupGames, setupHiddenGestures, initOnboardingEvents, setupStudyTracker
     ];
     setups.forEach(function (fn) { try { console.log("[init] running setup:", fn.name); fn(); console.log("[init] done setup:", fn.name); } catch (e) { console.warn("Setup failed:", fn.name, e); } });
     document.querySelectorAll(".ba-modal-close").forEach(function (b) { if (!b.id) return; b.addEventListener("click", function () { closeModal(b.closest(".ba-modal").id); }); });
